@@ -40,6 +40,22 @@
 
 	<inceptionYear>2012</inceptionYear>
 
+
+
+	<scm>
+		<url>scm:git:git@github.com:VT-Visionarium/osnap.git</url>
+		<connection>scm:git:git@github.com:VT-Visionarium/osnap.git</connection>
+		<developerConnection>sgit@github.com:VT-Visionarium/osnap.git
+        </developerConnection>
+		<tag>webservice</tag>
+	</scm>
+
+	<issueManagement>
+		<system>GitHub</system>
+		<url>https://github.com/VT-Visionarium/osnap/issues</url>
+	</issueManagement>
+
+
 	<packaging>war</packaging>
 
 	<properties>
@@ -206,58 +222,7 @@
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>2.9.1</version>
 			</plugin>
-			<plugin>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.3</version>
-				<executions>
-					<execution>
-						<id>default-war</id>
-						<phase>package</phase>
-						<goals>
-							<goal>war</goal>
-						</goals>
-						<configuration>
-							<archive>
-								<manifest>
-									<addClasspath>true</addClasspath>
-									<classpathPrefix>lib/</classpathPrefix>
-								</manifest>
-							</archive>
-							<webResources>
-								<resource>
-									<directory>src/main/resources</directory>
-								</resource>
-							</webResources>
-							<failOnMissingWebXml>false</failOnMissingWebXml>
-						</configuration>
-					</execution>
-				</executions>
-				<configuration>
-					<archive>
-						<manifest>
-							<addClasspath>true</addClasspath>
-							<classpathPrefix>lib/</classpathPrefix>
-						</manifest>
-					</archive>
-					<webResources>
-						<resource>
-							<directory>src/main/resources</directory>
-						</resource>
-					</webResources>
-					<failOnMissingWebXml>false</failOnMissingWebXml>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.tomcat.maven</groupId>
-				<artifactId>tomcat7-maven-plugin</artifactId>
-				<version>2.2</version>
-				<configuration>
-					<url>http://162.209.109.239:8080/manager/text</url>
-					<username>saint-deploy</username>
-					<password>N3xtL3v3lG3o$</password>
-					<path>/saint</path>
-				</configuration>
-			</plugin>
+
 			<plugin>
 				<artifactId>maven-clean-plugin</artifactId>
 				<version>2.5</version>
