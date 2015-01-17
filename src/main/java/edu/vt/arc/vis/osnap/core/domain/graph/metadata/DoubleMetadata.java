@@ -1,5 +1,7 @@
 package edu.vt.arc.vis.osnap.core.domain.graph.metadata;
 
+
+//@formatter:off
 /*
  * _
  * The Open Semantic Network Analysis Platform (OSNAP)
@@ -19,6 +21,7 @@ package edu.vt.arc.vis.osnap.core.domain.graph.metadata;
  * limitations under the License.
  * _
  */
+//@formatter:on
 
 
 import javax.xml.bind.annotation.XmlType;
@@ -43,7 +46,7 @@ import edu.vt.arc.vis.osnap.events.domain.metadata.DoubleMetadataDetails;
 public class DoubleMetadata
         extends edu.vt.arc.vis.osnap.core.domain.graph.metadata.Metadata {
 
-    Double value;
+    private Double value;
 
 
     @Override
@@ -57,11 +60,20 @@ public class DoubleMetadata
     public void setValue(Object value) {
 
         if (value == null || value instanceof Double) {
+
             this.value = (Double) value;
         }
         else {
-            throw new IllegalArgumentException(
-                    "Value has to be of type Double.");
+
+            try {
+
+                this.value = Double.parseDouble(value.toString());
+            }
+            catch (NumberFormatException e) {
+
+                throw new IllegalArgumentException(
+                        "Value has to be of type Double.", e);
+            }
         }
     }
 

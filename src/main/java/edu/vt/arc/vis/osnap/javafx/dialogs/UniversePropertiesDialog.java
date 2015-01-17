@@ -1,17 +1,17 @@
 /*******************************************************************************
  * Copyright 2014 Virginia Tech Visionarium
  * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  * 
- *   http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  ******************************************************************************/
 
 
@@ -20,279 +20,247 @@
  */
 package edu.vt.arc.vis.osnap.javafx.dialogs;
 
-import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
-import edu.vt.arc.vis.osnap.core.domain.graph.common.IUniverse;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.Node;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
+import javafx.stage.Window;
+
+import org.jutility.javafx.control.labeled.LabeledTextField;
+
+import edu.vt.arc.vis.osnap.core.domain.graph.common.IUniverse;
 
 
 /**
- * @author Shawn P Neuman
- *
+ * The {@code UniversePropertiesDialog} provides a dialog box for the display of
+ * {@link IUniverse Universe} properties.
+ * 
+ * @author Shawn P Neuman, Peter J. Radics
+ * @version 1.1.1
+ * @since 0.1.0
  */
-public class UniversePropertiesDialog extends Stage {
-    
-    String id;
-    Universe universe;
+public class UniversePropertiesDialog
+        extends Dialog<ButtonType> {
 
-    
-    
+    private final GridPane content;
+
+
     /**
-     * @param uni
-     *            the graph whose properties are to be displayed
+     * Creates a new instance of the {@code GraphPropertiesDialog} class.
+     * 
+     * @param owner
+     *            the owner of this {@code GraphPropertiesDialog}.
+     * @param universe
+     *            the {@link IUniverse} whose properties are to be displayed.
      */
-    public UniversePropertiesDialog(IUniverse uni) {
+    public UniversePropertiesDialog(final Node owner, final IUniverse universe) {
 
-        this.universe = (Universe) uni;
+        this(owner == null ? null : owner.getScene().getWindow(), universe);
+    }
 
-        this.setTitle("Universe Properties");
-        this.initModality(Modality.APPLICATION_MODAL);
-        Scene graphProperties = new Scene(new VBox());
+    /**
+     * Creates a new instance of the {@code GraphPropertiesDialog} class.
+     * 
+     * @param owner
+     *            the owner of this {@code GraphPropertiesDialog}.
+     * @param universe
+     *            the {@link IUniverse} whose properties are to be displayed.
+     */
+    public UniversePropertiesDialog(final Window owner, final IUniverse universe) {
 
-        GridPane grid = new GridPane();
-        grid.setAlignment(Pos.CENTER);
-        grid.setPadding(new Insets(25, 25, 25, 25));
-        grid.setVgap(10);
-        grid.setHgap(10);
-        
-        Text numGraphs = new Text("Number of Graphs");
-        TextField numGraphField = new TextField();
+        super();
+
+        this.initOwner(owner);
+        this.setTitle("Graph Properties");
+
+        this.content = new GridPane();
+        this.content.setAlignment(Pos.CENTER);
+        this.content.setPadding(new Insets(25, 25, 25, 25));
+        this.content.setVgap(10);
+        this.content.setHgap(20);
+
+        this.getDialogPane().setContent(this.content);
+
+        LabeledTextField numGraphField = new LabeledTextField(
+                "Number of Graphs");
         numGraphField.setText(String.valueOf(universe.getGraphs().size()));
         numGraphField.setEditable(false);
 
-        Text size = new Text("Size");
-        TextField sizeField = new TextField();
+
+        LabeledTextField sizeField = new LabeledTextField("Size");
         sizeField.setText(String.valueOf(universe.size()));
         sizeField.setEditable(false);
 
-        Text sizeEdges = new Text("Size of Edges");
-        TextField sizeEdgesField = new TextField();
+        LabeledTextField sizeEdgesField = new LabeledTextField("Size of Edges");
         sizeEdgesField.setText(String.valueOf(universe.sizeEdges()));
         sizeEdgesField.setEditable(false);
 
-        Text sizeHyperEdges = new Text("Size of Hyper Edges");
-        TextField sizeHyperEdgesField = new TextField();
+        LabeledTextField sizeHyperEdgesField = new LabeledTextField(
+                "Size of Hyper Edges");
         sizeHyperEdgesField.setText(String.valueOf(universe.sizeHyperEdges()));
         sizeHyperEdgesField.setEditable(false);
 
-        Text order = new Text("Order");
-        TextField orderField = new TextField();
+        LabeledTextField orderField = new LabeledTextField("Order");
         orderField.setText(String.valueOf(universe.order()));
         orderField.setEditable(false);
 
-        Text rank = new Text("Rank");
-        TextField rankField = new TextField();
+        LabeledTextField rankField = new LabeledTextField("Rank");
         rankField.setText(String.valueOf(universe.rank()));
         rankField.setEditable(false);
 
-        Text maxDegree = new Text("Max Degree");
-        TextField maxDegreeField = new TextField();
+        LabeledTextField maxDegreeField = new LabeledTextField("Max Degree");
         maxDegreeField.setText(String.valueOf(universe.maxDegree()));
         maxDegreeField.setEditable(false);
 
-        Text maxDegreeEdges = new Text("Max Degree Edges");
-        TextField maxDegreeEdgesField = new TextField();
+        LabeledTextField maxDegreeEdgesField = new LabeledTextField(
+                "Max Degree Edges");
         maxDegreeEdgesField.setText(String.valueOf(universe.maxDegreeEdges()));
         maxDegreeEdgesField.setEditable(false);
 
-        Text maxDegreeHyperEdges = new Text("Max Degree of Hyper Edges");
-        TextField maxDegreeHyperEdgesField = new TextField();
+        LabeledTextField maxDegreeHyperEdgesField = new LabeledTextField(
+                "Max Degree of Hyper Edges");
         maxDegreeHyperEdgesField.setText(String.valueOf(universe
                 .maxDegreeHyperEdges()));
         maxDegreeHyperEdgesField.setEditable(false);
 
-        Text maxInDegree = new Text("Max In Degree");
-        TextField maxInDegreeField = new TextField();
+        LabeledTextField maxInDegreeField = new LabeledTextField(
+                "Max In Degree");
         maxInDegreeField.setText(String.valueOf(universe.maxInDegree()));
         maxInDegreeField.setEditable(false);
 
-        Text maxInDegreeEdges = new Text("Max In Degree Edges");
-        TextField maxInDegreeEdgesField = new TextField();
-        maxInDegreeEdgesField.setText(String.valueOf(universe.maxInDegreeEdges()));
+        LabeledTextField maxInDegreeEdgesField = new LabeledTextField(
+                "Max In Degree Edges");
+        maxInDegreeEdgesField.setText(String.valueOf(universe
+                .maxInDegreeEdges()));
         maxInDegreeEdgesField.setEditable(false);
 
-        Text maxInDegreeHyperEdges = new Text("Max In Degree Hyper Edges");
-        TextField maxInDegreeHyperEdgesField = new TextField();
+        LabeledTextField maxInDegreeHyperEdgesField = new LabeledTextField(
+                "Max In Degree Hyper Edges");
         maxInDegreeHyperEdgesField.setText(String.valueOf(universe
                 .maxInDegreeHyperEdges()));
         maxInDegreeHyperEdgesField.setEditable(false);
 
-        Text maxOutDegree = new Text("Max Out Degree");
-        TextField maxOutDegreeField = new TextField();
+        LabeledTextField maxOutDegreeField = new LabeledTextField(
+                "Max Out Degree");
         maxOutDegreeField.setText(String.valueOf(universe.maxOutDegree()));
         maxOutDegreeField.setEditable(false);
 
-        Text maxOutDegreeEdges = new Text("Max Out Degree Edges");
-        TextField maxOutDegreeEdgesField = new TextField();
-        maxOutDegreeEdgesField
-                .setText(String.valueOf(universe.maxOutDegreeEdges()));
+        LabeledTextField maxOutDegreeEdgesField = new LabeledTextField(
+                "Max Out Degree Edges");
+        maxOutDegreeEdgesField.setText(String.valueOf(universe
+                .maxOutDegreeEdges()));
         maxOutDegreeEdgesField.setEditable(false);
 
-        Text maxOutDegreeHyperEdges = new Text("Max Out Degree Hyper Edges");
-        TextField maxOutDegreeHyperEdgesField = new TextField();
+        LabeledTextField maxOutDegreeHyperEdgesField = new LabeledTextField(
+                "Max Out Degree Hyper Edges");
         maxOutDegreeHyperEdgesField.setText(String.valueOf(universe
                 .maxOutDegreeHyperEdges()));
         maxOutDegreeHyperEdgesField.setEditable(false);
 
-        Text minDegree = new Text("Min Degree");
-        TextField minDegreeField = new TextField();
+        LabeledTextField minDegreeField = new LabeledTextField("Min Degree");
         minDegreeField.setText(String.valueOf(universe.minDegree()));
         minDegreeField.setEditable(false);
 
-        Text minDegreeEdges = new Text("Min Degree Edges");
-        TextField minDegreeEdgesField = new TextField();
+        LabeledTextField minDegreeEdgesField = new LabeledTextField(
+                "Min Degree Edges");
         minDegreeEdgesField.setText(String.valueOf(universe.minDegreeEdges()));
         minDegreeEdgesField.setEditable(false);
 
-        Text minDegreeHyperEdges = new Text("Min Degree of Hyper Edges");
-        TextField minDegreeHyperEdgesField = new TextField();
+        LabeledTextField minDegreeHyperEdgesField = new LabeledTextField(
+                "Min Degree of Hyper Edges");
         minDegreeHyperEdgesField.setText(String.valueOf(universe
                 .minDegreeHyperEdges()));
         minDegreeHyperEdgesField.setEditable(false);
 
-        Text minInDegree = new Text("Min In Degree");
-        TextField minInDegreeField = new TextField();
+        LabeledTextField minInDegreeField = new LabeledTextField(
+                "Min In Degree");
         minInDegreeField.setText(String.valueOf(universe.minInDegree()));
         minInDegreeField.setEditable(false);
 
-        Text minInDegreeEdges = new Text("Min In Degree Edges");
-        TextField minInDegreeEdgesField = new TextField();
-        minInDegreeEdgesField.setText(String.valueOf(universe.minInDegreeEdges()));
+        LabeledTextField minInDegreeEdgesField = new LabeledTextField(
+                "Min In Degree Edges");
+        minInDegreeEdgesField.setText(String.valueOf(universe
+                .minInDegreeEdges()));
         minInDegreeEdgesField.setEditable(false);
 
-        Text minInDegreeHyperEdges = new Text("Min In Degree Hyper Edges");
-        TextField minInDegreeHyperEdgesField = new TextField();
+        LabeledTextField minInDegreeHyperEdgesField = new LabeledTextField(
+                "Min In Degree Hyper Edges");
         minInDegreeHyperEdgesField.setText(String.valueOf(universe
                 .minInDegreeHyperEdges()));
         minInDegreeHyperEdgesField.setEditable(false);
 
-        Text minOutDegree = new Text("Min Out Degree");
-        TextField minOutDegreeField = new TextField();
+        LabeledTextField minOutDegreeField = new LabeledTextField(
+                "Min Out Degree");
         minOutDegreeField.setText(String.valueOf(universe.minOutDegree()));
         minOutDegreeField.setEditable(false);
 
-        Text minOutDegreeEdges = new Text("Min Out Degree Edges");
-        TextField minOutDegreeEdgesField = new TextField();
-        minOutDegreeEdgesField
-                .setText(String.valueOf(universe.minOutDegreeEdges()));
+        LabeledTextField minOutDegreeEdgesField = new LabeledTextField(
+                "Min Out Degree Edges");
+        minOutDegreeEdgesField.setText(String.valueOf(universe
+                .minOutDegreeEdges()));
         minOutDegreeEdgesField.setEditable(false);
 
-        Text minOutDegreeHyperEdges = new Text("Min Out Degree Hyper Edges");
-        TextField minOutDegreeHyperEdgesField = new TextField();
+        LabeledTextField minOutDegreeHyperEdgesField = new LabeledTextField(
+                "Min Out Degree Hyper Edges");
         minOutDegreeHyperEdgesField.setText(String.valueOf(universe
                 .minOutDegreeHyperEdges()));
         minOutDegreeHyperEdgesField.setEditable(false);
 
-        Text uniform = new Text("Is Uniform");
-        TextField uniformField = new TextField();
+        LabeledTextField uniformField = new LabeledTextField("Is Uniform");
         uniformField.setText(universe.isUniform().toString());
         uniformField.setEditable(false);
 
-        Text uniformK = new Text("Uniform Constant");
-        TextField uniformKField = new TextField();
+        LabeledTextField uniformKField = new LabeledTextField(
+                "Uniform Constant");
         uniformKField.setText(String.valueOf(universe.uniformK()));
         uniformKField.setEditable(false);
 
-        Text regular = new Text("Is Regular");
-        TextField regularField = new TextField();
+        LabeledTextField regularField = new LabeledTextField("Is Regular");
         regularField.setText(universe.isRegular().toString());
         regularField.setEditable(false);
 
-        Text regularK = new Text("Regular Constant");
-        TextField regularKField = new TextField();
+        LabeledTextField regularKField = new LabeledTextField(
+                "Regular Constant");
         regularKField.setText(String.valueOf(universe.regularK()));
         regularKField.setEditable(false);
 
-        Button ok = new Button("OK");
-        ok.setOnAction(new EventHandler<ActionEvent>() {
 
-            @Override
-            public void handle(ActionEvent action) {
+        this.content.add(numGraphField, 0, 1);
+        this.content.add(sizeField, 0, 1);
+        this.content.add(sizeEdgesField, 0, 2);
+        this.content.add(sizeHyperEdgesField, 1, 3);
+        this.content.add(orderField, 0, 4);
+        this.content.add(rankField, 0, 5);
 
-                close();
+        this.content.add(maxDegreeField, 1, 0);
+        this.content.add(maxInDegreeField, 1, 1);
+        this.content.add(maxOutDegreeField, 1, 2);
+        this.content.add(minDegreeField, 1, 3);
+        this.content.add(minInDegreeField, 1, 4);
+        this.content.add(minOutDegreeField, 1, 5);
 
-            }
+        this.content.add(maxDegreeEdgesField, 2, 0);
+        this.content.add(maxInDegreeEdgesField, 2, 1);
+        this.content.add(maxOutDegreeEdgesField, 2, 2);
+        this.content.add(minDegreeEdgesField, 2, 3);
+        this.content.add(minInDegreeEdgesField, 2, 4);
+        this.content.add(minOutDegreeEdgesField, 2, 5);
 
-        });
+        this.content.add(maxDegreeHyperEdgesField, 3, 0);
+        this.content.add(maxInDegreeHyperEdgesField, 3, 1);
+        this.content.add(maxOutDegreeHyperEdgesField, 3, 2);
+        this.content.add(minDegreeHyperEdgesField, 3, 3);
+        this.content.add(minInDegreeHyperEdgesField, 3, 4);
+        this.content.add(minOutDegreeHyperEdgesField, 3, 5);
 
-        grid.add(numGraphs, 0, 0);
-        grid.add(numGraphField, 1, 0);
-        grid.add(size, 0, 1);
-        grid.add(sizeField, 1, 1);
-        grid.add(sizeEdges, 0, 2);
-        grid.add(sizeEdgesField, 1, 2);
-        grid.add(sizeHyperEdges, 0, 3);
-        grid.add(sizeHyperEdgesField, 1, 3);
-        grid.add(order, 0, 4);
-        grid.add(orderField, 1, 4);
-        grid.add(rank, 0, 5);
-        grid.add(rankField, 1, 5);
+        this.content.add(uniformField, 4, 0);
+        this.content.add(uniformKField, 4, 1);
+        this.content.add(regularField, 4, 2);
+        this.content.add(regularKField, 4, 3);
 
-        grid.add(maxDegree, 2, 0);
-        grid.add(maxDegreeField, 3, 0);
-        grid.add(maxInDegree, 2, 1);
-        grid.add(maxInDegreeField, 3, 1);
-        grid.add(maxOutDegree, 2, 2);
-        grid.add(maxOutDegreeField, 3, 2);
-        grid.add(minDegree, 2, 3);
-        grid.add(minDegreeField, 3, 3);
-        grid.add(minInDegree, 2, 4);
-        grid.add(minInDegreeField, 3, 4);
-        grid.add(minOutDegree, 2, 5);
-        grid.add(minOutDegreeField, 3, 5);
-
-        grid.add(maxDegreeEdges, 4, 0);
-        grid.add(maxDegreeEdgesField, 5, 0);
-        grid.add(maxInDegreeEdges, 4, 1);
-        grid.add(maxInDegreeEdgesField, 5, 1);
-        grid.add(maxOutDegreeEdges, 4, 2);
-        grid.add(maxOutDegreeEdgesField, 5, 2);
-        grid.add(minDegreeEdges, 4, 3);
-        grid.add(minDegreeEdgesField, 5, 3);
-        grid.add(minInDegreeEdges, 4, 4);
-        grid.add(minInDegreeEdgesField, 5, 4);
-        grid.add(minOutDegreeEdges, 4, 5);
-        grid.add(minOutDegreeEdgesField, 5, 5);
-
-        grid.add(maxDegreeHyperEdges, 6, 0);
-        grid.add(maxDegreeHyperEdgesField, 7, 0);
-        grid.add(maxInDegreeHyperEdges, 6, 1);
-        grid.add(maxInDegreeHyperEdgesField, 7, 1);
-        grid.add(maxOutDegreeHyperEdges, 6, 2);
-        grid.add(maxOutDegreeHyperEdgesField, 7, 2);
-        grid.add(minDegreeHyperEdges, 6, 3);
-        grid.add(minDegreeHyperEdgesField, 7, 3);
-        grid.add(minInDegreeHyperEdges, 6, 4);
-        grid.add(minInDegreeHyperEdgesField, 7, 4);
-        grid.add(minOutDegreeHyperEdges, 6, 5);
-        grid.add(minOutDegreeHyperEdgesField, 7, 5);
-
-        grid.add(uniform, 8, 0);
-        grid.add(uniformField, 9, 0);
-        grid.add(uniformK, 8, 1);
-        grid.add(uniformKField, 9, 1);
-        grid.add(regular, 8, 2);
-        grid.add(regularField, 9, 2);
-        grid.add(regularK, 8, 3);
-        grid.add(regularKField, 9, 3);
-
-        grid.add(ok, 5, 6, 2, 1);
-
-        ((VBox) graphProperties.getRoot()).getChildren().add(grid);
-
-        this.setScene(graphProperties);
-        ok.requestFocus();
+        this.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
     }
-
-
 }

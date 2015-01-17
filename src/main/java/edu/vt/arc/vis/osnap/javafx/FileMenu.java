@@ -1,6 +1,13 @@
-/*******************************************************************************
- * Copyright 2014 Virginia Tech Visionarium
- * 
+package edu.vt.arc.vis.osnap.javafx;
+
+
+// @formatter:off
+/*
+ * _
+ * The Open Semantic Network Analysis Platform (OSNAP) 
+ * _
+ * Copyright (C) 2012 - 2014 Visionarium at Virginia Tech 
+ * _
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
@@ -12,40 +19,16 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
- ******************************************************************************/
-
-
-package edu.vt.arc.vis.osnap.javafx;
-
-/*
- * _
- * The Open Semantic Network Analysis Platform (OSNAP)
- * _
- * Copyright (C) 2012 - 2014 Visionarium at Virginia Tech
- * _
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
  * _
  */
-
+// @formatter:on
 
 import java.io.File;
 import java.net.URI;
+import java.util.Optional;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.Menu;
 import javafx.scene.control.SeparatorMenuItem;
@@ -54,7 +37,6 @@ import javafx.stage.Stage;
 
 import org.controlsfx.control.action.Action;
 import org.controlsfx.control.action.ActionUtils;
-import org.controlsfx.dialog.DefaultDialogAction;
 import org.jutility.javafx.control.dialog.UriDialog;
 
 import edu.vt.arc.vis.osnap.core.domain.Project;
@@ -215,205 +197,159 @@ public class FileMenu
         this.tempSaveLocation = null;
 
         // menu items for File
-        this.newMI = new DefaultDialogAction("New Project") {
+        this.newMI = new Action("New Project", actionEvent -> {
 
-            @Override
-            public void handle(ActionEvent ae) {
+            Optional<Universe> result = new UniverseDialog(this.stage,
+                    "Create Universe", null).showAndWait();
+            if (result.isPresent()) {
 
-
-                Universe universe = UniverseDialog.showUniverseDialog(
-                        FileMenu.this.stage, null);
-
-                if (universe != null) {
-
-                    FileMenu.this.project.set(new Project(universe));
-                }
-                else {
-
-                    FileMenu.this.project.set(null);
-                }
-                FileMenu.this.universe.set(universe);
-
+                this.project.set(new Project(result.get()));
+                this.universe.set(result.get());
             }
-        };
+            else {
 
-        this.openProjectMI = new DefaultDialogAction("Open Project File") {
-
-            @Override
-            public void handle(ActionEvent ae) {
-
-                Project project = FileMenu.this.openFile(Project.class,
-                        FileMenu.this.projectSaveLocation, FileMenu.osnap);
-
-                FileMenu.this.project.set(project);
-
-                if (project != null) {
-
-                    FileMenu.this.projectSaveLocation = FileMenu.this.tempSaveLocation;
-                    FileMenu.this.tempSaveLocation = null;
-
-                    FileMenu.this.universe.set(project.getUniverse());
-                }
-
+                this.project.set(null);
+                this.universe.set(null);
             }
-        };
+        });
 
-        this.openProjectUriMI = new DefaultDialogAction("Open Project URI") {
+        this.openProjectMI = new Action(
+                "Open Project File",
+                actionEvent -> {
 
-            @Override
-            public void handle(ActionEvent ae) {
-
-                URI uri = UriDialog.showUriDialog(FileMenu.this.stage);
-
-                if (uri != null) {
-                    Project project = FileMenu.this.open(Project.class, uri);
+                    Project project = FileMenu.this.openFile(Project.class,
+                            FileMenu.this.projectSaveLocation, FileMenu.osnap);
 
                     FileMenu.this.project.set(project);
 
                     if (project != null) {
 
+                        FileMenu.this.projectSaveLocation = FileMenu.this.tempSaveLocation;
+                        FileMenu.this.tempSaveLocation = null;
+
                         FileMenu.this.universe.set(project.getUniverse());
                     }
+
+                });
+
+        this.openProjectUriMI = new Action("Open Project URI", actionEvent -> {
+
+            new UriDialog(FileMenu.this.stage).showAndWait().ifPresent(uri -> {
+
+                Project project = this.open(Project.class, uri);
+
+                this.project.set(project);
+
+                if (project != null) {
+
+                    this.universe.set(project.getUniverse());
                 }
-            }
-        };
+            });
 
 
-        this.openUniverseMI = new DefaultDialogAction(
-                "Open Graph Universe File") {
-
-            @Override
-            public void handle(ActionEvent ae) {
-
-                Universe universe = FileMenu.this.openFile(Universe.class,
-                        FileMenu.this.universeSaveLocation, allFormats, osnapu,
-                        owl, xml, graphML);
-
-                if (universe != null) {
-
-                    Project project = new Project(universe);
-                    FileMenu.this.project.set(project);
-                }
-
-                FileMenu.this.universe.set(universe);
-
-            }
-        };
+        });
 
 
-        this.openUniverseUriMI = new DefaultDialogAction(
-                "Open Graph Universe URI") {
+        this.openUniverseMI = new Action("Open Graph Universe File",
+                actionEvent -> {
 
-            @Override
-            public void handle(ActionEvent ae) {
-
-                URI uri = UriDialog.showUriDialog(FileMenu.this.stage);
-
-                if (uri != null) {
-
-                    Universe universe = FileMenu.this.open(Universe.class, uri);
+                    Universe universe = this.openFile(Universe.class,
+                            this.universeSaveLocation, FileMenu.allFormats,
+                            FileMenu.osnapu, FileMenu.owl, FileMenu.xml,
+                            FileMenu.graphML);
 
                     if (universe != null) {
 
                         Project project = new Project(universe);
-                        FileMenu.this.project.set(project);
+                        this.project.set(project);
                     }
-                    FileMenu.this.universe.set(universe);
-                }
 
+                    this.universe.set(universe);
+
+                });
+
+
+        this.openUniverseUriMI = new Action("Open Graph Universe URI",
+                actionEvent -> {
+
+                    new UriDialog(FileMenu.this.stage).showAndWait().ifPresent(
+                            uri -> {
+
+                                Universe universe = this.open(Universe.class,
+                                        uri);
+
+                                if (universe != null) {
+
+                                    Project project = new Project(universe);
+                                    this.project.set(project);
+                                }
+                                this.universe.set(universe);
+                            });
+                });
+
+
+
+        this.saveProjectMI = new Action("Save Project", actionEvent -> {
+
+            File saveLocation = FileMenu.this.saveFile(
+                    FileMenu.this.project.get(),
+                    FileMenu.this.projectSaveLocation, false, FileMenu.osnap);
+
+            if (saveLocation != null) {
+
+                FileMenu.this.projectSaveLocation = saveLocation;
             }
-        };
 
+        });
 
-        this.saveProjectMI = new DefaultDialogAction("Save Project") {
+        this.saveProjectAsMI = new Action("Save Project As", actionEvent -> {
 
-            @Override
-            public void handle(ActionEvent ae) {
+            File saveLocation = this.saveFile(this.project.get(),
+                    this.projectSaveLocation, true, osnap);
 
-                File saveLocation = FileMenu.this.saveFile(
-                        FileMenu.this.project.get(),
-                        FileMenu.this.projectSaveLocation, false,
-                        FileMenu.osnap);
+            if (saveLocation != null) {
 
-                if (saveLocation != null) {
-
-                    FileMenu.this.projectSaveLocation = saveLocation;
-                }
-
+                this.projectSaveLocation = saveLocation;
             }
-        };
+        });
 
-        this.saveProjectAsMI = new DefaultDialogAction("Save Project As") {
+        this.saveUniverseMI = new Action("Save Graph Universe",
+                actionEvent -> {
 
-            @Override
-            public void handle(ActionEvent ae) {
+                    File saveLocation = this.saveFile(this.universe.get(),
+                            this.universeSaveLocation, false, FileMenu.osnapu);
 
-                File saveLocation = FileMenu.this
-                        .saveFile(FileMenu.this.project.get(),
-                                FileMenu.this.projectSaveLocation, true,
-                                FileMenu.osnap);
+                    if (saveLocation != null) {
 
-                if (saveLocation != null) {
+                        FileMenu.this.universeSaveLocation = saveLocation;
+                    }
+                });
 
-                    FileMenu.this.projectSaveLocation = saveLocation;
-                }
-            }
-        };
+        this.saveUniverseAsMI = new Action("Save Graph Universe As",
+                actionEvent -> {
 
-        this.saveUniverseMI = new DefaultDialogAction("Save Graph Universe") {
+                    File saveLocation = this.saveFile(this.universe.get(),
+                            this.universeSaveLocation, true, FileMenu.osnapu);
 
-            @Override
-            public void handle(ActionEvent ae) {
+                    if (saveLocation != null) {
 
-                File saveLocation = FileMenu.this.saveFile(
-                        FileMenu.this.universe.get(),
-                        FileMenu.this.universeSaveLocation, false,
-                        FileMenu.osnapu);
-
-                if (saveLocation != null) {
-
-                    FileMenu.this.universeSaveLocation = saveLocation;
-                }
-            }
-        };
-
-        this.saveUniverseAsMI = new DefaultDialogAction(
-                "Save Graph Universe As") {
-
-            @Override
-            public void handle(ActionEvent ae) {
-
-                File saveLocation = FileMenu.this.saveFile(
-                        FileMenu.this.universe.get(),
-                        FileMenu.this.universeSaveLocation, true,
-                        FileMenu.osnapu);
-
-                if (saveLocation != null) {
-
-                    FileMenu.this.universeSaveLocation = saveLocation;
-                }
-            }
-        };
+                        FileMenu.this.universeSaveLocation = saveLocation;
+                    }
+                });
 
 
 
-        this.closeMI = new DefaultDialogAction("Close") {
+        this.closeMI = new Action("Close", actionEvent -> {
 
-            @Override
-            public void handle(ActionEvent ae) {
+            this.project.set(null);
+            this.universe.set(null);
+        });
 
-                FileMenu.this.project.set(null);
-                FileMenu.this.universe.set(null);
-            }
-        };
-        this.exitMI = new DefaultDialogAction("Exit") {
 
-            @Override
-            public void handle(ActionEvent ae) {
+        this.exitMI = new Action("Exit", actionEvent -> {
 
-                System.exit(0);
-            }
-        };
+            System.exit(0);
+        });
 
         this.saveProjectMI.disabledProperty().set(true);
         this.saveProjectAsMI.disabledProperty().set(true);
@@ -421,20 +357,6 @@ public class FileMenu
         this.saveUniverseAsMI.disabledProperty().set(true);
         this.closeMI.disabledProperty().set(true);
 
-        // Action test = new DefaultDialogAction("Test") {
-        // @Override
-        // public void handle(ActionEvent ae) {
-        //
-        // final Task<Universe> task = IOManager.Instance().openTask(null,
-        // Universe.class);
-        // // TODO Auto-generated method stub
-        //
-        // Dialogs.create().title("Opening File").showWorkerProgress(task);
-        // Thread thread = new Thread(task);
-        // thread.start();
-        //
-        // }
-        // };
 
 
         this.getItems().addAll(ActionUtils.createMenuItem(newMI),
@@ -448,45 +370,27 @@ public class FileMenu
                 ActionUtils.createMenuItem(saveUniverseMI),
                 ActionUtils.createMenuItem(saveUniverseAsMI),
                 new SeparatorMenuItem(), ActionUtils.createMenuItem(closeMI),
-                ActionUtils.createMenuItem(exitMI)
-        // ,ActionUtils.createMenuItem(test)
-                );
+                ActionUtils.createMenuItem(exitMI));
 
 
-        this.universe.addListener(new ChangeListener<Universe>() {
+        this.universe.addListener((observable, oldValue, newValue) -> {
 
-            @Override
-            public void changed(ObservableValue<? extends Universe> property,
-                    Universe oldValue, Universe newValue) {
+            boolean requiresUniverse = (newValue == null);
 
-                boolean requiresUniverse = (newValue == null);
+            this.newMI.disabledProperty().set(!requiresUniverse);
 
+            this.openProjectMI.disabledProperty().set(!requiresUniverse);
+            this.openProjectUriMI.disabledProperty().set(!requiresUniverse);
+            this.saveProjectAsMI.disabledProperty().set(requiresUniverse);
+            this.saveProjectMI.disabledProperty().set(requiresUniverse);
 
-
-                FileMenu.this.newMI.disabledProperty().set(!requiresUniverse);
-
-                FileMenu.this.openProjectMI.disabledProperty().set(
-                        !requiresUniverse);
-                FileMenu.this.openProjectUriMI.disabledProperty().set(
-                        !requiresUniverse);
-                FileMenu.this.saveProjectAsMI.disabledProperty().set(
-                        requiresUniverse);
-                FileMenu.this.saveProjectMI.disabledProperty().set(
-                        requiresUniverse);
-
-                FileMenu.this.openUniverseMI.disabledProperty().set(
-                        !requiresUniverse);
-                FileMenu.this.openUniverseUriMI.disabledProperty().set(
-                        !requiresUniverse);
-                FileMenu.this.saveUniverseAsMI.disabledProperty().set(
-                        requiresUniverse);
-                FileMenu.this.saveUniverseMI.disabledProperty().set(
-                        requiresUniverse);
-                FileMenu.this.closeMI.disabledProperty().set(requiresUniverse);
-            }
+            this.openUniverseMI.disabledProperty().set(!requiresUniverse);
+            this.openUniverseUriMI.disabledProperty().set(!requiresUniverse);
+            this.saveUniverseAsMI.disabledProperty().set(requiresUniverse);
+            this.saveUniverseMI.disabledProperty().set(requiresUniverse);
+            this.closeMI.disabledProperty().set(requiresUniverse);
         });
     }
-
 
     private <T> T openFile(Class<? extends T> fileType, File location,
             FileChooser.ExtensionFilter... extensionFilters) {

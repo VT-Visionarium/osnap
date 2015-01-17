@@ -1,5 +1,7 @@
 package edu.vt.arc.vis.osnap.core.domain.graph.metadata;
 
+
+//@formatter:off
 /*
  * _
  * The Open Semantic Network Analysis Platform (OSNAP)
@@ -19,8 +21,7 @@ package edu.vt.arc.vis.osnap.core.domain.graph.metadata;
  * limitations under the License.
  * _
  */
-
-
+//@formatter:on
 import javax.xml.bind.annotation.XmlType;
 
 import edu.vt.arc.vis.osnap.events.domain.metadata.StringMetadataDetails;
@@ -43,7 +44,7 @@ import edu.vt.arc.vis.osnap.events.domain.metadata.StringMetadataDetails;
 public class StringMetadata
         extends Metadata {
 
-    String value;
+    private String value;
 
     @Override
     public String getValue() {
@@ -56,11 +57,12 @@ public class StringMetadata
     public void setValue(Object value) {
 
         if (value == null || value instanceof String) {
+            
             this.value = ((String) value);
         }
         else {
-            throw new IllegalArgumentException(
-                    "Value has to be of type String.");
+            
+            this.value = value.toString();
         }
     }
 

@@ -22,12 +22,11 @@ package edu.vt.arc.vis.osnap.javafx;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -35,9 +34,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 import org.controlsfx.control.action.Action;
-import org.controlsfx.dialog.DefaultDialogAction;
-import org.controlsfx.dialog.Dialog;
-import org.controlsfx.dialog.Dialogs;
 import org.jutility.javafx.control.ListViewWithSearchPanel;
 
 import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
@@ -155,8 +151,8 @@ public class UniverseDetailsVBox
      */
     private void populate(Universe universe) {
 
-        this.universeListView.items().clear();
-        this.universeListView.items().add(this.getUniverse());
+        this.universeListView.getItems().clear();
+        this.universeListView.getItems().add(this.getUniverse());
 
         this.uniSchema = universe.getUniverseSchema();
         this.uniMetaDataTable.iterateCollection(universe.getMetadataProperty(),
@@ -177,129 +173,79 @@ public class UniverseDetailsVBox
 
     private void setUpEventHandlers() {
 
-        this.universe.addListener(new ChangeListener<Universe>() {
+        this.universe.addListener((observable, oldValue, newValue) -> {
 
-            @Override
-            public void changed(ObservableValue<? extends Universe> observable,
-                    Universe oldValue, Universe newValue) {
+            this.clear();
 
+            boolean universeEmpty = newValue == null;
 
+            if (!universeEmpty) {
 
-                UniverseDetailsVBox.this.clear();
-
-                boolean universeEmpty = newValue == null;
-                // UniverseDetailsVBox.this.removeUniverse.disabledProperty().set(
-                // universeEmpty);
-                // UniverseDetailsVBox.this.editUniverse.disabledProperty().set(
-                // universeEmpty);
-                // UniverseDetailsVBox.this.universeProperties.disabledProperty()
-                // .set(universeEmpty);
-
-
-                if (!universeEmpty) {
-
-                    UniverseDetailsVBox.this.populate(newValue);
-                }
+                this.populate(newValue);
             }
         });
 
         this.universeListView.selectedItemProperty().addListener(
-                new ChangeListener<Universe>() {
+                (observable, oldValue, newValue) -> {
 
-                    @Override
-                    public void changed(
-                            ObservableValue<? extends Universe> observable,
-                            Universe oldValue, Universe newValue) {
-
-                        boolean universeEmpty = newValue == null;
-                        UniverseDetailsVBox.this.removeUniverse
-                                .disabledProperty().set(universeEmpty);
-                        UniverseDetailsVBox.this.editUniverse
-                                .disabledProperty().set(universeEmpty);
-                        UniverseDetailsVBox.this.universeProperties
-                                .disabledProperty().set(universeEmpty);
+                    boolean universeEmpty = newValue == null;
+                    this.removeUniverse.disabledProperty().set(universeEmpty);
+                    this.editUniverse.disabledProperty().set(universeEmpty);
+                    this.universeProperties.disabledProperty().set(
+                            universeEmpty);
 
 
-                    }
                 });
     }
 
 
     private void setUpContextMenus() {
 
-        Action addUniverse = new DefaultDialogAction("Add") {
+        Action addUniverse = new Action("Add", actionEvent -> {
 
-            @Override
-            public void handle(ActionEvent actionEvent) {
+            new UniverseDialog(this, "Create Universe", null).showAndWait()
+                    .ifPresent(newUniverse -> {
 
-                Universe newUniverse = UniverseDialog.showUniverseDialog(
-                        UniverseDetailsVBox.this.getScene().getWindow(), null);
+                        this.setUniverse(newUniverse);
+                    });
 
-                if (newUniverse != null) {
+        });
 
-                    UniverseDetailsVBox.this.setUniverse(newUniverse);
-                    UniverseDetailsVBox.this.universeListView.update();
-                }
-            }
-        };
+        this.editUniverse = new Action("Edit", actionEvent -> {
 
-        this.editUniverse = new DefaultDialogAction("Edit") {
+            Universe universe = this.universeListView.getSelectedItem();
 
-            @Override
-            public void handle(ActionEvent actionEvent) {
+            new UniverseDialog(this, "Edit Universe", universe).showAndWait()
+                    .ifPresent(editedUniverse -> {
 
-                Universe universe = UniverseDetailsVBox.this.universeListView
-                        .getSelectedItem();
-
-                Universe editedUniverse = UniverseDialog.showUniverseDialog(
-                        UniverseDetailsVBox.this.getScene().getWindow(),
-                        universe);
+                        this.universeListView.clear();
+                        this.universeListView.getItems().add(editedUniverse);
+                    });
+        });
 
 
-                if (editedUniverse != null) {
+        this.removeUniverse = new Action("Remove", actionEvent -> {
 
-                    UniverseDetailsVBox.this.universeListView.update();
-                }
-            }
-        };
-
-
-        this.removeUniverse = new DefaultDialogAction("Remove") {
+            Universe universe = this.universeListView.getSelectedItem();
+            Alert alert = new Alert(AlertType.CONFIRMATION);
+            alert.setTitle("Confirm removal!");
+            alert.setContentText("Are you sure you want to remove universe "
+                    + universe.getId() + "?");
 
 
-            @Override
-            public void handle(ActionEvent actionEvent) {
+            alert.showAndWait().filter(buttonType -> {
+                return buttonType == ButtonType.OK;
+            }).ifPresent(param -> {
 
-                Universe universe = UniverseDetailsVBox.this.universeListView
-                        .getSelectedItem();
-                Action result = Dialogs
-                        .create()
-                        .title("Confirm removal!")
-                        .message(
-                                "Are you sure you want to remove universe "
-                                        + universe.getId() + "?").showConfirm();
+                this.universeListView.getItems().remove(universe);
+                this.universe.set(null);
+            });
+        });
 
+        this.universeProperties = new Action("Properties", actionEvent -> {
 
-                if (result == Dialog.Actions.YES) {
-
-                    UniverseDetailsVBox.this.universeListView.items().remove(
-                            universe);
-                    UniverseDetailsVBox.this.universe.set(null);
-                    UniverseDetailsVBox.this.universeListView.update();
-                }
-            }
-        };
-
-        this.universeProperties = new DefaultDialogAction("Properties") {
-
-            @Override
-            public void handle(ActionEvent actionEvent) {
-
-                UniversePropertiesDialog upd = new UniversePropertiesDialog(
-                        UniverseDetailsVBox.this.getUniverse());
-                upd.show();
-            }
-        };
+            new UniversePropertiesDialog(this, this.getUniverse()).show();
+        });
 
 
         this.removeUniverse.disabledProperty().set(true);
@@ -309,25 +255,21 @@ public class UniverseDetailsVBox
         this.universeListView.contextMenuActions().addAll(addUniverse,
                 editUniverse, removeUniverse, universeProperties);
 
-        universeListView.addEventHandler(MetadataChangedEvent.METADATA_CHANGED,
-                new EventHandler<MetadataChangedEvent>() {
+        this.universeListView.addEventHandler(
+                MetadataChangedEvent.METADATA_CHANGED,
+                metadataEvent -> {
 
-                    @Override
-                    public void handle(MetadataChangedEvent metadataEvent) {
+                    MetadataChangedEvent.Change change = metadataEvent
+                            .getChange();
 
-                        MetadataChangedEvent.Change change = metadataEvent
-                                .getChange();
-
-                        switch (change) {
-                            case ADD:
-                                uniSchemaTableView
-                                        .iterateCollection(UniverseDetailsVBox.this
-                                                .getUniverse().getNodeSchema());
-                                break;
-                            case REMOVE:
-                            default:
-                                break;
-                        }
+                    switch (change) {
+                        case ADD:
+                            uniSchemaTableView.iterateCollection(this
+                                    .getUniverse().getNodeSchema());
+                            break;
+                        case REMOVE:
+                        default:
+                            break;
                     }
 
                 });

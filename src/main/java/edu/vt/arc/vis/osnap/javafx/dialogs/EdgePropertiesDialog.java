@@ -1,95 +1,85 @@
-/*******************************************************************************
- * Copyright 2014 Virginia Tech Visionarium
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
-
-
 package edu.vt.arc.vis.osnap.javafx.dialogs;
 
 
-import edu.vt.arc.vis.osnap.core.domain.graph.Edge;
+//@formatter:off
+/*
+* _
+* The Open Semantic Network Analysis Platform (OSNAP)
+* _
+* Copyright (C) 2012 - 2014 Visionarium at Virginia Tech
+* _
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+* 
+*      http://www.apache.org/licenses/LICENSE-2.0
+* 
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+* _
+*/
+//@formatter:on
+
+
+import javafx.scene.Node;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.stage.Window;
+
+import org.jutility.javafx.control.labeled.LabeledTextField;
+
 import edu.vt.arc.vis.osnap.core.domain.graph.common.IEdge;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 
 /**
- * dialog box for displaying the possible properties of an edge including
- * property values of a specific edge
- *
- * @author Shawn P Neuman
- *
+ * The {@code EdgePropertiesDialog} provides a dialog box for the display of
+ * {@link IEdge Edge} properties.
+ * 
+ * @author Shawn P Neuman, Peter J. Radics
+ * @version 1.1.1
+ * @since 0.1.0
  */
 public class EdgePropertiesDialog
-        extends Stage {
+        extends Dialog<ButtonType> {
 
-    private Edge edge;
 
     /**
-     * constructor needs an edge to populate all the value fields
-     *
-     * @param iEdge
+     * Creates a new instance of the {@code EdgePropertiesDialog} class.
+     * 
+     * @param owner
+     *            the owner of this {@code EdgePropertiesDialog}.
+     * @param edge
+     *            the edge.
      */
-    public EdgePropertiesDialog(IEdge iEdge) {
+    public EdgePropertiesDialog(final Node owner, final IEdge edge) {
 
-        this.edge = (Edge) iEdge;
-
-        this.setTitle("Edge Properties");
-        this.initModality(Modality.APPLICATION_MODAL);
-        Scene edgeProperties = new Scene(new VBox());
-
-        GridPane grid = new GridPane();
-        grid.setAlignment(Pos.CENTER);
-        grid.setPadding(new Insets(25, 25, 25, 25));
-        grid.setVgap(10);
-        grid.setHgap(10);
-
-        Text isDirected = new Text("Directed ?");
-        TextField isDirectedField = new TextField();
-        isDirectedField.setText(edge.isDirected().toString());
-        isDirectedField.setEditable(false);
-
-        Button ok = new Button("OK");
-        ok.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent action) {
-
-                close();
-
-            }
-
-        });
-
-        grid.add(isDirected, 0, 0);
-        grid.add(isDirectedField, 1, 0);
-        grid.add(ok, 1, 1);
-
-        ((VBox) edgeProperties.getRoot()).getChildren().add(grid);
-
-        this.setScene(edgeProperties);
-        ok.requestFocus();
+        this(owner == null ? null : owner.getScene().getWindow(), edge);
     }
 
+    /**
+     * Creates a new instance of the {@code EdgePropertiesDialog} class.
+     * 
+     * @param owner
+     *            the owner of this {@code EdgePropertiesDialog}.
+     * @param edge
+     *            the edge.
+     */
+    public EdgePropertiesDialog(final Window owner, final IEdge edge) {
+
+        super();
+        this.initOwner(owner);
+        this.setTitle("Edge Properties");
+
+        LabeledTextField isDirectedTF = new LabeledTextField("Directed ?");
+        isDirectedTF.setHgap(10);
+        isDirectedTF.setText(edge.isDirected().toString());
+        isDirectedTF.setEditable(false);
+
+        this.getDialogPane().setContent(isDirectedTF);
+
+        this.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+    }
 }

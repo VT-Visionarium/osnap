@@ -1,22 +1,24 @@
 /*******************************************************************************
  * Copyright 2014 Virginia Tech Visionarium
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  ******************************************************************************/
 
 
 package edu.vt.arc.vis.osnap.javafx.wizards.content;
 
+
+//@formatter:off
 /*
  * _
  * The Open Semantic Network Analysis Platform (OSNAP)
@@ -26,9 +28,9 @@ package edu.vt.arc.vis.osnap.javafx.wizards.content;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,7 +38,7 @@ package edu.vt.arc.vis.osnap.javafx.wizards.content;
  * limitations under the License.
  * _
  */
-
+//@formatter:on
 
 import java.util.Collection;
 import java.util.List;
@@ -44,13 +46,12 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.GridPane;
 
-import org.jutility.javafx.control.LabeledComboBox;
 import org.jutility.javafx.control.ListViewWithSearchPanel;
+import org.jutility.javafx.control.labeled.LabeledComboBox;
 
 import edu.vt.arc.vis.osnap.core.domain.graph.common.IGraphObject;
 import edu.vt.arc.vis.osnap.core.domain.graph.common.IGraphObjectBasedValueTypeContainer;
@@ -62,19 +63,19 @@ import edu.vt.arc.vis.osnap.javafx.wizards.pages.DisplayPropertiesPage;
 /**
  * This panel contains all of the panes for choosing and editing display
  * properties
- * 
+ *
  * @author Shawn P. Neuman, Peter J. Radics
- * 
+ *
  */
 public class DisplayPropertiesGridPane
-        extends GridPane {
+extends GridPane {
 
 
-    private LabeledComboBox<String>                                      typeSelectionComboBox;
-    private ListViewWithSearchPanel<IGraphObjectBasedValueTypeContainer> domainKeys;
-    private ListViewWithSearchPanel<Object>                              valueListView;
+    private final LabeledComboBox<String>                                      typeSelectionComboBox;
+    private final ListViewWithSearchPanel<IGraphObjectBasedValueTypeContainer> domainKeys;
+    private final ListViewWithSearchPanel<Object>                              valueListView;
 
-    private Collection<IGraphObject>                                     selectedGraphObjects;
+    private Collection<IGraphObject>                                           selectedGraphObjects;
 
     /**
      * Creates a new instance of the {@link DisplayPropertiesGridPane} class;
@@ -87,37 +88,38 @@ public class DisplayPropertiesGridPane
         this.setVgap(10);
         this.setPadding(new Insets(10, 25, 25, 25));
 
-        typeSelectionComboBox = new LabeledComboBox<>("Property Type");
-        typeSelectionComboBox.items().addAll("Metadata",
+        this.typeSelectionComboBox = new LabeledComboBox<>("Property Type");
+        this.typeSelectionComboBox.getItems().addAll("Metadata",
                 "Graph Object Property");
 
-        domainKeys = new ListViewWithSearchPanel<>(
-                "Available Keys",
+        this.domainKeys = new ListViewWithSearchPanel<>("Available Keys",
                 new GraphObjectBasedValueTypeContainerStringConverter<>());
-        domainKeys.setVisible(false);
+        this.domainKeys.setVisible(false);
 
 
-        valueListView = new ListViewWithSearchPanel<>("Available Values");
-        valueListView.setVisible(false);
-        valueListView.setSelectionMode(SelectionMode.MULTIPLE);
+        this.valueListView = new ListViewWithSearchPanel<>("Available Values");
+        this.valueListView.setVisible(false);
+        this.valueListView.getSelectionModel().setSelectionMode(
+                SelectionMode.MULTIPLE);
 
 
-        this.add(typeSelectionComboBox, 0, 0);
-        this.add(domainKeys, 1, 0);
-        this.add(valueListView, 2, 0);
+        this.add(this.typeSelectionComboBox, 0, 0);
+        this.add(this.domainKeys, 1, 0);
+        this.add(this.valueListView, 2, 0);
 
 
         this.setUpEventHandlers();
     }
 
 
-    private Set<?> createValueList(IGraphObjectBasedValueTypeContainer domainKey) {
+    private Set<?> createValueList(
+            final IGraphObjectBasedValueTypeContainer domainKey) {
 
-        Set<Object> values = new TreeSet<>();
+        final Set<Object> values = new TreeSet<>();
 
-        for (IGraphObject graphObject : this.selectedGraphObjects) {
+        for (final IGraphObject graphObject : this.selectedGraphObjects) {
 
-            Object value = domainKey.getValueForGraphObject(graphObject);
+            final Object value = domainKey.getValueForGraphObject(graphObject);
             if (value instanceof Collection<?>) {
                 values.addAll((Collection<?>) value);
             }
@@ -130,29 +132,29 @@ public class DisplayPropertiesGridPane
 
     /**
      * Populates the graph object schema list view
-     * 
+     *
      * @param container
-     * 
+     *
      */
-    private void populateSchema(IMetadataContainer container) {
+    private void populateSchema(final IMetadataContainer container) {
 
-        domainKeys.clear();
-        domainKeys.items().addAll(
+        this.domainKeys.clear();
+        this.domainKeys.getItems().addAll(
                 container.getMetadataProperty().getSchema().getEntries());
-        domainKeys.setVisible(true);
+        this.domainKeys.setVisible(true);
     }
 
     /**
      * populates the property list view
-     * 
+     *
      * @param graphObject
-     * 
+     *
      */
-    private void populateProperties(IGraphObject graphObject) {
+    private void populateProperties(final IGraphObject graphObject) {
 
-        domainKeys.clear();
-        domainKeys.items().addAll(graphObject.hasGraphProperties());
-        domainKeys.setVisible(true);
+        this.domainKeys.clear();
+        this.domainKeys.getItems().addAll(graphObject.hasGraphProperties());
+        this.domainKeys.setVisible(true);
     }
 
 
@@ -162,7 +164,7 @@ public class DisplayPropertiesGridPane
      */
     public String getComboBoxChoice() {
 
-        return typeSelectionComboBox.getSelectedItem();
+        return this.typeSelectionComboBox.getSelectionModel().getSelectedItem();
     }
 
 
@@ -182,7 +184,7 @@ public class DisplayPropertiesGridPane
      */
     public List<Object> getValueChoices() {
 
-        return valueListView.getSelectedItems();
+        return this.valueListView.getSelectedItems();
     }
 
 
@@ -192,7 +194,7 @@ public class DisplayPropertiesGridPane
      */
     public void clear() {
 
-        this.typeSelectionComboBox.clearSelection();
+        this.typeSelectionComboBox.getSelectionModel().clearSelection();
 
         this.domainKeys.clear();
         this.domainKeys.setVisible(false);
@@ -207,7 +209,7 @@ public class DisplayPropertiesGridPane
      *            list of selected IGraph objects
      */
     public void setSelectedGraphObjects(
-            Collection<IGraphObject> selectedGraphObjects) {
+            final Collection<IGraphObject> selectedGraphObjects) {
 
         this.selectedGraphObjects = selectedGraphObjects;
     }
@@ -215,94 +217,90 @@ public class DisplayPropertiesGridPane
 
     private void setUpEventHandlers() {
 
-        typeSelectionComboBox.selectedItemProperty().addListener(
-                new ChangeListener<String>() {
+        this.typeSelectionComboBox
+                .getSelectionModel()
+                .selectedItemProperty()
+        .addListener(
+                        (ChangeListener<String>) (observable, oldValue,
+                                newValue) -> {
 
-                    @Override
-                    public void changed(
-                            ObservableValue<? extends String> observable,
-                            String oldValue, String newValue) {
+                            DisplayPropertiesGridPane.this.domainKeys
+                                    .clearSelection();
+                            DisplayPropertiesGridPane.this.valueListView
+                                    .clear();
+                            DisplayPropertiesGridPane.this.toggleNextButton();
+                            DisplayPropertiesGridPane.this.valueListView
+                                    .setVisible(false);
 
-                        domainKeys.clearSelection();
-                        valueListView.clear();
-                        toggleNextButton();
-                        valueListView.setVisible(false);
+                            if (newValue != null) {
 
-                        if (newValue != null) {
+                                switch (newValue) {
 
-                            switch (newValue) {
+                                    case "Metadata":
+                                        if (!DisplayPropertiesGridPane.this.selectedGraphObjects
+                                                .isEmpty()) {
 
-                                case "Metadata":
-                                    if (!selectedGraphObjects.isEmpty()) {
+                                            final IGraphObject graphObject1 = DisplayPropertiesGridPane.this.selectedGraphObjects
+                                                    .iterator().next();
 
-                                        IGraphObject graphObject = selectedGraphObjects
-                                                .iterator().next();
+                                            if (graphObject1 instanceof IMetadataContainer) {
 
-                                        if (graphObject instanceof IMetadataContainer) {
-
-                                            populateSchema((IMetadataContainer) graphObject);
+                                                DisplayPropertiesGridPane.this
+                                                        .populateSchema((IMetadataContainer) graphObject1);
+                                            }
                                         }
-                                    }
-                                    break;
-                                case "Graph Object Property":
-                                    if (!selectedGraphObjects.isEmpty()) {
+                                        break;
+                                    case "Graph Object Property":
+                                        if (!DisplayPropertiesGridPane.this.selectedGraphObjects
+                                                .isEmpty()) {
 
-                                        IGraphObject graphObject = selectedGraphObjects
-                                                .iterator().next();
-                                        populateProperties(graphObject);
-                                    }
-                                    break;
-                                default:
-                                    clear();
-                                    break;
+                                            final IGraphObject graphObject2 = DisplayPropertiesGridPane.this.selectedGraphObjects
+                                                    .iterator().next();
+                                            DisplayPropertiesGridPane.this
+                                                    .populateProperties(graphObject2);
+                                        }
+                                        break;
+                                    default:
+                                        DisplayPropertiesGridPane.this.clear();
+                                        break;
+                                }
                             }
-                        }
+                        });
+
+        this.domainKeys.selectedItemProperty().addListener(
+                (ChangeListener<IGraphObjectBasedValueTypeContainer>) (
+                        observable, oldValue, newValue) -> {
+
+                    DisplayPropertiesGridPane.this.valueListView.clear();
+                    DisplayPropertiesGridPane.this.toggleNextButton();
+                    if (newValue != null) {
+
+                                DisplayPropertiesGridPane.this.valueListView
+                                .setVisible(true);
+                                DisplayPropertiesGridPane.this.valueListView.getItems()
+                                .addAll(DisplayPropertiesGridPane.this
+                                        .createValueList(newValue));
                     }
+                    else {
+                                DisplayPropertiesGridPane.this.valueListView
+                                .setVisible(false);
+                    }
+
                 });
 
-        domainKeys.selectedItemProperty().addListener(
-                new ChangeListener<IGraphObjectBasedValueTypeContainer>() {
-
-                    @Override
-                    public void changed(
-                            ObservableValue<? extends IGraphObjectBasedValueTypeContainer> observable,
-                            IGraphObjectBasedValueTypeContainer oldValue,
-                            IGraphObjectBasedValueTypeContainer newValue) {
-
-                        valueListView.clear();
-                        toggleNextButton();
-                        if (newValue != null) {
-
-                            valueListView.setVisible(true);
-                            valueListView.items().addAll(
-                                    createValueList(newValue));
-                        }
-                        else {
-                            valueListView.setVisible(false);
-                        }
-
-                    }
-                });
-
-        valueListView.selectedItemProperty().addListener(
-                new ChangeListener<Object>() {
-
-                    @Override
-                    public void changed(
-                            ObservableValue<? extends Object> observable,
-                            Object oldValue, Object newValue) {
-
-                        toggleNextButton();
-
-                    }
-                });
+        this.valueListView.selectedItemProperty()
+                .addListener(
+                        (ChangeListener<Object>) (observable, oldValue,
+                                newValue) -> DisplayPropertiesGridPane.this
+                                .toggleNextButton());
     }
-    
+
     private void toggleNextButton() {
-        DisplayPropertiesPage par = (DisplayPropertiesPage) DisplayPropertiesGridPane.this
+
+        final DisplayPropertiesPage par = (DisplayPropertiesPage) DisplayPropertiesGridPane.this
                 .getParent().getParent();
 
-        par.enableNextButton(!(valueListView.getSelectedItems() == null || valueListView
+        par.enableNextButton(!((this.valueListView.getSelectedItems() == null) || this.valueListView
                 .getSelectedItems().isEmpty()));
     }
 }

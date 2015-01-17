@@ -1,22 +1,7 @@
-/*******************************************************************************
- * Copyright 2014 Virginia Tech Visionarium
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- ******************************************************************************/
-
-
 package edu.vt.arc.vis.osnap.javafx;
 
+
+//@formatter:off
 /*
  * _
  * The Open Semantic Network Analysis Platform (OSNAP)
@@ -36,28 +21,25 @@ package edu.vt.arc.vis.osnap.javafx;
  * limitations under the License.
  * _
  */
-
+//@formatter:on
 
 import java.io.File;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.Node;
+import javafx.scene.control.Menu;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
 import org.controlsfx.control.action.Action;
 import org.controlsfx.control.action.ActionUtils;
-import org.controlsfx.dialog.DefaultDialogAction;
 import org.x3d.model.X3DDocument;
 
 import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
 import edu.vt.arc.vis.osnap.core.domain.layout.Layout;
 import edu.vt.arc.vis.osnap.core.domain.visualization.Visualization;
 import edu.vt.arc.vis.osnap.io.IOManager;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.scene.Node;
-import javafx.scene.control.Menu;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
 
 /**
@@ -75,9 +57,9 @@ public class VisualizationMenu
     private final ObjectProperty<Layout>        layout;
     private final ObjectProperty<Universe>      universe;
 
-    private final Action                       createFromLayoutMI;
-    private final Action                       exportToX3DMI;
-    private final Action                       closeMI;
+    private final Action                        createFromLayoutMI;
+    private final Action                        exportToX3DMI;
+    private final Action                        closeMI;
 
 
     /**
@@ -202,56 +184,43 @@ public class VisualizationMenu
         this.layout = new SimpleObjectProperty<>();
         this.universe = new SimpleObjectProperty<>();
 
-        this.createFromLayoutMI = new DefaultDialogAction(
-                "Create Visualization from Layout") {
+        this.createFromLayoutMI = new Action(
+                "Create Visualization from Layout", actionEvent -> {
 
-            @Override
-            public void handle(ActionEvent ae) {
-
-                VisualizationMenu.this.getLayout().layout();
-                VisualizationMenu.this.setVisualization(null);
-                VisualizationMenu.this.setVisualization(VisualizationMenu.this
-                        .getLayout().getVisualization());
-            }
-        };
+                    this.getLayout().layout();
+                    this.setVisualization(null);
+                    this.setVisualization(this.getLayout().getVisualization());
+                });
 
 
 
-        this.exportToX3DMI = new DefaultDialogAction("Export to X3D") {
+        this.exportToX3DMI = new Action(
+                "Export to X3D",
+                actionEvent -> {
 
-            @Override
-            public void handle(ActionEvent ae) {
+                    FileChooser fc = new FileChooser();
+                    fc.setTitle("Export Visualization As X3D");
+                    FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(
+                            "X3D Files", "*.x3d");
+                    fc.getExtensionFilters().add(filter);
+                    File x3dSaveFile = fc.showSaveDialog(this.stage);
+                    if (x3dSaveFile != null) {
+                        if (!x3dSaveFile.getAbsolutePath().endsWith(".x3d")) {
 
-                FileChooser fc = new FileChooser();
-                fc.setTitle("Export Visualization As X3D");
-                FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(
-                        "X3D Files", "*.x3d");
-                fc.getExtensionFilters().add(filter);
-                File x3dSaveFile = fc
-                        .showSaveDialog(VisualizationMenu.this.stage);
-                if (x3dSaveFile != null) {
-                    if (!x3dSaveFile.getAbsolutePath().endsWith(".x3d")) {
-
-                        x3dSaveFile = new File(x3dSaveFile.getAbsolutePath()
-                                + ".x3d");
+                            x3dSaveFile = new File(
+                                    x3dSaveFile.getAbsolutePath() + ".x3d");
+                        }
+                        IOManager.Instance().save(x3dSaveFile,
+                                this.visualization.get(), X3DDocument.class);
                     }
-                    IOManager.Instance().save(x3dSaveFile,
-                            VisualizationMenu.this.visualization.get(),
-                            X3DDocument.class);
-                }
-            }
-        };
+                });
 
 
-        this.closeMI = new DefaultDialogAction("Close") {
+        this.closeMI = new Action("Close", actionEvent -> {
 
-            @Override
-            public void handle(ActionEvent ae) {
+            this.visualization.set(null);
 
-                VisualizationMenu.this.visualization.set(null);
-
-            }
-        };
+        });
 
         this.exportToX3DMI.disabledProperty().set(true);
         this.closeMI.disabledProperty().set(true);
@@ -263,24 +232,19 @@ public class VisualizationMenu
 
 
 
-        this.visualization.addListener(new ChangeListener<Visualization>() {
-
-            @Override
-            public void changed(
-                    ObservableValue<? extends Visualization> property,
-                    Visualization oldValue, Visualization newValue) {
+        this.visualization.addListener((
+                    observable,
+                     oldValue,  newValue) ->{
 
                 boolean requiresVisualization = (newValue == null);
 
 
-                VisualizationMenu.this.createFromLayoutMI.disabledProperty()
-                        .set(!requiresVisualization);
+                this.createFromLayoutMI.disabledProperty().set(
+                        !requiresVisualization);
 
-                VisualizationMenu.this.exportToX3DMI.disabledProperty().set(
-                        requiresVisualization);
-                VisualizationMenu.this.closeMI.disabledProperty().set(
-                        requiresVisualization);
-            }
+                this.exportToX3DMI.disabledProperty()
+                        .set(requiresVisualization);
+                this.closeMI.disabledProperty().set(requiresVisualization);
         });
     }
 }

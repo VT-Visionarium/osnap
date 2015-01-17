@@ -1,22 +1,7 @@
-/*******************************************************************************
- * Copyright 2014 Virginia Tech Visionarium
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- ******************************************************************************/
-
-
 package edu.vt.arc.vis.osnap.javafx;
 
+
+//@formatter:off
 /*
  * _
  * The Open Semantic Network Analysis Platform (OSNAP)
@@ -36,22 +21,19 @@ package edu.vt.arc.vis.osnap.javafx;
  * limitations under the License.
  * _
  */
+//@formatter:on
 
-
-import org.controlsfx.control.action.Action;
-import org.controlsfx.control.action.ActionUtils;
-import org.controlsfx.dialog.DefaultDialogAction;
-
-import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
-import edu.vt.arc.vis.osnap.core.domain.layout.Layout;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.Menu;
 import javafx.stage.Stage;
+
+import org.controlsfx.control.action.Action;
+import org.controlsfx.control.action.ActionUtils;
+
+import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
+import edu.vt.arc.vis.osnap.core.domain.layout.Layout;
 
 
 /**
@@ -67,9 +49,9 @@ public class LayoutMenu
     private final ObjectProperty<Layout>   layout;
     private final ObjectProperty<Universe> universe;
 
-    private final Action                  createDefaultMI;
-    private final Action                  createEmptyMI;
-    private final Action                  closeMI;
+    private final Action                   createDefaultMI;
+    private final Action                   createEmptyMI;
+    private final Action                   closeMI;
 
     /**
      * Returns the layout property.
@@ -162,39 +144,26 @@ public class LayoutMenu
 
 
 
-        this.createDefaultMI = new DefaultDialogAction(
-                "Create Layout with Default Values") {
-
-            @Override
-            public void handle(ActionEvent ae) {
+        this.createDefaultMI = new Action("Create Layout with Default Values",
+                actionEvent -> {
 
 
-                LayoutMenu.this.setLayout(Layout.defaultLayout(LayoutMenu.this
-                        .getUniverse()));
-            }
-        };
+                    this.setLayout(Layout.defaultLayout(LayoutMenu.this
+                            .getUniverse()));
+                });
 
 
-        this.createEmptyMI = new DefaultDialogAction("Create Empty Layout") {
-
-            @Override
-            public void handle(ActionEvent ae) {
+        this.createEmptyMI = new Action("Create Empty Layout", actionEvent -> {
 
 
-                LayoutMenu.this.setLayout(new Layout(LayoutMenu.this
-                        .getUniverse()));
-            }
-        };
+            this.setLayout(new Layout(LayoutMenu.this.getUniverse()));
+        });
 
 
-        this.closeMI = new DefaultDialogAction("Clear Layout") {
+        this.closeMI = new Action("Clear Layout", actionEvent -> {
 
-            @Override
-            public void handle(ActionEvent ae) {
-
-                layout.set(null);
-            }
-        };
+            this.layout.set(null);
+        });
 
         this.closeMI.disabledProperty().set(true);
 
@@ -203,16 +172,11 @@ public class LayoutMenu
                 ActionUtils.createMenuItem(closeMI));
 
 
-        this.layout.addListener(new ChangeListener<Layout>() {
+        this.layout.addListener((observable, oldValue, newValue) -> {
 
-            @Override
-            public void changed(ObservableValue<? extends Layout> property,
-                    Layout oldValue, Layout newValue) {
+            boolean requiresLayout = (newValue == null);
 
-                boolean requiresLayout = (newValue == null);
-
-                LayoutMenu.this.closeMI.disabledProperty().set(requiresLayout);
-            }
+            this.closeMI.disabledProperty().set(requiresLayout);
         });
     }
 }

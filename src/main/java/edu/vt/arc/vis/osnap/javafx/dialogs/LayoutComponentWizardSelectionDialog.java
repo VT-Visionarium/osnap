@@ -1,43 +1,32 @@
-/*******************************************************************************
- * Copyright 2014 Virginia Tech Visionarium
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- ******************************************************************************/
-
-
-/**
- * 
- */
 package edu.vt.arc.vis.osnap.javafx.dialogs;
 
 
-import org.controlsfx.control.ButtonBar;
-import org.controlsfx.control.ButtonBar.ButtonType;
-import org.controlsfx.control.action.Action;
-import org.controlsfx.dialog.DefaultDialogAction;
-import org.controlsfx.dialog.Dialog;
+//@formatter:off
+/*
+* _
+* The Open Semantic Network Analysis Platform (OSNAP)
+* _
+* Copyright (C) 2012 - 2014 Visionarium at Virginia Tech
+* _
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+* 
+*      http://www.apache.org/licenses/LICENSE-2.0
+* 
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+* _
+*/
+//@formatter:on
 
-import edu.vt.arc.vis.osnap.core.domain.graph.Edge;
-import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
-import edu.vt.arc.vis.osnap.core.domain.layout.LayoutComponentRegistry;
-import edu.vt.arc.vis.osnap.core.domain.layout.common.I2DCoordinateLayoutComponent;
-import edu.vt.arc.vis.osnap.core.domain.layout.common.I3DCoordinateLayoutComponent;
-import edu.vt.arc.vis.osnap.core.domain.layout.common.ILayoutComponent;
-import edu.vt.arc.vis.osnap.core.domain.mappings.Mapping;
-import edu.vt.arc.vis.osnap.javafx.wizards.IWizardWithStatus;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
+
+import javafx.scene.Node;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
@@ -47,6 +36,13 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Window;
+import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
+import edu.vt.arc.vis.osnap.core.domain.layout.LayoutComponentRegistry;
+import edu.vt.arc.vis.osnap.core.domain.layout.common.I2DCoordinateLayoutComponent;
+import edu.vt.arc.vis.osnap.core.domain.layout.common.I3DCoordinateLayoutComponent;
+import edu.vt.arc.vis.osnap.core.domain.layout.common.ILayoutComponent;
+import edu.vt.arc.vis.osnap.core.domain.mappings.Mapping;
+import edu.vt.arc.vis.osnap.javafx.wizards.IWizardWithStatus;
 
 
 /**
@@ -57,27 +53,27 @@ import javafx.stage.Window;
  * 
  */
 public class LayoutComponentWizardSelectionDialog
-        extends Dialog {
-
+        extends Dialog<IWizardWithStatus> {
 
     private final Universe    universe;
-    private Action            confirmAction;
 
-    private ToggleGroup       group;
-    private GridPane          content;
-
-    private IWizardWithStatus wizard;
+    private final ToggleGroup group;
+    private final GridPane    content;
 
 
 
     /**
-     * Returns the {@link IWizardWithStatus Wizard} chosen by this dialog.
+     * Creates a new instance of the
+     * {@link LayoutComponentWizardSelectionDialog} class.
      * 
-     * @return the {@link IWizardWithStatus Wizard}.
+     * @param owner
+     *            the owner of this dialog.
+     * @param universe
+     *            the {@link Universe}.
      */
-    public IWizardWithStatus getWizard() {
+    public LayoutComponentWizardSelectionDialog(Node owner, Universe universe) {
 
-        return this.wizard;
+        this(owner == null ? null : owner.getScene().getWindow(), universe);
     }
 
     /**
@@ -91,14 +87,18 @@ public class LayoutComponentWizardSelectionDialog
      */
     public LayoutComponentWizardSelectionDialog(Window owner, Universe universe) {
 
-        super(owner, "Select a layout component to create");
+        super();
+
+        this.initOwner(owner);
+        this.setTitle("Select a layout component to create");
+
 
         this.universe = universe;
 
         this.content = new GridPane();
         this.content.setHgap(10);
         this.content.setVgap(10);
-        this.setContent(content);
+        this.getDialogPane().setContent(this.content);
 
 
 
@@ -114,10 +114,7 @@ public class LayoutComponentWizardSelectionDialog
         Text special = new Text("Mapped Layout Components");
         special.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
 
-
-
         this.group = new ToggleGroup();
-
 
         int simpleLayoutComponents = 1;
         int twoDLayoutComponents = 1;
@@ -168,96 +165,35 @@ public class LayoutComponentWizardSelectionDialog
             }
         }
 
+        this.getDialogPane().getButtonTypes()
+                .addAll(ButtonType.NEXT, ButtonType.CANCEL);
 
-        this.confirmAction = new DefaultDialogAction("Add LayoutComponent") {
+        this.getDialogPane().lookupButton(ButtonType.NEXT).disableProperty()
+                .bind(this.group.selectedToggleProperty().isNull());
 
-            {
-                ButtonBar.setType(this, ButtonType.OK_DONE);
-            }
 
-            @Override
-            public void handle(ActionEvent ae) {
+        this.setResultConverter(buttonType -> {
 
-                if (!isDisabled()) {
+            if (buttonType == ButtonType.NEXT) {
+                Toggle toggle = this.group.selectedToggleProperty().get();
 
-                    if (ae.getSource() instanceof Dialog) {
+                if (toggle instanceof RadioButton) {
 
-                        Dialog dlg = (Dialog) ae.getSource();
+                    RadioButton radioButton = (RadioButton) toggle;
 
-                        Toggle toggle = LayoutComponentWizardSelectionDialog.this.group
-                                .selectedToggleProperty().get();
+                    String layoutComponentClassName = radioButton.getText();
 
-                        if (toggle instanceof RadioButton) {
+                    Class<? extends ILayoutComponent> layoutComponentClass = LayoutComponentRegistry
+                            .Instance().getClassOfLayoutComponent(
+                                    layoutComponentClassName);
 
-                            RadioButton radioButton = (RadioButton) toggle;
-
-                            String layoutComponentClassName = radioButton
-                                    .getText();
-
-                            Class<? extends ILayoutComponent> layoutComponentClass = LayoutComponentRegistry
-                                    .Instance().getClassOfLayoutComponent(
-                                            layoutComponentClassName);
-
-                            LayoutComponentWizardSelectionDialog.this.wizard = LayoutComponentRegistry
-                                    .Instance()
-                                    .createWizardForLayoutComponentClass(
-                                            layoutComponentClass,
-                                            LayoutComponentWizardSelectionDialog.this.universe);
-
-                        }
-
-                        dlg.setResult(LayoutComponentWizardSelectionDialog.this.confirmAction);
-                    }
+                    return LayoutComponentRegistry.Instance()
+                            .createWizardForLayoutComponentClass(
+                                    layoutComponentClass, this.universe);
                 }
             }
-        };
 
-        this.confirmAction.disabledProperty().set(true);
-        this.getActions().addAll(this.confirmAction, Dialog.Actions.CANCEL);
-
-        this.group.selectedToggleProperty().addListener(
-                new ChangeListener<Toggle>() {
-
-                    @Override
-                    public void changed(
-                            ObservableValue<? extends Toggle> observable,
-                            Toggle oldValue, Toggle newValue) {
-
-                        LayoutComponentWizardSelectionDialog.this.validate();
-                    }
-                });
-
+            return null;
+        });
     }
-
-    private void validate() {
-
-        confirmAction.disabledProperty().set(group.getSelectedToggle() == null);
-    }
-
-
-    /**
-     * Creates and shows a dialog for creating or modifying an edge.
-     * 
-     * @param owner
-     *            the owner.
-     * @param universe
-     *            the {@link Universe}.
-     * @return the newly created (or modified) {@link Edge}.
-     */
-    public static IWizardWithStatus showLayoutComponentWizardSelectionDialog(
-            Window owner, Universe universe) {
-
-        LayoutComponentWizardSelectionDialog dialog = new LayoutComponentWizardSelectionDialog(
-                owner, universe);
-
-
-        Action result = dialog.show();
-
-        if (result == dialog.confirmAction) {
-
-            return dialog.wizard;
-        }
-        return null;
-    }
-
 }

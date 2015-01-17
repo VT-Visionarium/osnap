@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2014 Virginia Tech Visionarium
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -18,23 +18,15 @@
 package edu.vt.arc.vis.osnap.javafx.widgets;
 
 
-import edu.vt.arc.vis.osnap.core.domain.graph.metadata.Metadata;
-import edu.vt.arc.vis.osnap.core.domain.graph.metadata.MetadataMapProperty;
-import edu.vt.arc.vis.osnap.core.domain.graph.metadata.Schema;
-import edu.vt.arc.vis.osnap.javafx.dialogs.AddMetadataDialog;
-
 import java.util.Collection;
 
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
@@ -43,75 +35,60 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
-
-import org.controlsfx.control.action.Action;
-import org.controlsfx.dialog.Dialog.Actions;
-import org.controlsfx.dialog.Dialogs;
+import edu.vt.arc.vis.osnap.core.domain.graph.common.IGraphObject;
+import edu.vt.arc.vis.osnap.core.domain.graph.metadata.Metadata;
+import edu.vt.arc.vis.osnap.core.domain.graph.metadata.MetadataMapProperty;
+import edu.vt.arc.vis.osnap.core.domain.graph.metadata.Schema;
+import edu.vt.arc.vis.osnap.javafx.dialogs.MetadataDialog;
 
 
 /**
- * component for viewing meta data information on a selected graph object
- * 
- * @author Shawn P Neuman
- * 
+ * The {@code MetaDataTable} class provides a view for {@link Metadata}
+ * information on a selected {@link IGraphObject GraphObject}.
+ *
+ * @author Shawn P Neuman, Peter J. Radics
+ *
  */
 public class MetaDataTable
         extends VBox {
 
 
-    private Text                     tableLabel;
-    private TableView<Metadata>      metaDataTable;
-    private ObservableList<Metadata> metaDataList;
-    private String                   filterString;
-    private MetadataMapProperty      mdmp;
+    private final Text                     tableLabel;
+    private final TableView<Metadata>      metaDataTable;
+    private final ObservableList<Metadata> metaDataList;
+    private String                         filterString;
+    private MetadataMapProperty            mdmp;
     private Collection<Metadata>           data;
-    private ContextMenu              cm;
-    private AddMetadataDialog        addDialog;
-    private Metadata                 temp;
-    private String                   id;
-    private Schema                   graphSchema;
-    private SearchPanel              searchPanel;
-    private Stage                    warning;
-
-
+    private ContextMenu                    cm;
+    private Schema                         schema;
+    private final SearchPanel              searchPanel;
 
     /**
-     * constructor
+     * Creates a new instance of the {@code MetaDataTable} class with the
+     * provided title.
      * 
-     * @param label
-     *            title value, changes based on which object meta data is
-     *            associated with
+     * @param title
+     *            the title.
      */
-    public MetaDataTable(String label) {
+    public MetaDataTable(final String title) {
 
 
         // this.setStyle("-fx-background-color: #778899");
         // this.setStyle("-fx-border-color: #778899; -fx-border-width: 10px");
-        tableLabel = new Text(label);
-        tableLabel.setFont(Font.font("verdana", 16));
+        this.tableLabel = new Text(title);
+        this.tableLabel.setFont(Font.font("verdana", 16));
         // tableLabel.setFill(Color.WHITE);
-        metaDataTable = new TableView<>();
-        TableColumn<Metadata, String> key = new TableColumn<>(
-                "Key");
+        this.metaDataTable = new TableView<>();
+        final TableColumn<Metadata, String> key = new TableColumn<>("Key");
         key.setPrefWidth(125);
 
-        TableColumn<Metadata, String> metadataType = new TableColumn<>(
+        final TableColumn<Metadata, String> metadataType = new TableColumn<>(
                 "Type");
 
-        TableColumn<Metadata, String> value = new TableColumn<>(
-                "Value");
+        final TableColumn<Metadata, String> value = new TableColumn<>("Value");
         value.setPrefWidth(125);
         // the quoted item must match the id given to the corresponding
         // portion of the object
@@ -123,100 +100,79 @@ public class MetaDataTable
         value.setCellValueFactory(new PropertyValueFactory<Metadata, String>(
                 "value"));
 
-        metaDataList = FXCollections.observableArrayList();
+        this.metaDataList = FXCollections.observableArrayList();
 
-        metaDataTable.setItems(metaDataList);
-        metaDataTable.getColumns().add(key);
-        metaDataTable.getColumns().add(value);
-        metaDataTable.getColumns().add(metadataType);
+        this.metaDataTable.setItems(this.metaDataList);
+        this.metaDataTable.getColumns().add(key);
+        this.metaDataTable.getColumns().add(value);
+        this.metaDataTable.getColumns().add(metadataType);
         metadataType.setVisible(false);
 
-        searchPanel = new SearchPanel();
+        this.searchPanel = new SearchPanel();
 
-        this.getChildren().addAll(tableLabel, metaDataTable);
+        this.getChildren().addAll(this.tableLabel, this.metaDataTable);
 
-        searchPanel.getClose().addEventHandler(ActionEvent.ACTION,
-                new EventHandler<ActionEvent>() {
+        this.searchPanel.getClose().addEventHandler(
+                ActionEvent.ACTION,
+                arg0 -> {
 
-                    @Override
-                    public void handle(ActionEvent arg0) {
+                    if (MetaDataTable.this.getChildren().contains(
+                            MetaDataTable.this.searchPanel)) {
+                        MetaDataTable.this.getChildren().remove(
+                                MetaDataTable.this.searchPanel);
+                    }
 
-                        if (MetaDataTable.this.getChildren().contains(
-                                searchPanel)) {
-                            MetaDataTable.this.getChildren().remove(
+
+                });
+
+        this.searchPanel.getFilterString().addListener(
+                (ChangeListener<String>) (observable, oldVal, newVal) -> {
+
+                    MetaDataTable.this.filterString = newVal;
+                    if (MetaDataTable.this.mdmp != null) {
+                        MetaDataTable.this.iterateCollection(
+                                MetaDataTable.this.mdmp,
+                                MetaDataTable.this.schema);
+                    }
+
+                });
+
+        this.metaDataTable.addEventHandler(
+                ContextMenuEvent.CONTEXT_MENU_REQUESTED, event -> {
+
+                    final double screenx = event.getScreenX();
+                    final double screeny = event.getScreenY();
+                    if (MetaDataTable.this.cm != null) {
+                        MetaDataTable.this.cm.hide();
+                    }
+                    MetaDataTable.this.setupContextMenu(screenx, screeny);
+
+                });
+
+        this.metaDataTable.setOnMouseClicked(event -> {
+
+            if (event.getButton().equals(MouseButton.PRIMARY)) {
+                if (MetaDataTable.this.cm != null) {
+                    MetaDataTable.this.cm.hide();
+                }
+            }
+
+        });
+
+        this.addEventHandler(
+                KeyEvent.KEY_PRESSED,
+                event -> {
+
+                    if ((event.getCode().toString() == "F")
+                            && event.isControlDown()) {
+                        if (!MetaDataTable.this.getChildren().contains(
+                                MetaDataTable.this.searchPanel)) {
+                            MetaDataTable.this.getChildren().add(
                                     MetaDataTable.this.searchPanel);
+                            MetaDataTable.this.searchPanel.setTextFocus();
                         }
 
-
                     }
-
-                });
-
-        searchPanel.getFilterString().addListener(new ChangeListener<String>() {
-
-            @Override
-            public void changed(ObservableValue<? extends String> observable,
-                    String oldVal, String newVal) {
-
-                filterString = newVal;
-                if (mdmp != null) {
-                    iterateCollection(mdmp, graphSchema);
-                }
-
-            }
-
-        });
-
-        metaDataTable.addEventHandler(ContextMenuEvent.CONTEXT_MENU_REQUESTED,
-                new EventHandler<ContextMenuEvent>() {
-
-                    @Override
-                    public void handle(ContextMenuEvent event) {
-
-                        double screenx = event.getScreenX();
-                        double screeny = event.getScreenY();
-                        if (cm != null) {
-                            cm.hide();
-                        }
-                        contextMenu(screenx, screeny);
-
-                    }
-
-                });
-
-        metaDataTable.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
-            @Override
-            public void handle(MouseEvent event) {
-
-                if (event.getButton().equals(MouseButton.PRIMARY)) {
-                    if (cm != null) {
-                        cm.hide();
-                    }
-                }
-
-            }
-
-        });
-
-        this.addEventHandler(KeyEvent.KEY_PRESSED,
-                new EventHandler<KeyEvent>() {
-
-                    @Override
-                    public void handle(KeyEvent event) {
-
-                        if (event.getCode().toString() == "F"
-                                && event.isControlDown()) {
-                            if (!MetaDataTable.this.getChildren().contains(
-                                    searchPanel)) {
-                                MetaDataTable.this.getChildren().add(
-                                        MetaDataTable.this.searchPanel);
-                                searchPanel.setTextFocus();
-                            }
-
-                        }
-                    }
-
                 });
 
 
@@ -224,41 +180,42 @@ public class MetaDataTable
 
     /**
      * iterate over collection of graph objects
-     * 
+     *
      * @param data
      *            the meta data property
      * @param graphSchema
      *            the collection of schema entries
      */
-    public void iterateCollection(MetadataMapProperty data, Schema graphSchema) {
+    public void iterateCollection(final MetadataMapProperty data,
+            final Schema graphSchema) {
 
-        this.graphSchema = graphSchema;
-        mdmp = data;
+        this.schema = graphSchema;
+        this.mdmp = data;
         this.data = data.getMetadata();
-        metaDataList.clear();
-        for (Metadata entry : this.data) {
-            populate(entry);
+        this.metaDataList.clear();
+        for (final Metadata entry : this.data) {
+            this.populate(entry);
         }
     }
 
     /**
      * populates the list from the entry passed in from iterate collection
      * method
-     * 
+     *
      * @param entry
      *            the entry to add to the list
      */
-    public void populate(Metadata entry) {
+    public void populate(final Metadata entry) {
 
-        if (filterString == null) {
-            metaDataList.add(entry);
+        if (this.filterString == null) {
+            this.metaDataList.add(entry);
         }
 
-        else if (entry.getKey().contains(filterString.toLowerCase())) {
-            metaDataList.add(entry);
+        else if (entry.getKey().contains(this.filterString.toLowerCase())) {
+            this.metaDataList.add(entry);
 
         }
-        metaDataTable.setItems(metaDataList);
+        this.metaDataTable.setItems(this.metaDataList);
 
     }
 
@@ -267,166 +224,89 @@ public class MetaDataTable
      */
     public void clear() {
 
-        metaDataList.clear();
+        this.metaDataList.clear();
     }
 
     /**
      * creates a context menu to enable adding, editing, removing
-     * 
+     *
      * @param x
      *            x location to place menu
      * @param y
      *            y location to place menu
      */
-    private void contextMenu(double x, double y) {
+    private void setupContextMenu(final double x, final double y) {
 
-        if (cm != null) {
-            cm.hide();
+        if (this.cm != null) {
+            this.cm.hide();
         }
 
-        cm = new ContextMenu();
+        this.cm = new ContextMenu();
 
-        MenuItem addGraph = new MenuItem("Add");
-        addGraph.setOnAction(new EventHandler<ActionEvent>() {
+        final MenuItem addGraph = new MenuItem("Add");
+        addGraph.setOnAction(actionEvent -> this.createMetadata());
 
-            @Override
-            public void handle(ActionEvent arg0) {
+        final MenuItem editGraph = new MenuItem("Edit");
+        editGraph.setOnAction(actionEvent -> this.createEditDialog());
 
-                createAddDialog();
-            }
+        final MenuItem remGraph = new MenuItem("Remove");
+        remGraph.setOnAction(actionEvent -> this.removeMetadata());
 
-        });
-
-        MenuItem editGraph = new MenuItem("Edit");
-        editGraph.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent arg0) {
-
-                createEditDialog();
-            }
-
-        });
-
-        MenuItem remGraph = new MenuItem("Remove");
-        remGraph.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent arg0) {
-
-                createRemoveDialog();
-            }
-
-        });
-
-        cm.getItems().addAll(addGraph, editGraph, remGraph);
+        this.cm.getItems().addAll(addGraph, editGraph, remGraph);
 
         if (this.metaDataTable.getSelectionModel().getSelectedItem() == null) {
+
             remGraph.setDisable(true);
             editGraph.setDisable(true);
             // addDefaultValue.setDisable(true);
         }
-        cm.show(metaDataTable, x, y);
+        this.cm.show(this.metaDataTable, x, y);
 
     }
 
-    /**
-     * create remove dialog
-     */
-    private void createRemoveDialog() {
+    private void removeMetadata() {
 
-        Action result = Dialogs
-                .create()
-                .title("Remove this item?")
-                .message(
-                        "Are you sure you want to remove "
-                                + this.getSelectedID()).showConfirm();
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Confirm Removal");
+        alert.setContentText("Are you sure you want to remove "
+                + this.getSelectedID());
 
-        if (result == Actions.OK || result == Actions.YES) {
+        alert.showAndWait().filter(buttonType -> {
+            return buttonType == ButtonType.OK;
+        }).ifPresent(param -> {
 
-            mdmp.removeMetadata(id);
-            iterateCollection(mdmp, graphSchema);
-        }
+            this.mdmp.removeMetadata(this.getSelectedID());
+            this.iterateCollection(this.mdmp, this.schema);
+        });
     }
 
-    /**
-     * create edit dialog (currently not functioning)
-     */
     private void createEditDialog() {
 
+        Metadata metadata = this.metaDataTable.getSelectionModel()
+                .getSelectedItem();
 
-        // TODO: implement
-    }
+        MetadataDialog dialog = new MetadataDialog(this, "Create Metadata",
+                metadata, this.schema);
 
-    /**
-     * create add dialog
-     */
-    private void createAddDialog() {
+        dialog.showAndWait().ifPresent(updatedMetadata -> {
 
-        addDialog = new AddMetadataDialog(null, null, graphSchema);
-        addDialog.setOnHiding(new EventHandler<WindowEvent>() {
-
-            @Override
-            public void handle(WindowEvent event) {
-
-                if (addDialog.getAdd()) {
-                    if (addDialog.getKey().equals("New")) {
-                        createDialog("to add a new entry, use the Schema table to add the new schema entry.  After adding, the new entry will appear on the list");
-                    }
-                    else {
-                        switch (addDialog.getType()) {
-                            case BOOLEAN:
-
-                                temp = Metadata.createMetadata(
-                                        addDialog.getKey(),
-                                        addDialog.getType(),
-                                        addDialog.getValue());
-                                break;
-                            case DOUBLE:
-
-                                temp = Metadata.createMetadata(
-                                        addDialog.getKey(),
-                                        addDialog.getType(),
-                                        (double) addDialog.getValue());
-                                break;
-                            case FLOAT:
-                                temp = Metadata.createMetadata(
-                                        addDialog.getKey(),
-                                        addDialog.getType(),
-                                        (float) addDialog.getValue());
-                                break;
-                            case INTEGER:
-                                temp = Metadata.createMetadata(
-                                        addDialog.getKey(),
-                                        addDialog.getType(),
-                                        (int) addDialog.getValue());
-                                break;
-                            case LONG:
-                                temp = Metadata.createMetadata(
-                                        addDialog.getKey(),
-                                        addDialog.getType(),
-                                        (long) addDialog.getValue());
-                                break;
-                            case STRING:
-                                temp = Metadata.createMetadata(
-                                        addDialog.getKey(),
-                                        addDialog.getType(),
-                                        (String) addDialog.getValue());
-                                break;
-                            default:
-                                break;
-
-                        }
-                        mdmp.addMetadata(temp);
-                        iterateCollection(mdmp, graphSchema);
-                    }
-
-                }
-
-            }
+            this.mdmp.removeMetadata(metadata);
+            this.mdmp.addMetadata(updatedMetadata);
+            this.iterateCollection(this.mdmp, this.schema);
         });
 
-        addDialog.show();
+    }
+
+    private void createMetadata() {
+
+        MetadataDialog dialog = new MetadataDialog(this, "Create Metadata",
+                null, this.schema);
+
+        dialog.showAndWait().ifPresent(metadata -> {
+            this.mdmp.addMetadata(metadata);
+            this.iterateCollection(this.mdmp, this.schema);
+
+        });
     }
 
     /**
@@ -434,57 +314,10 @@ public class MetaDataTable
      */
     public String getSelectedID() {
 
-        return metaDataTable.getSelectionModel().getSelectedItem().getKey();
+        return this.metaDataTable.getSelectionModel().getSelectedItem()
+                .getKey();
 
 
-    }
-
-    /**
-     * creates a warning dialog for bad entries the warn string allows for
-     * different messages to be passed in
-     * 
-     * @param warn
-     *            the warning message
-     */
-    private void createDialog(String warn) {
-
-        warning = new Stage();
-        warning.setTitle("Warning !!");
-        warning.initModality(Modality.APPLICATION_MODAL);
-        Scene warnScene = new Scene(new VBox());
-        HBox box = new HBox();
-        GridPane grid2 = new GridPane();
-        grid2.setAlignment(Pos.CENTER);
-        grid2.setPadding(new Insets(25, 25, 25, 25));
-        box.setAlignment(Pos.CENTER);
-        box.setPadding(new Insets(0, 0, 25, 0));
-        Text warnText = new Text(warn);
-        warnText.setTextAlignment(TextAlignment.CENTER);
-        warnText.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
-        warnText.setFill(Color.BLACK);
-
-        Button okButton = new Button("OK");
-        okButton.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent e) {
-
-                warning.close();
-
-            }
-
-        });
-        okButton.setTextAlignment(TextAlignment.CENTER);
-
-        box.getChildren().add(okButton);
-
-        grid2.add(warnText, 0, 0, 3, 1);
-
-        ((VBox) warnScene.getRoot()).getChildren().addAll(grid2, box);
-
-        warning.setScene(warnScene);
-
-        warning.show();
     }
 
 }

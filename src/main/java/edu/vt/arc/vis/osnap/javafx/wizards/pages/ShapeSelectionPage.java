@@ -1,22 +1,7 @@
-/*******************************************************************************
- * Copyright 2014 Virginia Tech Visionarium
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
-
-
 package edu.vt.arc.vis.osnap.javafx.wizards.pages;
 
+
+//@formatter:off
 /*
  * _
  * The Open Semantic Network Analysis Platform (OSNAP)
@@ -26,9 +11,9 @@ package edu.vt.arc.vis.osnap.javafx.wizards.pages;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,14 +21,14 @@ package edu.vt.arc.vis.osnap.javafx.wizards.pages;
  * limitations under the License.
  * _
  */
-
+//@formatter:on
 
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBoxBuilder;
+import javafx.scene.layout.VBox;
 
-import org.jutility.javafx.control.LabeledComboBox;
+import org.jutility.javafx.control.labeled.LabeledComboBox;
 
 import edu.vt.arc.vis.osnap.core.domain.layout.simpleComponents.SimpleShapeLayoutComponent;
 import edu.vt.arc.vis.osnap.core.domain.visualization.Shape;
@@ -53,9 +38,9 @@ import edu.vt.arc.vis.osnap.javafx.wizards.statusobjects.ShapeStatus;
 
 /**
  * page for selecting components for this layout type
- * 
+ *
  * @author Shawn P Neuman
- * 
+ *
  */
 public class ShapeSelectionPage
         extends WizardPage {
@@ -76,20 +61,21 @@ public class ShapeSelectionPage
     @Override
     Parent getContent() {
 
-        grid = new GridPane();
-        grid.setHgap(25);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(10, 25, 25, 25));
+        this.grid = new GridPane();
+        this.grid.setHgap(25);
+        this.grid.setVgap(10);
+        this.grid.setPadding(new Insets(10, 25, 25, 25));
 
 
-        shapeBox = new LabeledComboBox<>("Choose a Shape");
+        this.shapeBox = new LabeledComboBox<>("Choose a Shape");
 
-        shapeBox.items().addAll(Shape.values());
+        this.shapeBox.getItems().addAll(Shape.values());
 
-        grid.add(shapeBox, 0, 0);
+        this.grid.add(this.shapeBox, 0, 0);
         this.getFinishButton().setDisable(true);
 
-        return VBoxBuilder.create().spacing(5).children(grid).build();
+
+        return new VBox(5, this.grid);
     }
 
 
@@ -97,10 +83,11 @@ public class ShapeSelectionPage
     @Override
     void nextPage() {
 
-        if (null != shapeBox.getSelectedItem()) {
-            Shape shape = shapeBox.getSelectedItem();
+        if (null != this.shapeBox.getSelectionModel().getSelectedItem()) {
+            final Shape shape = this.shapeBox.getSelectionModel()
+                    .getSelectedItem();
 
-            ShapeStatus status = ((ShapeLayoutWizard) ShapeSelectionPage.this
+            final ShapeStatus status = ((ShapeLayoutWizard) ShapeSelectionPage.this
                     .getWizard()).getStatusObject();
             status.setShape(shape);
             status.setLayoutComponent(new SimpleShapeLayoutComponent(status

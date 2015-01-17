@@ -1,27 +1,20 @@
-/*******************************************************************************
- * Copyright 2014 Virginia Tech Visionarium
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- ******************************************************************************/
-
-
 package edu.vt.arc.vis.osnap.javafx;
 
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+
 import org.controlsfx.control.action.Action;
-import org.controlsfx.dialog.DefaultDialogAction;
-import org.controlsfx.dialog.Dialog;
-import org.controlsfx.dialog.Dialogs;
 import org.jutility.javafx.control.ListViewWithSearchPanel;
 
 import edu.vt.arc.vis.osnap.core.domain.graph.Edge;
@@ -40,19 +33,6 @@ import edu.vt.arc.vis.osnap.javafx.stringConverters.GraphObjectStringConverter;
 import edu.vt.arc.vis.osnap.javafx.stringConverters.GraphObjectStringConverterConfiguration;
 import edu.vt.arc.vis.osnap.javafx.widgets.MetaDataTable;
 import edu.vt.arc.vis.osnap.javafx.widgets.SchemaTableView;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 
 
 /**
@@ -265,7 +245,7 @@ public class GraphDetailsVBox
     private void populate(Universe universe) {
 
 
-        this.graphListView.items().addAll(universe.getGraphs());
+        this.graphListView.getItems().addAll(universe.getGraphs());
         this.graphListView.setVisible(true);
 
         this.graphSchema = universe.getGraphSchema();
@@ -312,140 +292,110 @@ public class GraphDetailsVBox
 
     private void setUpEventHandlers() {
 
-        this.universe.addListener(new ChangeListener<Universe>() {
+        this.universe.addListener((observable, oldValue, newValue) -> {
 
-            @Override
-            public void changed(ObservableValue<? extends Universe> observable,
-                    Universe oldValue, Universe newValue) {
+            this.clear();
+            if (newValue != null) {
 
-                GraphDetailsVBox.this.clear();
-                if (newValue != null) {
-
-                    GraphDetailsVBox.this.populate(newValue);
-                }
-
+                this.populate(newValue);
             }
         });
 
 
 
-        this.graphListView.getSelectionModel().selectedItemProperty()
-                .addListener(new ChangeListener<Graph>() {
+        this.graphListView
+                .getSelectionModel()
+                .selectedItemProperty()
+                .addListener(
+                        (observable, oldValue, newValue) -> {
 
-                    @Override
-                    public void changed(
-                            ObservableValue<? extends Graph> observable,
-                            Graph oldValue, Graph newValue) {
+                            if (newValue != null) {
 
-                        if (newValue != null) {
+                                this.nodeListView.clear();
+                                this.nodeListView.getItems().addAll(
+                                        newValue.getNodes());
+                                this.nodeListView.setVisible(true);
+                                this.nodeSchemaTableView.setVisible(true);
+                                this.graphMetaDataTable.iterateCollection(
+                                        newValue.getMetadataProperty(),
+                                        this.graphSchema);
+                                this.graphMetaDataTable.setVisible(true);
+                            }
+                            else {
+                                this.nodeListView.clear();
+                                this.edgeListView.clear();
+                                this.graphMetaDataTable.clear();
+                                this.nodeMetaDataTable.clear();
+                                this.edgeMetaDataTable.clear();
 
-                            GraphDetailsVBox.this.nodeListView.clear();
-                            GraphDetailsVBox.this.nodeListView.items().addAll(
-                                    newValue.getNodes());
-                            GraphDetailsVBox.this.nodeListView.setVisible(true);
-                            GraphDetailsVBox.this.nodeSchemaTableView
-                                    .setVisible(true);
-                            GraphDetailsVBox.this.graphMetaDataTable
-                                    .iterateCollection(
-                                            newValue.getMetadataProperty(),
-                                            GraphDetailsVBox.this.graphSchema);
-                            GraphDetailsVBox.this.graphMetaDataTable
-                                    .setVisible(true);
-                        }
-                        else {
-                            GraphDetailsVBox.this.nodeListView.clear();
-                            GraphDetailsVBox.this.edgeListView.clear();
-                            GraphDetailsVBox.this.graphMetaDataTable.clear();
-                            GraphDetailsVBox.this.nodeMetaDataTable.clear();
-                            GraphDetailsVBox.this.edgeMetaDataTable.clear();
+                                this.graphMetaDataTable.setVisible(false);
+                                this.nodeMetaDataTable.setVisible(false);
+                                this.edgeMetaDataTable.setVisible(false);
+                                this.nodeListView.setVisible(false);
+                                this.edgeListView.setVisible(false);
+                                this.nodeSchemaTableView.setVisible(false);
+                                this.edgeSchemaTableView.setVisible(false);
+                            }
 
-                            GraphDetailsVBox.this.graphMetaDataTable
-                                    .setVisible(false);
-                            GraphDetailsVBox.this.nodeMetaDataTable
-                                    .setVisible(false);
-                            GraphDetailsVBox.this.edgeMetaDataTable
-                                    .setVisible(false);
-                            GraphDetailsVBox.this.nodeListView
-                                    .setVisible(false);
-                            GraphDetailsVBox.this.edgeListView
-                                    .setVisible(false);
-                            GraphDetailsVBox.this.nodeSchemaTableView
-                                    .setVisible(false);
-                            GraphDetailsVBox.this.edgeSchemaTableView
-                                    .setVisible(false);
-                        }
-
-                    }
-                });
+                        });
 
 
 
-        nodeListView.getSelectionModel().selectedItemProperty()
-                .addListener(new ChangeListener<Node>() {
+        this.nodeListView
+                .getSelectionModel()
+                .selectedItemProperty()
+                .addListener(
+                        (observable, oldValue, newValue) -> {
 
-                    @Override
-                    public void changed(
-                            ObservableValue<? extends Node> observable,
-                            Node oldValue, Node newValue) {
+                            if (newValue != null) {
 
-                        if (newValue != null) {
+                                this.edgeListView.clear();
+                                this.edgeListView.getItems().addAll(
+                                        newValue.getEdges());
 
-                            GraphDetailsVBox.this.edgeListView.clear();
-                            GraphDetailsVBox.this.edgeListView.items().addAll(
-                                    newValue.getEdges());
+                                this.edgeListView.setVisible(true);
+                                this.nodeMetaDataTable.iterateCollection(
+                                        newValue.getMetadataProperty(),
+                                        this.nodeSchema);
+                                this.nodeMetaDataTable.setVisible(true);
+                                this.edgeSchemaTableView.setVisible(true);
 
-                            GraphDetailsVBox.this.edgeListView.setVisible(true);
-                            GraphDetailsVBox.this.nodeMetaDataTable
-                                    .iterateCollection(
-                                            newValue.getMetadataProperty(),
-                                            GraphDetailsVBox.this.nodeSchema);
-                            GraphDetailsVBox.this.nodeMetaDataTable
-                                    .setVisible(true);
-                            GraphDetailsVBox.this.edgeSchemaTableView
-                                    .setVisible(true);
+                            }
 
-                        }
-
-                        else {
-                            GraphDetailsVBox.this.edgeListView.clear();
-                            GraphDetailsVBox.this.nodeMetaDataTable.clear();
-                            GraphDetailsVBox.this.edgeMetaDataTable.clear();
-                            GraphDetailsVBox.this.nodeMetaDataTable
-                                    .setVisible(false);
-                            GraphDetailsVBox.this.edgeMetaDataTable
-                                    .setVisible(false);
-                            GraphDetailsVBox.this.edgeListView
-                                    .setVisible(false);
-                            GraphDetailsVBox.this.edgeSchemaTableView
-                                    .setVisible(false);
-                        }
-                    }
-                });
+                            else {
+                                this.edgeListView.clear();
+                                this.nodeMetaDataTable.clear();
+                                this.edgeMetaDataTable.clear();
+                                this.nodeMetaDataTable.setVisible(false);
+                                this.edgeMetaDataTable.setVisible(false);
+                                this.edgeListView.setVisible(false);
+                                this.edgeSchemaTableView.setVisible(false);
+                            }
+                        });
 
 
 
-        this.edgeListView.getSelectionModel().selectedItemProperty()
-                .addListener(new ChangeListener<Edge>() {
+        this.edgeListView
+                .getSelectionModel()
+                .selectedItemProperty()
+                .addListener(
+                        (observable, oldValue, newValue) -> {
 
-                    @Override
-                    public void changed(
-                            ObservableValue<? extends Edge> observable,
-                            Edge oldValue, Edge newValue) {
+                            if (newValue != null) {
 
-                        if (newValue != null) {
+                                this.edgeMetaDataTable.iterateCollection(
+                                        newValue.getMetadataProperty(),
+                                        this.edgeSchema);
+                                this.edgeMetaDataTable.setVisible(true);
+                            }
 
-                            edgeMetaDataTable.iterateCollection(
-                                    newValue.getMetadataProperty(), edgeSchema);
-                            edgeMetaDataTable.setVisible(true);
-                        }
+                            else {
 
-                        else {
-                            edgeMetaDataTable.clear();
-                            edgeMetaDataTable.setVisible(false);
-                        }
+                                this.edgeMetaDataTable.clear();
+                                this.edgeMetaDataTable.setVisible(false);
+                            }
 
-                    }
-                });
+                        });
 
 
 
@@ -453,322 +403,234 @@ public class GraphDetailsVBox
 
     private void setUpContextMenus() {
 
-        Action addGraph = new DefaultDialogAction("Add") {
+        Action addGraph = new Action("Add", actionEvent -> {
 
-            @Override
-            public void handle(ActionEvent actionEvent) {
-
-
-                Graph newGraph = GraphDialog.showGraphDialog(
-                        GraphDetailsVBox.this.getScene().getWindow(),
-                        GraphDetailsVBox.this.getUniverse(), null);
-
-                if (newGraph != null) {
-
-                    GraphDetailsVBox.this.graphListView.items().add(newGraph);
-                    GraphDetailsVBox.this.graphListView.update();
-                }
-
-            }
-        };
-
-        Action editGraph = new DefaultDialogAction("Edit") {
-
-            @Override
-            public void handle(ActionEvent actionEvent) {
-
-                Graph graph = GraphDetailsVBox.this.graphListView
-                        .getSelectedItem();
-
-                Graph editedGraph = GraphDialog.showGraphDialog(
-                        GraphDetailsVBox.this.getScene().getWindow(),
-                        GraphDetailsVBox.this.getUniverse(), graph);
-
-                if (editedGraph != null) {
-
-                    GraphDetailsVBox.this.graphListView.update();
-                }
-
-            }
-        };
-
-        Action removeGraph = new DefaultDialogAction("Remove") {
-
-            @Override
-            public void handle(ActionEvent actionEvent) {
-
-                Graph graph = GraphDetailsVBox.this.graphListView
-                        .getSelectedItem();
-                Action result = Dialogs
-                        .create()
-                        .title("Confirm removal!")
-                        .message(
-                                "Are you sure you want to remove graph "
-                                        + graph.getId() + "?").showConfirm();
-
-                if (result == Dialog.Actions.YES) {
-
-                    GraphDetailsVBox.this.getUniverse().removeGraph(graph);
-                    GraphDetailsVBox.this.graphListView.items().remove(graph);
-                    GraphDetailsVBox.this.graphListView.update();
-                }
-            }
-        };
+            new GraphDialog(this, "Create Graph", this.getUniverse(), null)
+                    .showAndWait().ifPresent(newGraph -> {
+                        this.graphListView.getItems().add(newGraph);
+                    });
 
 
-        Action graphProperties = new DefaultDialogAction("Properties") {
+        });
 
-            @Override
-            public void handle(ActionEvent actionEvent) {
+        Action editGraph = new Action("Edit", actionEvent -> {
 
-                Graph graph = GraphDetailsVBox.this.graphListView
-                        .getSelectedItem();
-                GraphPropertiesDialog gpd = new GraphPropertiesDialog(graph);
-                gpd.show();
-            }
-        };
+            Graph graph = this.graphListView.getSelectedItem();
+
+            new GraphDialog(this, "Edit Graph", this.getUniverse(), graph)
+                    .showAndWait().ifPresent(
+                            editedGraph -> {
+
+                                this.graphListView.getItems().set(
+                                        this.graphListView.getItems().indexOf(
+                                                graph), editedGraph);
+                            });
+
+        });
+
+        Action removeGraph = new Action("Remove", actionEvent -> {
+
+            Graph graph = this.graphListView.getSelectedItem();
+            Alert alert = new Alert(AlertType.CONFIRMATION);
+            alert.setTitle("Confirm removal!");
+            alert.setContentText("Are you sure you want to remove graph "
+                    + graph.getId() + "?");
+
+            alert.showAndWait().filter(buttonType -> {
+                return buttonType == ButtonType.OK;
+            }).ifPresent(param -> {
+
+                this.getUniverse().removeGraph(graph);
+                this.graphListView.getItems().remove(graph);
+            });
+        });
+
+
+        Action graphProperties = new Action("Properties", actionEvent -> {
+
+            Graph graph = this.graphListView.getSelectedItem();
+            new GraphPropertiesDialog(this, graph).show();
+        });
 
         this.graphListView.contextMenuActions().addAll(addGraph, editGraph,
                 removeGraph, graphProperties);
 
 
 
-        graphListView.addEventHandler(MetadataChangedEvent.METADATA_CHANGED,
-                new EventHandler<MetadataChangedEvent>() {
+        this.graphListView.addEventHandler(
+                MetadataChangedEvent.METADATA_CHANGED,
+                metadataEvent -> {
 
-                    @Override
-                    public void handle(MetadataChangedEvent metadataEvent) {
+                    MetadataChangedEvent.Change change = metadataEvent
+                            .getChange();
 
-                        MetadataChangedEvent.Change change = metadataEvent
-                                .getChange();
-
-                        switch (change) {
-                            case ADD:
-                                graphSchemaTableView
-                                        .iterateCollection(GraphDetailsVBox.this
-                                                .getUniverse().getNodeSchema());
-                                break;
-                            case REMOVE:
-                            default:
-                                break;
-                        }
+                    switch (change) {
+                        case ADD:
+                            graphSchemaTableView.iterateCollection(this
+                                    .getUniverse().getNodeSchema());
+                            break;
+                        case REMOVE:
+                        default:
+                            break;
                     }
                 });
 
 
 
-        Action addNode = new DefaultDialogAction("Add") {
-
-            @Override
-            public void handle(ActionEvent actionEvent) {
+        Action addNode = new Action("Add", actionEvent -> {
 
 
-                Graph graph = GraphDetailsVBox.this.graphListView
-                        .getSelectedItem();
+            Graph graph = this.graphListView.getSelectedItem();
+            new NodeDialog(this, "Create Node", graph, null).showAndWait()
+                    .ifPresent(newNode -> {
 
-                Node newNode = NodeDialog.showNodeDialog(GraphDetailsVBox.this
-                        .getScene().getWindow(), graph, null);
+                        this.nodeListView.getItems().add(newNode);
+                    });
 
-                if (newNode != null) {
-                    GraphDetailsVBox.this.nodeListView.items().add(newNode);
-                    GraphDetailsVBox.this.nodeListView.update();
-                }
-            }
-        };
+        });
 
-        Action editNode = new DefaultDialogAction("Edit") {
+        Action editNode = new Action("Edit", actionEvent -> {
 
-            @Override
-            public void handle(ActionEvent actionEvent) {
+            Node node = this.nodeListView.getSelectedItem();
 
-                Node node = GraphDetailsVBox.this.nodeListView
-                        .getSelectedItem();
+            Graph graph = this.graphListView.getSelectedItem();
 
-                Graph graph = GraphDetailsVBox.this.graphListView
-                        .getSelectedItem();
+            new NodeDialog(this, "Edit Node", graph, node).showAndWait()
+                    .ifPresent(
+                            editedNode -> {
 
-                Node editedNode = NodeDialog.showNodeDialog(
-                        GraphDetailsVBox.this.getScene().getWindow(), graph,
-                        node);
+                                this.nodeListView.getItems().set(
+                                        this.nodeListView.getItems().indexOf(
+                                                node), editedNode);
+                            });
+        });
 
-                if (editedNode != null) {
+        Action removeNode = new Action("Remove", actionEvent -> {
 
-                    GraphDetailsVBox.this.nodeListView.update();
-                }
-            }
-        };
+            Node node = this.nodeListView.getSelectedItem();
+            Alert alert = new Alert(AlertType.CONFIRMATION);
+            alert.setTitle("Confirm removal!");
+            alert.setContentText("Are you sure you want to remove node "
+                    + node.getId() + "?");
 
-        Action removeNode = new DefaultDialogAction("Remove") {
+            alert.showAndWait().filter(buttonType -> {
+                return buttonType == ButtonType.OK;
+            }).ifPresent(param -> {
 
-            @Override
-            public void handle(ActionEvent actionEvent) {
-
-                Node node = GraphDetailsVBox.this.nodeListView
-                        .getSelectedItem();
-                Action result = Dialogs
-                        .create()
-                        .title("Confirm removal!")
-                        .message(
-                                "Are you sure you want to remove node "
-                                        + node.getId() + "?").showConfirm();
-
-                if (result == Dialog.Actions.YES) {
-
-                    GraphDetailsVBox.this.getUniverse().removeNode(node);
-                    GraphDetailsVBox.this.nodeListView.items().remove(node);
-                    GraphDetailsVBox.this.nodeListView.update();
-                }
-            }
-        };
+                this.getUniverse().removeNode(node);
+                this.nodeListView.getItems().remove(node);
+            });
+        });
 
 
-        Action nodeProperties = new DefaultDialogAction("Properties") {
+        Action nodeProperties = new Action("Properties", actionEvent -> {
 
-            @Override
-            public void handle(ActionEvent actionEvent) {
-
-                Node node = GraphDetailsVBox.this.nodeListView
-                        .getSelectedItem();
-                NodePropertiesDialog npd = new NodePropertiesDialog(node);
-                npd.show();
-            }
-        };
+            Node node = this.nodeListView.getSelectedItem();
+            new NodePropertiesDialog(this, node).show();
+        });
 
         this.nodeListView.contextMenuActions().addAll(addNode, editNode,
                 removeNode, nodeProperties);
 
 
-        nodeListView.addEventHandler(MetadataChangedEvent.METADATA_CHANGED,
-                new EventHandler<MetadataChangedEvent>() {
+        this.nodeListView.addEventHandler(
+                MetadataChangedEvent.METADATA_CHANGED,
+                metadataEvent -> {
 
-                    @Override
-                    public void handle(MetadataChangedEvent metadataEvent) {
+                    MetadataChangedEvent.Change change = metadataEvent
+                            .getChange();
 
-                        MetadataChangedEvent.Change change = metadataEvent
-                                .getChange();
-
-                        switch (change) {
-                            case ADD:
-                                nodeSchemaTableView
-                                        .iterateCollection(GraphDetailsVBox.this
-                                                .getUniverse().getNodeSchema());
-                                break;
-                            case REMOVE:
-                            default:
-                                break;
-
-                        }
+                    switch (change) {
+                        case ADD:
+                            nodeSchemaTableView.iterateCollection(this
+                                    .getUniverse().getNodeSchema());
+                            break;
+                        case REMOVE:
+                        default:
+                            break;
 
                     }
+
 
                 });
 
 
 
-        Action addEdge = new DefaultDialogAction("Add") {
-
-            @Override
-            public void handle(ActionEvent actionEvent) {
+        Action addEdge = new Action("Add", actionEvent -> {
 
 
-                Graph graph = GraphDetailsVBox.this.graphListView
-                        .getSelectedItem();
+            Graph graph = this.graphListView.getSelectedItem();
 
-                Edge newEdge = EdgeDialog.showEdgeDialog(GraphDetailsVBox.this
-                        .getScene().getWindow(), graph, null);
+            new EdgeDialog(this, "Create Edge", graph, null).showAndWait()
+                    .ifPresent(newEdge -> {
 
-                if (newEdge != null) {
+                        this.edgeListView.getItems().add(newEdge);
+                    });
 
-                    GraphDetailsVBox.this.edgeListView.items().add(newEdge);
-                    GraphDetailsVBox.this.edgeListView.update();
-                }
-            }
-        };
+        });
 
-        Action editEdge = new DefaultDialogAction("Edit") {
+        Action editEdge = new Action("Edit", actionEvent -> {
 
-            @Override
-            public void handle(ActionEvent actionEvent) {
+            Edge edge = this.edgeListView.getSelectedItem();
 
-                Edge edge = GraphDetailsVBox.this.edgeListView
-                        .getSelectedItem();
+            Graph graph = this.graphListView.getSelectedItem();
 
-                Graph graph = GraphDetailsVBox.this.graphListView
-                        .getSelectedItem();
+            new EdgeDialog(this, "Edit Edge", graph, edge).showAndWait()
+                    .ifPresent(
+                            editedEdge -> {
+                                this.edgeListView.getItems().set(
+                                        this.edgeListView.getItems().indexOf(
+                                                edge), editedEdge);
+                            });
 
-                Edge editedNode = EdgeDialog.showEdgeDialog(
-                        GraphDetailsVBox.this.getScene().getWindow(), graph,
-                        edge);
+        });
 
-                if (editedNode != null) {
-
-                    GraphDetailsVBox.this.nodeListView.update();
-                }
-            }
-        };
-
-        Action removeEdge = new DefaultDialogAction("Remove") {
-
-            @Override
-            public void handle(ActionEvent actionEvent) {
+        Action removeEdge = new Action("Remove", actionEvent -> {
 
 
-                Edge edge = GraphDetailsVBox.this.edgeListView
-                        .getSelectedItem();
-                Action result = Dialogs
-                        .create()
-                        .title("Confirm removal!")
-                        .message(
-                                "Are you sure you want to remove edge "
-                                        + edge.getId() + "?").showConfirm();
+            Edge edge = this.edgeListView.getSelectedItem();
+            Alert alert = new Alert(AlertType.CONFIRMATION);
+            alert.setTitle("Confirm removal!");
+            alert.setContentText("Are you sure you want to remove edge "
+                    + edge.getId() + "?");
 
-                if (result == Dialog.Actions.YES) {
+            alert.showAndWait().filter(buttonType -> {
+                return buttonType == ButtonType.OK;
+            }).ifPresent(param -> {
 
-                    GraphDetailsVBox.this.getUniverse().removeEdge(edge);
-                    GraphDetailsVBox.this.edgeListView.items().remove(edge);
-                    GraphDetailsVBox.this.edgeListView.update();
-                }
-            }
-        };
+                this.getUniverse().removeEdge(edge);
+                this.edgeListView.getItems().remove(edge);
+            });
+        });
 
 
-        Action edgeProperties = new DefaultDialogAction("Properties") {
+        Action edgeProperties = new Action("Properties", actionEvent -> {
 
-            @Override
-            public void handle(ActionEvent actionEvent) {
-
-                Edge edge = GraphDetailsVBox.this.edgeListView
-                        .getSelectedItem();
-                EdgePropertiesDialog epd = new EdgePropertiesDialog(edge);
-                epd.show();
-            }
-        };
+            Edge edge = this.edgeListView.getSelectedItem();
+            EdgePropertiesDialog epd = new EdgePropertiesDialog(this, edge);
+            epd.show();
+        });
 
         this.edgeListView.contextMenuActions().addAll(addEdge, editEdge,
                 removeEdge, edgeProperties);
 
 
 
-        edgeListView.addEventHandler(MetadataChangedEvent.METADATA_CHANGED,
-                new EventHandler<MetadataChangedEvent>() {
+        this.edgeListView.addEventHandler(
+                MetadataChangedEvent.METADATA_CHANGED,
+                metadataEvent -> {
 
-                    @Override
-                    public void handle(MetadataChangedEvent metadataEvent) {
+                    MetadataChangedEvent.Change change = metadataEvent
+                            .getChange();
 
-                        MetadataChangedEvent.Change change = metadataEvent
-                                .getChange();
-
-                        switch (change) {
-                            case ADD:
-                                edgeSchemaTableView
-                                        .iterateCollection(GraphDetailsVBox.this
-                                                .getUniverse().getNodeSchema());
-                                break;
-                            case REMOVE:
-                            default:
-                                break;
-
-                        }
+                    switch (change) {
+                        case ADD:
+                            edgeSchemaTableView.iterateCollection(this
+                                    .getUniverse().getNodeSchema());
+                            break;
+                        case REMOVE:
+                        default:
+                            break;
                     }
                 });
     }

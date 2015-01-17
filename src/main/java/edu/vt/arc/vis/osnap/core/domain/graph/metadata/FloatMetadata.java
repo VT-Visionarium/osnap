@@ -1,5 +1,7 @@
 package edu.vt.arc.vis.osnap.core.domain.graph.metadata;
 
+
+//@formatter:off
 /*
  * _
  * The Open Semantic Network Analysis Platform (OSNAP)
@@ -19,7 +21,7 @@ package edu.vt.arc.vis.osnap.core.domain.graph.metadata;
  * limitations under the License.
  * _
  */
-
+//@formatter:on
 
 import javax.xml.bind.annotation.XmlType;
 
@@ -43,7 +45,7 @@ import edu.vt.arc.vis.osnap.events.domain.metadata.FloatMetadataDetails;
 public class FloatMetadata
         extends Metadata {
 
-    Float value;
+    private Float value;
 
 
     @Override
@@ -57,10 +59,20 @@ public class FloatMetadata
     public void setValue(Object value) {
 
         if (value == null || value instanceof Float) {
+
             this.value = (Float) value;
         }
         else {
-            throw new IllegalArgumentException("Value has to be of type Float.");
+
+            try {
+
+                this.value = Float.parseFloat(value.toString());
+            }
+            catch (NumberFormatException e) {
+
+                throw new IllegalArgumentException(
+                        "Value has to be of type Float.", e);
+            }
         }
     }
 

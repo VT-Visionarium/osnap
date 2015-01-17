@@ -1,5 +1,7 @@
 package edu.vt.arc.vis.osnap.core.domain.graph.metadata;
 
+
+//@formatter:off
 /*
  * _
  * The Open Semantic Network Analysis Platform (OSNAP)
@@ -19,6 +21,7 @@ package edu.vt.arc.vis.osnap.core.domain.graph.metadata;
  * limitations under the License.
  * _
  */
+//@formatter:on
 
 
 import javax.xml.bind.annotation.XmlType;
@@ -43,7 +46,7 @@ import edu.vt.arc.vis.osnap.events.domain.metadata.BooleanMetadataDetails;
 public class BooleanMetadata
         extends Metadata {
 
-    Boolean value;
+    private Boolean value;
 
     @Override
     public Boolean getValue() {
@@ -56,11 +59,22 @@ public class BooleanMetadata
     public void setValue(Object value) {
 
         if (value == null || value instanceof Boolean) {
+
             this.value = (Boolean) value;
         }
         else {
-            throw new IllegalArgumentException(
-                    "Value has to be of type Boolean.");
+
+            String stringValue = value.toString();
+
+            if ("true".equals(stringValue)
+                    || "false".equalsIgnoreCase(stringValue)) {
+
+                this.value = Boolean.parseBoolean(stringValue);
+            }
+            else {
+                throw new IllegalArgumentException(
+                        "Value has to be of type Boolean.");
+            }
         }
     }
 

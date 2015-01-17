@@ -1,5 +1,7 @@
 package edu.vt.arc.vis.osnap.core.domain.graph.metadata;
 
+
+//@formatter:off
 /*
  * _
  * The Open Semantic Network Analysis Platform (OSNAP)
@@ -19,6 +21,7 @@ package edu.vt.arc.vis.osnap.core.domain.graph.metadata;
  * limitations under the License.
  * _
  */
+//@formatter:on
 
 
 import javax.xml.bind.annotation.XmlType;
@@ -43,7 +46,7 @@ import edu.vt.arc.vis.osnap.events.domain.metadata.IntegerMetadataDetails;
 public class IntegerMetadata
         extends Metadata {
 
-    Integer value;
+    private Integer value;
 
     @Override
     public Integer getValue() {
@@ -56,11 +59,19 @@ public class IntegerMetadata
     public void setValue(Object value) {
 
         if (value == null || value instanceof Integer) {
+
             this.value = (Integer) value;
         }
         else {
-            throw new IllegalArgumentException(
-                    "Value has to be of type Integer.");
+            try {
+
+                this.value = Integer.parseInt(value.toString());
+            }
+            catch (NumberFormatException e) {
+
+                throw new IllegalArgumentException(
+                        "Value has to be of type Integer.", e);
+            }
         }
     }
 

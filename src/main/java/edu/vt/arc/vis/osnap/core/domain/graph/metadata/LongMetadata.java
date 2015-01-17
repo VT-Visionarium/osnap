@@ -1,5 +1,7 @@
 package edu.vt.arc.vis.osnap.core.domain.graph.metadata;
 
+
+//@formatter:off
 /*
  * _
  * The Open Semantic Network Analysis Platform (OSNAP)
@@ -19,8 +21,7 @@ package edu.vt.arc.vis.osnap.core.domain.graph.metadata;
  * limitations under the License.
  * _
  */
-
-
+//@formatter:on
 import javax.xml.bind.annotation.XmlType;
 
 import edu.vt.arc.vis.osnap.events.domain.metadata.LongMetadataDetails;
@@ -43,7 +44,7 @@ import edu.vt.arc.vis.osnap.events.domain.metadata.LongMetadataDetails;
 public class LongMetadata
         extends Metadata {
 
-    Long value;
+    private Long value;
 
     @Override
     public Long getValue() {
@@ -59,8 +60,16 @@ public class LongMetadata
             this.value = (Long) value;
         }
         else {
-            throw new IllegalArgumentException(
-                    "Value has to be of type Integer.");
+
+            try {
+
+                this.value = Long.parseLong(value.toString());
+            }
+            catch (NumberFormatException e) {
+
+                throw new IllegalArgumentException(
+                        "Value has to be of type Long.", e);
+            }
         }
     }
 

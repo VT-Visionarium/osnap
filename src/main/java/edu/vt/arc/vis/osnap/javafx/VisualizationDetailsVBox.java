@@ -1,29 +1,8 @@
-/*******************************************************************************
- * Copyright 2014 Virginia Tech Visionarium
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
-
-
 package edu.vt.arc.vis.osnap.javafx;
 
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -230,9 +209,9 @@ public class VisualizationDetailsVBox
     private void populate(Visualization visualization) {
 
         this.clear();
-        this.graphListView.items().addAll(visualization.getVisualGraphs());
-        this.nodeListView.items().addAll(visualization.getVisualNodes());
-        this.edgeListView.items().addAll(visualization.getVisualEdges());
+        this.graphListView.getItems().addAll(visualization.getVisualGraphs());
+        this.nodeListView.getItems().addAll(visualization.getVisualNodes());
+        this.edgeListView.getItems().addAll(visualization.getVisualEdges());
     }
 
 
@@ -249,78 +228,49 @@ public class VisualizationDetailsVBox
 
         // List Views
         this.nodeListView.getSelectionModel().selectedItemProperty()
-                .addListener(new ChangeListener<VisualNode>() {
+                .addListener((observable, oldValue, newValue) -> {
 
-                    @Override
-                    public void changed(
-                            ObservableValue<? extends VisualNode> observable,
-                            VisualNode oldValue, VisualNode newValue) {
-
-                        nodeData.populateFields(newValue);
-
-                    }
+                    this.nodeData.populateFields(newValue);
                 });
 
         this.edgeListView.getSelectionModel().selectedItemProperty()
-                .addListener(new ChangeListener<VisualEdge>() {
+                .addListener((observable, oldValue, newValue) -> {
 
-                    @Override
-                    public void changed(
-                            ObservableValue<? extends VisualEdge> observable,
-                            VisualEdge oldValue, VisualEdge newValue) {
-
-                        edgeData.populateFields(newValue);
-                    }
+                    this.edgeData.populateFields(newValue);
                 });
 
 
 
         // Clearing List Views
-        this.visualization.addListener(new ChangeListener<Visualization>() {
+        this.visualization.addListener((observable, oldValue, newValue) -> {
 
-            @Override
-            public void changed(
-                    ObservableValue<? extends Visualization> observable,
-                    Visualization oldValue, Visualization newValue) {
+            if (newValue != null) {
 
-                if (newValue != null) {
+                this.populate(newValue);
+            }
+            else {
 
-                    VisualizationDetailsVBox.this.populate(newValue);
-                }
-                else {
-
-                    VisualizationDetailsVBox.this.clear();
-                }
+                this.clear();
             }
         });
 
 
 
         // Buttons
-        this.exportButton.setOnAction(new EventHandler<ActionEvent>() {
+        this.exportButton.setOnAction(actionEvent -> {
 
-            @Override
-            public void handle(ActionEvent arg0) {
-
-
-                ExportLayoutEvent exportEvent = new ExportLayoutEvent(
-                        ExportLayoutEvent.EXPORT, VisualizationDetailsVBox.this
-                                .getVisualization());
-                fireEvent(exportEvent);
-            }
+            ExportLayoutEvent exportEvent = new ExportLayoutEvent(
+                    ExportLayoutEvent.EXPORT, this.getVisualization());
+            fireEvent(exportEvent);
         });
 
 
         this.addLayoutComponentButton
-                .setOnAction(new EventHandler<ActionEvent>() {
+                .setOnAction(actionEvent -> {
 
-                    @Override
-                    public void handle(ActionEvent arg0) {
-
-                        SwitchTabEvent switchTab = new SwitchTabEvent(
-                                SwitchTabEvent.SWITCH);
-                        fireEvent(switchTab);
-                    }
+                    SwitchTabEvent switchTab = new SwitchTabEvent(
+                            SwitchTabEvent.SWITCH);
+                    fireEvent(switchTab);
                 });
     }
 }

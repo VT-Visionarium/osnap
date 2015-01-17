@@ -18,19 +18,17 @@
 package edu.vt.arc.vis.osnap.javafx;
 
 
-// import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -40,9 +38,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 import org.controlsfx.control.action.Action;
-import org.controlsfx.dialog.DefaultDialogAction;
-import org.controlsfx.dialog.Dialog;
-import org.controlsfx.dialog.Dialogs;
 import org.jutility.common.datatype.map.KeyValuePair;
 import org.jutility.javafx.control.ListViewWithSearchPanel;
 
@@ -275,10 +270,10 @@ public class LayoutDetailsVBox
 
         if (this.getLayout() != null) {
 
-            this.layoutComponentListView.items().clear();
-//            System.out.println("Layout components: "
-//                    + this.getLayout().getLayoutComponents());
-            this.layoutComponentListView.items().addAll(
+            this.layoutComponentListView.getItems().clear();
+            // System.out.println("Layout components: "
+            // + this.getLayout().getLayoutComponents());
+            this.layoutComponentListView.getItems().addAll(
                     this.getLayout().getLayoutComponents());
         }
     }
@@ -314,37 +309,33 @@ public class LayoutDetailsVBox
 
         if (wizard != null) {
             final WizardDialog dsw2 = new WizardDialog(wizard);
-            dsw2.addEventHandler(WizardCompleted.WIZARD_COMPLETED,
-                    new EventHandler<WizardCompleted>() {
+            dsw2.addEventHandler(
+                    WizardCompleted.WIZARD_COMPLETED,
+                    event -> {
 
-                        @Override
-                        public void handle(WizardCompleted event) {
+                        ILayoutComponent comp = event.getStatusObject()
+                                .getLayoutComponent();
 
-                            ILayoutComponent comp = event.getStatusObject()
-                                    .getLayoutComponent();
+                        Set<VisualProperty> visualProperty = event
+                                .getStatusObject().getVisualProperty();
 
-                            Set<VisualProperty> visualProperty = event
-                                    .getStatusObject().getVisualProperty();
-
-                            for (VisualProperty prop : visualProperty) {
-                                LayoutDetailsVBox.this.getLayout()
-                                        .addLayoutProviderForVisualProperty(
-                                                comp, prop);
-                            }
-
-                            Set<IGraphObject> restriction = new LinkedHashSet<>(
-                                    event.getStatusObject()
-                                            .getGraphObjectList());
-                            comp.setRestriction(restriction);
-
-                            if (event.getStatusObject().getLayoutComponent() instanceof SphereCoordinateLayoutComponent) {
-//                                System.out
-//                                        .println("I am a sphere layout component");
-                            }
-
-
-                            populateList();
+                        for (VisualProperty prop : visualProperty) {
+                            this.getLayout()
+                                    .addLayoutProviderForVisualProperty(comp,
+                                            prop);
                         }
+
+                        Set<IGraphObject> restriction = new LinkedHashSet<>(
+                                event.getStatusObject().getGraphObjectList());
+                        comp.setRestriction(restriction);
+
+                        if (event.getStatusObject().getLayoutComponent() instanceof SphereCoordinateLayoutComponent) {
+                            // System.out
+                            // .println("I am a sphere layout component");
+                        }
+
+
+                        populateList();
 
                     });
             wizard.setOwner(dsw2);
@@ -356,195 +347,152 @@ public class LayoutDetailsVBox
     private void setUpEventHandlers() {
 
 
-        this.layout.addListener(new ChangeListener<Layout>() {
+        this.layout.addListener((observable, oldValue, newValue) -> {
 
-            @Override
-            public void changed(ObservableValue<? extends Layout> observable,
-                    Layout oldValue, Layout newValue) {
+            if (newValue != null) {
 
-                if (newValue != null) {
+                this.populateList();
+            }
+            else {
 
-//                    System.out.println("New Layout Value: " + newValue);
-                    LayoutDetailsVBox.this.populateList();
-                }
-                else {
-
-                    LayoutDetailsVBox.this.clear();
-                }
+                this.clear();
             }
         });
 
         this.layoutComponentListView
                 .selectedItemProperty()
                 .addListener(
-                        new ChangeListener<KeyValuePair<ILayoutComponent, VisualProperty>>() {
+                        (observable, oldValue, newValue) -> {
 
-                            @Override
-                            public void changed(
-                                    javafx.beans.value.ObservableValue<? extends org.jutility.common.datatype.map.KeyValuePair<ILayoutComponent, VisualProperty>> arg0,
-                                    KeyValuePair<ILayoutComponent, VisualProperty> oldValue,
-                                    KeyValuePair<ILayoutComponent, VisualProperty> newValue) {
+                            this.clearLayoutComponentDetails();
 
-                                LayoutDetailsVBox.this
-                                        .clearLayoutComponentDetails();
+                            if (newValue != null) {
 
-                                if (newValue != null) {
-
-                                    ILayoutComponent layoutComponent = newValue
-                                            .getKey();
-                                    VisualProperty visualProperty = newValue
-                                            .getValue();
+                                ILayoutComponent layoutComponent = newValue
+                                        .getKey();
+                                VisualProperty visualProperty = newValue
+                                        .getValue();
 
 
+                                this.nameTF.setText(layoutComponent.getName());
+                                this.descriptionTA.setText(layoutComponent
+                                        .getDescription());
 
-                                    LayoutDetailsVBox.this.nameTF
-                                            .setText(layoutComponent.getName());
-                                    LayoutDetailsVBox.this.descriptionTA
-                                            .setText(layoutComponent
-                                                    .getDescription());
+                                this.graphObjectListView.getItems().addAll(
+                                        layoutComponent.getRestriction());
 
-                                    LayoutDetailsVBox.this.graphObjectListView
-                                            .items().addAll(
-                                                    layoutComponent
-                                                            .getRestriction());
+                                this.routingGridPane
+                                        .setLayoutComponent(layoutComponent);
 
-                                    LayoutDetailsVBox.this.routingGridPane
-                                            .setLayoutComponent(layoutComponent);
+                                Set<VisualProperty> capabilities = layoutComponent
+                                        .providesCapabilities();
 
-                                    Set<VisualProperty> capabilities = layoutComponent
-                                            .providesCapabilities();
+                                Set<CapabilitiesObject> caps = new HashSet<>();
+                                for (VisualProperty property : capabilities) {
 
-                                    Set<CapabilitiesObject> caps = new HashSet<>();
-                                    for (VisualProperty property : capabilities) {
-                                        Boolean enabled = layoutComponent
-                                                .isEnabled(property);
-                                        CapabilitiesObject co = new CapabilitiesObject(
-                                                visualProperty, enabled);
-                                        caps.add(co);
-                                    }
-
-                                    LayoutDetailsVBox.this.capabilities
-                                            .populateCapabilities(caps);
-
-
-                                    if (layoutComponent instanceof Mapping<?, ?, ?, ?>) {
-
-                                        Mapping<?, ?, ?, ?> mapping = (Mapping<?, ?, ?, ?>) layoutComponent;
-                                        valueMappingListView.items().addAll(
-                                                mapping.getValueMappings());
-                                    }
+                                    Boolean enabled = layoutComponent
+                                            .isEnabled(property);
+                                    CapabilitiesObject co = new CapabilitiesObject(
+                                            visualProperty, enabled);
+                                    caps.add(co);
                                 }
-                                else {
 
-                                    LayoutDetailsVBox.this.routingGridPane
-                                            .setLayoutComponent(null);
+                                this.capabilities.populateCapabilities(caps);
+
+
+                                if (layoutComponent instanceof Mapping<?, ?, ?, ?>) {
+
+                                    Mapping<?, ?, ?, ?> mapping = (Mapping<?, ?, ?, ?>) layoutComponent;
+                                    this.valueMappingListView.getItems()
+                                            .addAll(mapping.getValueMappings());
                                 }
+                            }
+                            else {
+
+                                this.routingGridPane.setLayoutComponent(null);
                             }
 
                         });
 
 
 
-        applyLayout.setOnAction(new EventHandler<ActionEvent>() {
+        this.applyLayout.setOnAction(actionEvent -> {
 
-            @Override
-            public void handle(ActionEvent event) {
+            if (this.layout != null) {
 
-                if (LayoutDetailsVBox.this.layout != null) {
+                // Date startTime = new Date();
+                this.getLayout().layout();
+                this.setVisualization(null);
+                this.setVisualization(this.getLayout().getVisualization());
 
-                    // Date startTime = new Date();
-                    LayoutDetailsVBox.this.getLayout().layout();
-                    LayoutDetailsVBox.this.setVisualization(null);
-                    LayoutDetailsVBox.this
-                            .setVisualization(LayoutDetailsVBox.this
-                                    .getLayout().getVisualization());
+                // gives a time dialog, tells user how long it took
+                // to create the visualization
 
-                    // gives a time dialog, tells user how long it took
-                    // to create the visualization
-
-                    // Date endTime = new Date();
-                    //
-                    // Date difference = new Date(endTime.getTime()
-                    // - startTime.getTime());
-                    // Dialogs.create()
-                    // .title("Creating Visualization Finished.")
-                    // .message(
-                    // "Creating visualization took "
-                    // + difference.getTime() / 1000
-                    // + " seconds.").showInformation();
-                    export.setDisable(false);
-                }
+                // Date endTime = new Date();
+                //
+                // Date difference = new Date(endTime.getTime()
+                // - startTime.getTime());
+                // Dialogs.create()
+                // .title("Creating Visualization Finished.")
+                // .message(
+                // "Creating visualization took "
+                // + difference.getTime() / 1000
+                // + " seconds.").showInformation();
+                this.export.setDisable(false);
             }
 
         });
-        export.setOnAction(new EventHandler<ActionEvent>() {
+        this.export.setOnAction(actionEvent -> {
 
-            @Override
-            public void handle(ActionEvent arg0) {
-
-                ExportLayoutEvent exportEvent = new ExportLayoutEvent(
-                        ExportLayoutEvent.EXPORT, LayoutDetailsVBox.this
-                                .getVisualization());
-                fireEvent(exportEvent);
-            }
+            ExportLayoutEvent exportEvent = new ExportLayoutEvent(
+                    ExportLayoutEvent.EXPORT, this.getVisualization());
+            fireEvent(exportEvent);
         });
     }
-
 
     private void setUpContextMenus() {
 
 
+        Action addLayoutComponent = new Action("Add", actionEvent -> {
 
-        Action addLayoutComponent = new DefaultDialogAction("Add") {
+            new LayoutComponentWizardSelectionDialog(this, this.getUniverse())
+                    .showAndWait().ifPresent(wizard -> {
 
-            @Override
-            public void handle(ActionEvent ae) {
-
-                IWizardWithStatus wizard = LayoutComponentWizardSelectionDialog
-                        .showLayoutComponentWizardSelectionDialog(
-                                LayoutDetailsVBox.this.getScene().getWindow(),
-                                getUniverse());
-
-                if (wizard != null) {
-
-                    LayoutDetailsVBox.this.startWizard(wizard);
-                }
-            }
-        };
+                        this.startWizard(wizard);
+                    });
+        });
 
 
 
-        Action removeLayoutComponent = new DefaultDialogAction("Remove") {
+        Action removeLayoutComponent = new Action(
+                "Remove",
+                actionEvent -> {
 
-            @Override
-            public void handle(ActionEvent ae) {
+                    KeyValuePair<ILayoutComponent, VisualProperty> selectedItem = this.layoutComponentListView
+                            .getSelectedItem();
 
-                KeyValuePair<ILayoutComponent, VisualProperty> selectedItem = LayoutDetailsVBox.this.layoutComponentListView
-                        .getSelectedItem();
+                    Alert alert = new Alert(AlertType.CONFIRMATION);
+                    alert.setTitle("Confirm removal!");
+                    alert.setContentText("Are you sure you want to remove layout component "
+                            + selectedItem.getKey()
+                            + " for Visual Property "
+                            + selectedItem.getValue() + "?");
+                    alert.showAndWait()
+                            .filter(buttonType -> {
+                                return buttonType == ButtonType.OK;
+                            })
+                            .ifPresent(
+                                    param -> {
 
-                Action result = Dialogs
-                        .create()
-                        .title("Confirm removal!")
-                        .message(
-                                "Are you sure you want to remove layout component "
-                                        + selectedItem.getKey()
-                                        + " for Visual Property "
-                                        + selectedItem.getValue() + "?")
-                        .showConfirm();
+                                        this.getLayout()
+                                                .removeLayoutProviderForVisualProperty(
+                                                        selectedItem.getKey(),
+                                                        selectedItem.getValue());
+                                        this.layoutComponentListView.getItems()
+                                                .remove(selectedItem);
+                                    });
 
-                if (result == Dialog.Actions.YES) {
-
-                    LayoutDetailsVBox.this.getLayout()
-                            .removeLayoutProviderForVisualProperty(
-                                    selectedItem.getKey(),
-                                    selectedItem.getValue());
-                    LayoutDetailsVBox.this.layoutComponentListView.items()
-                            .remove(selectedItem);
-                    LayoutDetailsVBox.this.layoutComponentListView.update();
-                }
-
-            }
-        };
+                });
 
         this.layoutComponentListView.contextMenuActions().addAll(
                 addLayoutComponent, removeLayoutComponent);

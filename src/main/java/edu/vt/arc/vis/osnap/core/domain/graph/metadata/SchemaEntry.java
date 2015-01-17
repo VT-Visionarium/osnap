@@ -225,7 +225,7 @@ public class SchemaEntry
      * @param unique
      *            whether or not the Metadata is unique within a container.
      */
-    protected SchemaEntry(String key, MetadataType type, Metadata defaultValue,
+    public SchemaEntry(String key, MetadataType type, Metadata defaultValue,
             boolean required, boolean unique) {
 
         this(key, type, defaultValue, required, unique, false);

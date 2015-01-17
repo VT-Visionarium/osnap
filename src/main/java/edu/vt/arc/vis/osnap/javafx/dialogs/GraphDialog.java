@@ -1,64 +1,69 @@
-/*******************************************************************************
- * Copyright 2014 Virginia Tech Visionarium
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- ******************************************************************************/
-
-
 package edu.vt.arc.vis.osnap.javafx.dialogs;
 
 
-import org.controlsfx.control.ButtonBar;
-import org.controlsfx.control.ButtonBar.ButtonType;
-import org.controlsfx.control.action.Action;
-import org.controlsfx.dialog.DefaultDialogAction;
-import org.controlsfx.dialog.Dialog;
+//@formatter:off
+/*
+* _
+* The Open Semantic Network Analysis Platform (OSNAP)
+* _
+* Copyright (C) 2012 - 2014 Visionarium at Virginia Tech
+* _
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+* 
+*      http://www.apache.org/licenses/LICENSE-2.0
+* 
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+* _
+*/
+//@formatter:on
+
+
+import javafx.application.Platform;
+import javafx.scene.Node;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.stage.Window;
+
+import org.controlsfx.validation.Validator;
+import org.controlsfx.validation.decoration.GraphicValidationDecoration;
+import org.jutility.javafx.control.labeled.LabeledTextField;
+import org.jutility.javafx.control.validation.ValidationGroup;
 
 import edu.vt.arc.vis.osnap.core.domain.graph.Graph;
 import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
-import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.stage.Window;
 
 
 
 /**
  * The {@link GraphDialog} class provides a {@link Dialog} for creating or
  * editing {@link Graph Graphs}.
- * 
+ *
  * @author Peter J. Radics
- * @version 1.0
+ * @version 1.1.1
+ * @since 0.1.0
  */
 public class GraphDialog
-        extends Dialog {
+        extends Dialog<Graph> {
 
-    private final Universe universe;
-    private Graph          graph;
-    private TextField      graphIdTF;
-    private Action         confirmAction;
-    private GridPane       content;
+    private final ValidationGroup  validationGroup;
+
+    private final Universe         universe;
+
+    private Graph                  graph;
+
+    private final LabeledTextField graphIdTF;
 
 
 
     /**
      * Creates a new instance of the {@link GraphDialog} class.
-     * 
+     *
      * @param owner
      *            the owner of this dialog.
      * @param title
@@ -69,134 +74,105 @@ public class GraphDialog
      *            the {@link Graph} to edit (or {@code null} to create a new
      *            graph).
      */
-    public GraphDialog(Window owner, String title, Universe universe,
-            Graph graph) {
+    public GraphDialog(final Node owner, final String title,
+            final Universe universe, final Graph graph) {
 
-        super(owner, title);
+        this(owner == null ? null : owner.getScene().getWindow(), title,
+                universe, graph);
+    }
+
+    /**
+     * Creates a new instance of the {@link GraphDialog} class.
+     *
+     * @param owner
+     *            the owner of this dialog.
+     * @param title
+     *            the title of the dialog.
+     * @param universe
+     *            the {@link Universe} containing the {@link Graph}.
+     * @param graph
+     *            the {@link Graph} to edit (or {@code null} to create a new
+     *            graph).
+     */
+    public GraphDialog(final Window owner, final String title,
+            final Universe universe, final Graph graph) {
+
+        super();
+
+        this.initOwner(owner);
+        this.setTitle(title);
+
+        this.validationGroup = new ValidationGroup();
 
         this.universe = universe;
         this.graph = graph;
 
         final boolean graphProvided = graph != null;
 
-        this.content = new GridPane();
-        this.content.setHgap(10);
-        this.content.setVgap(10);
-        this.setContent(content);
 
-        graphIdTF = new TextField();
-        graphIdTF.setPromptText("Enter Graph ID (cannot be empty)");
+        this.graphIdTF = new LabeledTextField("Graph ID");
+        this.graphIdTF.setHgap(10);
+        this.graphIdTF.setPromptText("Enter Graph ID (cannot be empty)");
         if (graphProvided) {
 
-            graphIdTF.setText(graph.getId());
+            this.graphIdTF.setText(graph.getId());
         }
 
-        graphIdTF.setMaxHeight(Double.MAX_VALUE);
-        graphIdTF.setMaxWidth(Double.MAX_VALUE);
-
-        content.add(new Label("Graph ID"), 0, 0);
-        content.add(graphIdTF, 1, 0);
-        GridPane.setHgrow(graphIdTF, Priority.ALWAYS);
+        this.graphIdTF.setMaxHeight(Double.MAX_VALUE);
+        this.graphIdTF.setMaxWidth(Double.MAX_VALUE);
+        this.getDialogPane().setContent(this.graphIdTF);
 
 
-        confirmAction = new DefaultDialogAction("Ok") {
+        this.setupValidation();
 
-            {
-                ButtonBar.setType(this, ButtonType.OK_DONE);
-            }
+        this.getDialogPane().getButtonTypes()
+                .addAll(ButtonType.OK, ButtonType.CANCEL);
 
-            // This method is called when the login button is clicked...
-            @Override
-            public void handle(ActionEvent ae) {
+        this.getDialogPane().lookupButton(ButtonType.OK).disableProperty()
+                .bind(this.validationGroup.invalidProperty());
 
-                if (!isDisabled()) {
 
-                    if (ae.getSource() instanceof Dialog) {
+        this.setResultConverter(buttonType -> {
 
-                        Dialog dlg = (Dialog) ae.getSource();
+            if (buttonType == ButtonType.OK) {
 
-                        if (graphProvided) {
-                            GraphDialog.this.graph
-                                    .setId(GraphDialog.this.graphIdTF.getText());
-                        }
-                        else {
-                            GraphDialog.this.graph = GraphDialog.this.universe
-                                    .createGraph(GraphDialog.this.graphIdTF
-                                            .getText());
-                        }
-                        dlg.setResult(GraphDialog.this.confirmAction);
-                    }
+                if (this.graph != null) {
+
+                    this.graph.setId(this.graphIdTF.getText());
                 }
-            }
-        };
-        this.confirmAction.disabledProperty().set(!graphProvided);
-        this.getActions().addAll(this.confirmAction, Dialog.Actions.CANCEL);
-        // request focus on the username field by default (so the user can
-        // type immediately without having to click first)
-        Platform.runLater(new Runnable() {
+                else {
 
-            @Override
-            public void run() {
-
-                graphIdTF.requestFocus();
+                    this.graph = this.universe.createGraph(this.graphIdTF
+                            .getText());
+                }
+                return this.graph;
             }
+            return null;
         });
-        ChangeListener<String> changeListener = new ChangeListener<String>() {
 
-            @Override
-            public void changed(ObservableValue<? extends String> observable,
-                    String oldValue, String newValue) {
+        Platform.runLater(() -> {
 
-                GraphDialog.this.validate();
-            }
-        };
-        this.graphIdTF.textProperty().addListener(changeListener);
+            this.graphIdTF.requestFocus();
+        });
     }
 
-    private void validate() {
+    private void setupValidation() {
 
-        confirmAction.disabledProperty().set(
-                graphIdTF.getText() == null
-                        || graphIdTF.getText().trim().isEmpty()
-                        || GraphDialog.this.universe
-                                .containsID(GraphDialog.this.graphIdTF
-                                        .getText()));
+        this.graphIdTF.registerValidator(Validator.combine(
+                Validator.createEmptyValidator("Graph id cannot be empty!"),
+                Validator.createPredicateValidator(text -> {
 
-    }
+                    if (text != null) {
 
-    /**
-     * Creates and shows a dialog for creating a new graph or modifying the ID
-     * of a provided graph.
-     * 
-     * @param owner
-     *            the owner.
-     * @param universe
-     *            the {@link Universe}.
-     * @param graph
-     *            the {@link Graph} to modify (or {@code null} to create a new
-     *            graph).
-     * @return the newly created (or modified) {@link Graph}.
-     */
-    public static Graph showGraphDialog(Window owner, Universe universe,
-            Graph graph) {
+                        return !this.universe.containsID(text.toString());
+                    }
+                    return false;
+                }, "ID is already in use!")));
+        this.graphIdTF
+                .setValidationDecorator(new GraphicValidationDecoration());
+        this.graphIdTF.setErrorDecorationEnabled(true);
+        this.validationGroup.registerSubValidationSupport(this.graphIdTF,
+                this.graphIdTF.validationSupport());
 
-        GraphDialog dialog;
-
-        if (graph == null) {
-
-            dialog = new GraphDialog(owner, "Create New Graph", universe, graph);
-        }
-        else {
-
-            dialog = new GraphDialog(owner, "Edit Graph ID", universe, graph);
-        }
-
-        Action result = dialog.show();
-
-        if (result == dialog.confirmAction) {
-
-            return dialog.graph;
-        }
-        return null;
     }
 }

@@ -1,17 +1,17 @@
 /*******************************************************************************
  * Copyright 2014 Virginia Tech Visionarium
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  ******************************************************************************/
 
 
@@ -23,9 +23,6 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
@@ -39,11 +36,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBoxBuilder;
 import javafx.scene.paint.Color;
 
+import org.jutility.common.datatype.range.Interval;
 import org.jutility.common.datatype.util.NumberComparator;
 import org.jutility.common.datatype.util.NumberUtils;
-import org.jutility.javafx.control.LabeledComboBox;
 import org.jutility.javafx.control.ListViewWithSearchPanel;
-import org.jutility.common.datatype.range.Interval;
+import org.jutility.javafx.control.labeled.LabeledComboBox;
 import org.jutility.math.geometry.Scalef;
 
 import edu.vt.arc.vis.osnap.core.domain.mappings.IValueMapping;
@@ -57,9 +54,9 @@ import edu.vt.arc.vis.osnap.javafx.wizards.statusobjects.MappingStatus;
 
 /**
  * creates a page for mapping values to properties
- * 
+ *
  * @author Shawn P Neuman
- * 
+ *
  */
 public class MappingPage
         extends WizardPage
@@ -110,118 +107,105 @@ public class MappingPage
     Parent getContent() {
 
 
-        grid = new GridPane();
-        addMappingButton = new Button("Add Mapping");
-        addMappingButton.setOnAction(new EventHandler<ActionEvent>() {
+        this.grid = new GridPane();
+        this.addMappingButton = new Button("Add Mapping");
+        this.addMappingButton.setOnAction(click -> MappingPage.this
+                .addMappingValue());
 
-            @Override
-            public void handle(ActionEvent click) {
-
-                addMappingValue();
-            }
-        });
-
-        grid.setVgap(10);
-        grid.setHgap(10);
-        domainValueListView = new ListViewWithSearchPanel<>("Values to Map");
-        domainValueListView.setSelectionMode(SelectionMode.SINGLE);
+        this.grid.setVgap(10);
+        this.grid.setHgap(10);
+        this.domainValueListView = new ListViewWithSearchPanel<>(
+                "Values to Map");
+        this.domainValueListView.getSelectionModel().setSelectionMode(
+                SelectionMode.SINGLE);
 
 
-        oneToOne = new RadioButton("1 : 1");
-        setToOne = new RadioButton("Set : 1");
-        intervalToOne = new RadioButton("Interval : 1");
-        intervalToInterval = new RadioButton("Interval : Interval");
-        identity = new RadioButton("Identity");
+        this.oneToOne = new RadioButton("1 : 1");
+        this.setToOne = new RadioButton("Set : 1");
+        this.intervalToOne = new RadioButton("Interval : 1");
+        this.intervalToInterval = new RadioButton("Interval : Interval");
+        this.identity = new RadioButton("Identity");
 
 
-        group = new ToggleGroup();
-        group.selectedToggleProperty().addListener(
-                new ChangeListener<Toggle>() {
+        this.group = new ToggleGroup();
+        this.group.selectedToggleProperty().addListener(
+                (ChangeListener<Toggle>) (observable, oldValue, newValue) -> {
 
-                    @Override
-                    public void changed(
-                            ObservableValue<? extends Toggle> observable,
-                            Toggle oldValue, Toggle newValue) {
+                    if (MappingPage.this.mappingStatus != null) {
 
-                        if (MappingPage.this.mappingStatus != null) {
+                        if (newValue == MappingPage.this.oneToOne) {
 
-                            if (newValue == oneToOne) {
-
-                                domainValueListView
-                                        .setSelectionMode(SelectionMode.SINGLE);
-                            }
-                            else {
-
-                                domainValueListView
-                                        .setSelectionMode(SelectionMode.MULTIPLE);
-                            }
-
-                            MappingPage.this.setFields();
+                            MappingPage.this.domainValueListView
+                                    .getSelectionModel().setSelectionMode(
+                                            SelectionMode.SINGLE);
                         }
+                        else {
+
+                            MappingPage.this.domainValueListView
+                                    .getSelectionModel().setSelectionMode(
+                                            SelectionMode.MULTIPLE);
+                        }
+
+                        MappingPage.this.setFields();
                     }
                 });
 
-        oneToOne.setToggleGroup(group);
-        setToOne.setToggleGroup(group);
-        intervalToOne.setToggleGroup(group);
-        intervalToInterval.setToggleGroup(group);
-        identity.setToggleGroup(group);
+        this.oneToOne.setToggleGroup(this.group);
+        this.setToOne.setToggleGroup(this.group);
+        this.intervalToOne.setToggleGroup(this.group);
+        this.intervalToInterval.setToggleGroup(this.group);
+        this.identity.setToggleGroup(this.group);
 
-        mapOptions = new Label("Available Mapping Options");
+        this.mapOptions = new Label("Available Mapping Options");
 
-        GridPane radioButtonGrid = new GridPane();
+        final GridPane radioButtonGrid = new GridPane();
         radioButtonGrid.setVgap(10);
-        radioButtonGrid.add(mapOptions, 0, 0);
-        radioButtonGrid.add(oneToOne, 0, 1);
-        radioButtonGrid.add(setToOne, 0, 2);
-        radioButtonGrid.add(intervalToOne, 0, 3);
-        radioButtonGrid.add(intervalToInterval, 0, 4);
-        radioButtonGrid.add(identity, 0, 5);
+        radioButtonGrid.add(this.mapOptions, 0, 0);
+        radioButtonGrid.add(this.oneToOne, 0, 1);
+        radioButtonGrid.add(this.setToOne, 0, 2);
+        radioButtonGrid.add(this.intervalToOne, 0, 3);
+        radioButtonGrid.add(this.intervalToInterval, 0, 4);
+        radioButtonGrid.add(this.identity, 0, 5);
 
         // Colors
-        colorPicker = new ColorPicker(Color.WHITE);
-        colorPicker.getStyleClass().add("split_button");
-        colorPicker.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent choice) {
-
-                color = colorPicker.getValue();
-            }
-        });
+        this.colorPicker = new ColorPicker(Color.WHITE);
+        this.colorPicker.getStyleClass().add("split_button");
+        this.colorPicker
+                .setOnAction(choice -> MappingPage.this.color = MappingPage.this.colorPicker
+                        .getValue());
 
         // Shapes
-        shapeComboBox = new LabeledComboBox<>("");
-        this.shapeComboBox.items().addAll(Shape.values());
+        this.shapeComboBox = new LabeledComboBox<>("");
+        this.shapeComboBox.getItems().addAll(Shape.values());
 
         this.valueMappingList = new ListViewWithSearchPanel<>("Mapped Choices");
 
-        grid.add(domainValueListView, 1, 0);
-        grid.add(radioButtonGrid, 0, 0);
+        this.grid.add(this.domainValueListView, 1, 0);
+        this.grid.add(radioButtonGrid, 0, 0);
 
-        grid.add(shapeComboBox, 2, 0);
-        grid.add(colorPicker, 2, 0);
-        grid.add(valueMappingList, 0, 1, 2, 1);
+        this.grid.add(this.shapeComboBox, 2, 0);
+        this.grid.add(this.colorPicker, 2, 0);
+        this.grid.add(this.valueMappingList, 0, 1, 2, 1);
 
-        GridPane innerGrid = new GridPane();
-        instructionLabel = new Label("Set Mapping value");
+        final GridPane innerGrid = new GridPane();
+        this.instructionLabel = new Label("Set Mapping value");
 
-        from = new Label("From");
-        fromTF = new TextField();
-        from.setLabelFor(fromTF);
+        this.from = new Label("From");
+        this.fromTF = new TextField();
+        this.from.setLabelFor(this.fromTF);
 
-        to = new Label("To");
-        toTF = new TextField();
-        to.setLabelFor(toTF);
+        this.to = new Label("To");
+        this.toTF = new TextField();
+        this.to.setLabelFor(this.toTF);
 
-        innerGrid.add(instructionLabel, 0, 0);
-        innerGrid.add(from, 0, 1);
-        innerGrid.add(fromTF, 1, 1);
-        innerGrid.add(to, 0, 2);
-        innerGrid.add(toTF, 1, 2);
-        innerGrid.add(addMappingButton, 0, 3);
+        innerGrid.add(this.instructionLabel, 0, 0);
+        innerGrid.add(this.from, 0, 1);
+        innerGrid.add(this.fromTF, 1, 1);
+        innerGrid.add(this.to, 0, 2);
+        innerGrid.add(this.toTF, 1, 2);
+        innerGrid.add(this.addMappingButton, 0, 3);
 
-        grid.add(innerGrid, 2, 1);
+        this.grid.add(innerGrid, 2, 1);
 
         this.getNextButton().setDisable(true);
         this.getFinishButton().setDisable(true);
@@ -231,7 +215,7 @@ public class MappingPage
 
         this.setUpValidation();
 
-        return VBoxBuilder.create().spacing(5).children(grid).build();
+        return VBoxBuilder.create().spacing(5).children(this.grid).build();
     }
 
 
@@ -239,16 +223,16 @@ public class MappingPage
      * @param statusObject
      *            the status object
      */
-    public void populateList(MappingStatus statusObject) {
+    public void populateList(final MappingStatus statusObject) {
 
         this.mappingStatus = statusObject;
         this.setToggles();
-        Collection<?> values = mappingStatus.getValuesList();
+        final Collection<?> values = this.mappingStatus.getValuesList();
 
-        domainValueListView.clear();
+        this.domainValueListView.clear();
         if (values != null) {
 
-            domainValueListView.items().addAll(values);
+            this.domainValueListView.getItems().addAll(values);
         }
     }
 
@@ -259,7 +243,8 @@ public class MappingPage
         this.disableFields();
 
 
-        Mapping<?, ?, ?, VisualProperty> map = mappingStatus.getMapping();
+        final Mapping<?, ?, ?, VisualProperty> map = this.mappingStatus
+                .getMapping();
 
         map.clearValueMappings();
         this.valueMappingList.clearSelection();
@@ -281,14 +266,14 @@ public class MappingPage
 
     private void setFields() {
 
-        disableFields();
+        this.disableFields();
 
-        switch (mappingStatus.getVisualProperty().iterator().next()) {
+        switch (this.mappingStatus.getVisualProperty().iterator().next()) {
 
             case EDGE_COLOR:
             case NODE_COLOR:
 
-                colorPicker.setVisible(true);
+                this.colorPicker.setVisible(true);
                 break;
 
             case EDGE_LABEL_TEXT:
@@ -296,9 +281,9 @@ public class MappingPage
 
                 if (this.group.selectedToggleProperty().getValue() != this.identity) {
 
-                    to.setVisible(true);
-                    toTF.setVisible(true);
-                    toTF.setPromptText("Enter a label.");
+                    this.to.setVisible(true);
+                    this.toTF.setVisible(true);
+                    this.toTF.setPromptText("Enter a label.");
                 }
                 break;
 
@@ -310,23 +295,23 @@ public class MappingPage
 
                 if (this.group.selectedToggleProperty().getValue() != this.identity) {
 
-                    to.setVisible(true);
-                    toTF.setVisible(true);
-                    toTF.setPromptText("Enter a float value.");
+                    this.to.setVisible(true);
+                    this.toTF.setVisible(true);
+                    this.toTF.setPromptText("Enter a float value.");
                 }
 
                 if (this.group.selectedToggleProperty().getValue() == this.intervalToInterval) {
 
-                    from.setVisible(true);
-                    fromTF.setVisible(true);
-                    fromTF.setPromptText("Enter a float value.");
+                    this.from.setVisible(true);
+                    this.fromTF.setVisible(true);
+                    this.fromTF.setPromptText("Enter a float value.");
                 }
                 break;
 
             case EDGE_SHAPE:
             case NODE_SHAPE:
 
-                shapeComboBox.setVisible(true);
+                this.shapeComboBox.setVisible(true);
                 break;
 
             default:
@@ -338,13 +323,15 @@ public class MappingPage
 
     private boolean enableIdentity() {
 
-        if (mappingStatus != null && mappingStatus.getKey() != null
-                && mappingStatus.getVisualProperty() != null
-                && !mappingStatus.getVisualProperty().isEmpty()) {
+        if ((this.mappingStatus != null)
+                && (this.mappingStatus.getKey() != null)
+                && (this.mappingStatus.getVisualProperty() != null)
+                && !this.mappingStatus.getVisualProperty().isEmpty()) {
 
-            Class<?> domainValueType = mappingStatus.getKey().getValueType();
-            Class<?> coDomainValueType = mappingStatus.getVisualProperty()
-                    .iterator().next().getValueType();
+            final Class<?> domainValueType = this.mappingStatus.getKey()
+                    .getValueType();
+            final Class<?> coDomainValueType = this.mappingStatus
+                    .getVisualProperty().iterator().next().getValueType();
 
             return (coDomainValueType.isAssignableFrom(domainValueType))
                     || (Number.class.isAssignableFrom(domainValueType) && (Number.class
@@ -357,13 +344,15 @@ public class MappingPage
 
     private boolean enableIntervalToInterval() {
 
-        if (mappingStatus != null && mappingStatus.getKey() != null
-                && mappingStatus.getVisualProperty() != null
-                && !mappingStatus.getVisualProperty().isEmpty()) {
+        if ((this.mappingStatus != null)
+                && (this.mappingStatus.getKey() != null)
+                && (this.mappingStatus.getVisualProperty() != null)
+                && !this.mappingStatus.getVisualProperty().isEmpty()) {
 
-            Class<?> domainValueType = mappingStatus.getKey().getValueType();
-            Class<?> coDomainValueType = mappingStatus.getVisualProperty()
-                    .iterator().next().getValueType();
+            final Class<?> domainValueType = this.mappingStatus.getKey()
+                    .getValueType();
+            final Class<?> coDomainValueType = this.mappingStatus
+                    .getVisualProperty().iterator().next().getValueType();
 
             return (Number.class.isAssignableFrom(domainValueType) && (Number.class
                     .isAssignableFrom(coDomainValueType) || Scalef.class
@@ -375,9 +364,11 @@ public class MappingPage
 
     private boolean enableIntervalToOne() {
 
-        if (mappingStatus != null && mappingStatus.getKey() != null) {
+        if ((this.mappingStatus != null)
+                && (this.mappingStatus.getKey() != null)) {
 
-            Class<?> valueType = mappingStatus.getKey().getValueType();
+            final Class<?> valueType = this.mappingStatus.getKey()
+                    .getValueType();
 
             return Number.class.isAssignableFrom(valueType);
         }
@@ -387,16 +378,16 @@ public class MappingPage
     private void disableToggles() {
 
         // unselect toggles
-        oneToOne.setSelected(false);
-        setToOne.setSelected(false);
-        intervalToOne.setSelected(false);
-        intervalToInterval.setSelected(false);
-        identity.setSelected(false);
+        this.oneToOne.setSelected(false);
+        this.setToOne.setSelected(false);
+        this.intervalToOne.setSelected(false);
+        this.intervalToInterval.setSelected(false);
+        this.identity.setSelected(false);
 
         // setting toggles to disabled
-        intervalToOne.setDisable(true);
-        intervalToInterval.setDisable(true);
-        identity.setDisable(true);
+        this.intervalToOne.setDisable(true);
+        this.intervalToInterval.setDisable(true);
+        this.identity.setDisable(true);
     }
 
 
@@ -405,97 +396,69 @@ public class MappingPage
         this.addMappingButton.setDisable(true);
 
         // hiding unnecessary objects
-        colorPicker.setVisible(false);
-        colorPicker.setValue(Color.WHITE);
+        this.colorPicker.setVisible(false);
+        this.colorPicker.setValue(Color.WHITE);
 
-        shapeComboBox.setVisible(false);
-        shapeComboBox.clearSelection();
+        this.shapeComboBox.setVisible(false);
+        this.shapeComboBox.getSelectionModel().clearSelection();
 
         // hiding unnecessary fields
-        instructionLabel.setVisible(false);
+        this.instructionLabel.setVisible(false);
 
-        from.setVisible(false);
-        fromTF.clear();
-        fromTF.setVisible(false);
+        this.from.setVisible(false);
+        this.fromTF.clear();
+        this.fromTF.setVisible(false);
 
-        to.setVisible(false);
-        toTF.clear();
-        toTF.setVisible(false);
+        this.to.setVisible(false);
+        this.toTF.clear();
+        this.toTF.setVisible(false);
 
         // Clear selections
-        domainValueListView.clearSelection();
+        this.domainValueListView.clearSelection();
     }
 
 
     private void setUpValidation() {
 
-        this.toTF.textProperty().addListener(new ChangeListener<String>() {
+        this.toTF.textProperty()
+                .addListener(
+                        (ChangeListener<String>) (observable, oldValue,
+                                newValue) -> MappingPage.this.validate());
+        this.fromTF.textProperty()
+                .addListener(
+                        (ChangeListener<String>) (observable, oldValue,
+                                newValue) -> MappingPage.this.validate());
+        this.colorPicker
+                .valueProperty()
+                .addListener(
+                        (ChangeListener<Color>) (observable, oldValue, newValue) -> MappingPage.this
+                                .validate());
+        this.shapeComboBox
+                .getSelectionModel()
+                .selectedItemProperty()
+                .addListener(
+                        (ChangeListener<Shape>) (observable, oldValue, newValue) -> MappingPage.this
+                                .validate());
 
-            @Override
-            public void changed(ObservableValue<? extends String> observable,
-                    String oldValue, String newValue) {
-
-                MappingPage.this.validate();
-            }
-        });
-        this.fromTF.textProperty().addListener(new ChangeListener<String>() {
-
-            @Override
-            public void changed(ObservableValue<? extends String> observable,
-                    String oldValue, String newValue) {
-
-                MappingPage.this.validate();
-            }
-        });
-        this.colorPicker.valueProperty().addListener(
-                new ChangeListener<Color>() {
-
-                    @Override
-                    public void changed(
-                            ObservableValue<? extends Color> observable,
-                            Color oldValue, Color newValue) {
-
-                        MappingPage.this.validate();
-                    }
-                });
-        this.shapeComboBox.selectedItemProperty().addListener(
-                new ChangeListener<Shape>() {
-
-                    @Override
-                    public void changed(
-                            ObservableValue<? extends Shape> observable,
-                            Shape oldValue, Shape newValue) {
-
-                        MappingPage.this.validate();
-                    }
-                });
-
-        this.domainValueListView.selectedItemProperty().addListener(
-                new ChangeListener<Object>() {
-
-                    @Override
-                    public void changed(
-                            ObservableValue<? extends Object> observable,
-                            Object oldValue, Object newValue) {
-
-                        MappingPage.this.validate();
-
-                    }
-                });
+        this.domainValueListView.selectedItemProperty()
+                .addListener(
+                        (ChangeListener<Object>) (observable, oldValue,
+                                newValue) -> MappingPage.this.validate());
     }
 
     private void validate() {
 
 
-        Toggle selectedToggle = this.group.getSelectedToggle();
+        final Toggle selectedToggle = this.group.getSelectedToggle();
 
-        if (selectedToggle != null
+        if ((selectedToggle != null)
                 && !this.domainValueListView.getSelectedItems().isEmpty()) {
 
-            if (this.mappingStatus.getVisualProperty() != null
+            if ((this.mappingStatus.getVisualProperty() != null)
                     && !this.mappingStatus.getVisualProperty().isEmpty()) {
 
-                switch (mappingStatus.getVisualProperty().iterator().next()) {
+                switch (this.mappingStatus.getVisualProperty().iterator()
+                        .next()) {
 
                     case EDGE_COLOR:
                     case NODE_COLOR:
@@ -506,8 +469,9 @@ public class MappingPage
                     case EDGE_SHAPE:
                     case NODE_SHAPE:
 
-                        this.addMappingButton.setDisable(!(shapeComboBox
-                                .getSelectedItem() != null));
+                        this.addMappingButton
+                                .setDisable(!(this.shapeComboBox
+                                        .getSelectionModel().getSelectedItem() != null));
                         break;
                     case EDGE_LABEL_TEXT:
                     case NODE_LABEL_TEXT:
@@ -521,14 +485,14 @@ public class MappingPage
                             this.addMappingButton.setDisable(false);
                         }
                         else {
-                            boolean toNotEmpty = this.toTF.getText() != null
+                            final boolean toNotEmpty = (this.toTF.getText() != null)
                                     && !"".equals(this.toTF.getText());
 
                             boolean fromNotEmpty = true;
 
                             if (selectedToggle == this.intervalToInterval) {
 
-                                fromNotEmpty = this.fromTF.getText() != null
+                                fromNotEmpty = (this.fromTF.getText() != null)
                                         && !"".equals(this.fromTF.getText());
                             }
 
@@ -557,19 +521,21 @@ public class MappingPage
     @SuppressWarnings({ "rawtypes", "unchecked" })
     private void addMappingValue() {
 
-        Mapping<?, ?, ?, VisualProperty> map = mappingStatus.getMapping();
+        final Mapping<?, ?, ?, VisualProperty> map = this.mappingStatus
+                .getMapping();
 
-        if (!mappingStatus.getVisualProperty().isEmpty()) {
-            switch (mappingStatus.getVisualProperty().iterator().next()) {
+        if (!this.mappingStatus.getVisualProperty().isEmpty()) {
+            switch (this.mappingStatus.getVisualProperty().iterator().next()) {
 
                 case EDGE_COLOR:
                 case NODE_COLOR:
 
-                    for (Object item : domainValueListView.getSelectedItems()) {
+                    for (final Object item : this.domainValueListView
+                            .getSelectedItems()) {
 
-                        OneToOneValueMapping<?, ?> mapping = OneToOneValueMapping
+                        final OneToOneValueMapping<?, ?> mapping = OneToOneValueMapping
                                 .create(map.getDomainValueType().cast(item),
-                                        color);
+                                        this.color);
 
                         map.addValueMapping((IValueMapping) mapping);
 
@@ -580,10 +546,11 @@ public class MappingPage
                 case NODE_LABEL_TEXT:
 
 
-                    for (Object item : domainValueListView.getSelectedItems()) {
+                    for (final Object item : this.domainValueListView
+                            .getSelectedItems()) {
                         OneToOneValueMapping<?, ?> mapping = null;
 
-                        if (group.getSelectedToggle() == identity) {
+                        if (this.group.getSelectedToggle() == this.identity) {
 
                             mapping = OneToOneValueMapping.create(map
                                     .getDomainValueType().cast(item), map
@@ -592,7 +559,7 @@ public class MappingPage
                         else {
 
                             mapping = OneToOneValueMapping.create(map
-                                    .getDomainValueType().cast(item), toTF
+                                    .getDomainValueType().cast(item), this.toTF
                                     .getText());
                         }
                         map.addValueMapping((IValueMapping) mapping);
@@ -608,15 +575,17 @@ public class MappingPage
                 case EDGE_SCALE:
                 case NODE_SCALE:
 
-                    if (group.getSelectedToggle() == intervalToInterval) {
+                    if (this.group.getSelectedToggle() == this.intervalToInterval) {
 
-                        Interval<? extends Number> domainInterval = this
+                        final Interval<? extends Number> domainInterval = this
                                 .createDomainInterval();
 
-                        Float minInterval = Float.parseFloat(fromTF.getText());
-                        Float maxInterval = Float.parseFloat(toTF.getText());
+                        final Float minInterval = Float.parseFloat(this.fromTF
+                                .getText());
+                        final Float maxInterval = Float.parseFloat(this.toTF
+                                .getText());
 
-                        LinearIntervalToIntervalValueMapping<?, ?> intervalMapping = LinearIntervalToIntervalValueMapping
+                        final LinearIntervalToIntervalValueMapping<?, ?> intervalMapping = LinearIntervalToIntervalValueMapping
                                 .create(domainInterval.getLowerBound(),
                                         domainInterval.getUpperBound(),
                                         minInterval, maxInterval,
@@ -627,16 +596,16 @@ public class MappingPage
 
 
                     }
-                    else if (group.getSelectedToggle() == identity) {
+                    else if (this.group.getSelectedToggle() == this.identity) {
 
-                        for (Object item : domainValueListView
+                        for (final Object item : this.domainValueListView
                                 .getSelectedItems()) {
 
                             if (item instanceof Number) {
-                                OneToOneValueMapping<?, ?> mapping = OneToOneValueMapping
+                                final OneToOneValueMapping<?, ?> mapping = OneToOneValueMapping
                                         .create(map.getDomainValueType().cast(
-                                                item), NumberUtils.cast((Number) item,
-                                                Float.class));
+                                                item), NumberUtils.cast(
+                                                (Number) item, Float.class));
                                 map.addValueMapping((IValueMapping) mapping);
                             }
                         }
@@ -651,11 +620,12 @@ public class MappingPage
                     // OneToOneValueMapping(domainInterval, scale);
                     // }
                     else {
-                        for (Object item : domainValueListView
+                        for (final Object item : this.domainValueListView
                                 .getSelectedItems()) {
-                            Float scale = Float.parseFloat(toTF.getText());
+                            final Float scale = Float.parseFloat(this.toTF
+                                    .getText());
 
-                            OneToOneValueMapping<?, ?> mapping = OneToOneValueMapping
+                            final OneToOneValueMapping<?, ?> mapping = OneToOneValueMapping
                                     .create(map.getDomainValueType().cast(item),
                                             scale);
                             map.addValueMapping((IValueMapping) mapping);
@@ -667,11 +637,13 @@ public class MappingPage
                 case EDGE_SHAPE:
                 case NODE_SHAPE:
 
-                    for (Object item : domainValueListView.getSelectedItems()) {
+                    for (final Object item : this.domainValueListView
+                            .getSelectedItems()) {
 
-                        OneToOneValueMapping<?, ?> mapping = OneToOneValueMapping
+                        final OneToOneValueMapping<?, ?> mapping = OneToOneValueMapping
                                 .create(map.getDomainValueType().cast(item),
-                                        shapeComboBox.getSelectedItem());
+                                        this.shapeComboBox.getSelectionModel()
+                                                .getSelectedItem());
 
                         map.addValueMapping((IValueMapping) mapping);
                     }
@@ -737,12 +709,12 @@ public class MappingPage
             }
         }
         this.valueMappingList.clear();
-        for (IValueMapping<?, ?> valueMapping : map.getValueMappings()) {
-            this.valueMappingList.items().add(valueMapping);
+        for (final IValueMapping<?, ?> valueMapping : map.getValueMappings()) {
+            this.valueMappingList.getItems().add(valueMapping);
         }
-        for (Object item : domainValueListView.getSelectedItems()) {
+        for (final Object item : this.domainValueListView.getSelectedItems()) {
 
-            domainValueListView.removeAll(item);
+            this.domainValueListView.removeAll(item);
         }
 
 
@@ -760,11 +732,11 @@ public class MappingPage
 
 
 
-        for (Object item : domainValueListView.getSelectedItems()) {
+        for (final Object item : this.domainValueListView.getSelectedItems()) {
 
-            Number number = (Number) item;
+            final Number number = (Number) item;
 
-            if (item instanceof Number && item instanceof Comparable<?>) {
+            if ((item instanceof Number) && (item instanceof Comparable<?>)) {
 
                 if (minValue == null) {
 
@@ -785,7 +757,7 @@ public class MappingPage
             }
         }
 
-        if (minValue != null && maxValue != null) {
+        if ((minValue != null) && (maxValue != null)) {
 
             return Interval.createInterval(minValue, maxValue);
         }
@@ -800,7 +772,7 @@ public class MappingPage
      * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
      */
     @Override
-    public void update(Observable statusObject, Object value) {
+    public void update(final Observable statusObject, final Object value) {
 
         if (statusObject instanceof MappingStatus) {
 

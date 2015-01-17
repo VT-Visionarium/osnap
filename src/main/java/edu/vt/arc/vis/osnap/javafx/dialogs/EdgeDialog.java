@@ -1,46 +1,47 @@
-/*******************************************************************************
- * Copyright 2014 Virginia Tech Visionarium
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- ******************************************************************************/
-
-
 package edu.vt.arc.vis.osnap.javafx.dialogs;
 
 
-import java.util.LinkedList;
+//@formatter:off
+/*
+* _
+* The Open Semantic Network Analysis Platform (OSNAP)
+* _
+* Copyright (C) 2012 - 2014 Visionarium at Virginia Tech
+* _
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+* 
+*      http://www.apache.org/licenses/LICENSE-2.0
+* 
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+* _
+*/
+//@formatter:on
 
-import org.controlsfx.control.ButtonBar;
-import org.controlsfx.control.ButtonBar.ButtonType;
-import org.controlsfx.control.action.Action;
-import org.controlsfx.dialog.DefaultDialogAction;
-import org.controlsfx.dialog.Dialog;
+
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.stage.Window;
+
+import org.controlsfx.validation.Validator;
+import org.controlsfx.validation.decoration.GraphicValidationDecoration;
+import org.jutility.javafx.control.labeled.LabeledComboBox;
+import org.jutility.javafx.control.labeled.LabeledTextField;
+import org.jutility.javafx.control.validation.ValidationGroup;
 
 import edu.vt.arc.vis.osnap.core.domain.graph.Edge;
 import edu.vt.arc.vis.osnap.core.domain.graph.Graph;
 import edu.vt.arc.vis.osnap.core.domain.graph.Node;
 import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
-import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.stage.Window;
 
 
 
@@ -49,20 +50,47 @@ import javafx.stage.Window;
  * editing {@link Edge Edges}.
  * 
  * @author Peter J. Radics
- * @version 1.0
+ * @version 1.1.1
+ * @since 0.1.0
  */
 public class EdgeDialog
-        extends Dialog {
+        extends Dialog<Edge> {
 
-    private final Universe universe;
-    private final Graph    graph;
-    private Edge           edge;
-    private TextField      edgeIdTF;
-    private Action         confirmAction;
-    private GridPane       content;
-    private ComboBox<Node> sourceNodeCB;
-    private ComboBox<Node> targetNodeCB;
+    private final ValidationGroup       validationGroup;
 
+    private final Universe              universe;
+    private final Graph                 graph;
+    private Edge                        edge;
+
+
+    private final GridPane              content;
+
+
+    private final LabeledTextField      edgeIdTF;
+
+    private final LabeledComboBox<Node> sourceNodeCB;
+    private final LabeledComboBox<Node> targetNodeCB;
+
+
+    /**
+     * Creates a new instance of the {@link EdgeDialog} class.
+     * 
+     * @param owner
+     *            the owner of this dialog.
+     * @param title
+     *            the title of the dialog
+     * @param graph
+     *            the {@link Graph} containing the edge.
+     * @param edge
+     *            the {@link Edge} to modify (or {@code null} if an edge should
+     *            be created).
+     */
+    public EdgeDialog(javafx.scene.Node owner, String title, Graph graph,
+            Edge edge) {
+
+        this(owner == null ? null : owner.getScene().getWindow(), title, graph,
+                edge);
+    }
 
     /**
      * Creates a new instance of the {@link EdgeDialog} class.
@@ -79,7 +107,12 @@ public class EdgeDialog
      */
     public EdgeDialog(Window owner, String title, Graph graph, Edge edge) {
 
-        super(owner, title);
+        super();
+
+        this.initOwner(owner);
+        this.setTitle(title);
+
+        this.validationGroup = new ValidationGroup();
 
         this.graph = graph;
         this.universe = this.graph.getUniverse();
@@ -88,192 +121,126 @@ public class EdgeDialog
         final boolean edgeProvided = edge != null;
 
         this.content = new GridPane();
-        this.content.setHgap(10);
         this.content.setVgap(10);
-        this.setContent(content);
+        this.getDialogPane().setContent(content);
 
-        this.edgeIdTF = new TextField();
+        this.edgeIdTF = new LabeledTextField("Edge ID");
         this.edgeIdTF.setPromptText("Enter Edge ID (cannot be empty)");
+
+
         if (edgeProvided) {
 
             this.edgeIdTF.setText(edge.getId());
         }
-
+        this.edgeIdTF.setHgap(10);
         this.edgeIdTF.setMaxHeight(Double.MAX_VALUE);
         this.edgeIdTF.setMaxWidth(Double.MAX_VALUE);
-        GridPane.setHgrow(this.edgeIdTF, Priority.ALWAYS);
+        GridPane.setHgrow(this.edgeIdTF, Priority.SOMETIMES);
 
-        Label edgeLabel = new Label("Edge ID");
-        edgeLabel.setLabelFor(edgeIdTF);
-        this.content.add(edgeLabel, 0, 0);
-        this.content.add(edgeIdTF, 1, 0);
+        this.content.add(this.edgeIdTF, 0, 0);
 
 
-        this.sourceNodeCB = new ComboBox<>(
-                FXCollections.observableList(new LinkedList<>(universe
-                        .getNodes())));
+        this.sourceNodeCB = new LabeledComboBox<>("Source Node");
+        this.sourceNodeCB.setItems(FXCollections
+                .observableArrayList(this.universe.getNodes()));
+
+        this.sourceNodeCB.setHgap(10);
         this.sourceNodeCB.setMaxHeight(Double.MAX_VALUE);
         this.sourceNodeCB.setMaxWidth(Double.MAX_VALUE);
-        GridPane.setHgrow(this.sourceNodeCB, Priority.ALWAYS);
+        GridPane.setHgrow(this.sourceNodeCB, Priority.SOMETIMES);
 
+        this.targetNodeCB = new LabeledComboBox<>("Target Node");
 
-
-        this.targetNodeCB = new ComboBox<>(
-                FXCollections.observableList(new LinkedList<>(universe
-                        .getNodes())));
+        this.targetNodeCB.setItems(FXCollections
+                .observableArrayList(this.universe.getNodes()));
+        this.targetNodeCB.setHgap(10);
         this.targetNodeCB.setMaxHeight(Double.MAX_VALUE);
         this.targetNodeCB.setMaxWidth(Double.MAX_VALUE);
-        GridPane.setHgrow(this.targetNodeCB, Priority.ALWAYS);
+        GridPane.setHgrow(this.targetNodeCB, Priority.SOMETIMES);
 
+        this.content.add(this.sourceNodeCB, 0, 1);
+        this.content.add(this.targetNodeCB, 0, 2);
 
+        this.getDialogPane().getButtonTypes()
+                .addAll(ButtonType.OK, ButtonType.CANCEL);
 
-        Label sourceLabel = new Label("Source Node");
-        sourceLabel.setLabelFor(sourceNodeCB);
-        Label targetLabel = new Label("Target Node");
-        targetLabel.setLabelFor(targetNodeCB);
+        this.setupValidation();
 
-        this.content.add(sourceLabel, 0, 1);
-        this.content.add(this.sourceNodeCB, 1, 1);
+        this.setResultConverter(param -> {
 
-        this.content.add(targetLabel, 0, 2);
-        this.content.add(this.targetNodeCB, 1, 2);
+            if (param == ButtonType.OK) {
 
+                if (edgeProvided) {
 
-
-        this.confirmAction = new DefaultDialogAction("Ok") {
-
-            {
-                ButtonBar.setType(this, ButtonType.OK_DONE);
-            }
-
-            @Override
-            public void handle(ActionEvent ae) {
-
-                if (!isDisabled()) {
-
-                    if (ae.getSource() instanceof Dialog) {
-
-                        Dialog dlg = (Dialog) ae.getSource();
-
-                        if (edgeProvided) {
-
-                            EdgeDialog.this.edge.setId(EdgeDialog.this.edgeIdTF
-                                    .getText());
-                        }
-                        else {
-                            EdgeDialog.this.edge = EdgeDialog.this.graph
-                                    .getUniverse().createEdge(
-
-                                            EdgeDialog.this.edgeIdTF.getText(),
-                                            EdgeDialog.this.graph.getId(),
-                                            EdgeDialog.this.sourceNodeCB
-                                                    .getSelectionModel()
-                                                    .getSelectedItem().getId(),
-                                            EdgeDialog.this.targetNodeCB
-                                                    .getSelectionModel()
-                                                    .getSelectedItem().getId());
-                        }
-                        dlg.setResult(EdgeDialog.this.confirmAction);
-                    }
+                    this.edge.setId(EdgeDialog.this.edgeIdTF.getText());
                 }
-            }
-        };
-        this.confirmAction.disabledProperty().set(!edgeProvided);
-        this.getActions().addAll(this.confirmAction, Dialog.Actions.CANCEL);
+                else {
+                    this.edge = this.universe.createEdge(
 
-        // Selects the source and target node (if an edge was provided). Then
-        // request focus on the edge id field by default (so the user can
-        // type immediately without having to click first)
-        Platform.runLater(new Runnable() {
-
-            @Override
-            public void run() {
-
-                if (EdgeDialog.this.edge != null) {
-
-                    EdgeDialog.this.sourceNodeCB.getSelectionModel().select(
-                            EdgeDialog.this.edge.getSource());
-                    EdgeDialog.this.targetNodeCB.getSelectionModel().select(
-                            EdgeDialog.this.edge.getTarget());
+                    this.edgeIdTF.getText(), this.graph.getId(),
+                            this.sourceNodeCB.getValue().getId(),
+                            this.targetNodeCB.getValue().getId());
                 }
-
-                EdgeDialog.this.edgeIdTF.requestFocus();
+                return this.edge;
             }
+            return null;
         });
 
+        Platform.runLater(() -> {
 
-        ChangeListener<String> changeListener = new ChangeListener<String>() {
+            if (edgeProvided) {
 
-            @Override
-            public void changed(ObservableValue<? extends String> observable,
-                    String oldValue, String newValue) {
-
-                EdgeDialog.this.validate();
+                this.sourceNodeCB.getSelectionModel().select(
+                        this.edge.getSource());
+                this.targetNodeCB.getSelectionModel().select(
+                        this.edge.getTarget());
             }
-        };
-        this.edgeIdTF.textProperty().addListener(changeListener);
 
-
-        ChangeListener<Node> nodeChangeListener = new ChangeListener<Node>() {
-
-            @Override
-            public void changed(ObservableValue<? extends Node> observable,
-                    Node oldValue, Node newValue) {
-
-                EdgeDialog.this.validate();
-            }
-        };
-        this.sourceNodeCB.getSelectionModel().selectedItemProperty()
-                .addListener(nodeChangeListener);
-        this.targetNodeCB.getSelectionModel().selectedItemProperty()
-                .addListener(nodeChangeListener);
+            this.edgeIdTF.requestFocus();
+        });
     }
 
-    private void validate() {
+    private void setupValidation() {
 
-        confirmAction.disabledProperty().set(
-                EdgeDialog.this.edgeIdTF.getText() == null
-                        || EdgeDialog.this.edgeIdTF.getText().trim().isEmpty()
-                        || EdgeDialog.this.universe
-                                .containsID(EdgeDialog.this.edgeIdTF.getText())
-                        || EdgeDialog.this.sourceNodeCB.getSelectionModel()
-                                .getSelectedItem() == null
-                        || EdgeDialog.this.targetNodeCB.getSelectionModel()
-                                .getSelectedItem() == null);
+        this.edgeIdTF.registerValidator(Validator.combine(
+                Validator.createEmptyValidator("Id cannot be empty!"),
+                Validator.createPredicateValidator(text -> {
 
-    }
+                    if (text != null) {
 
-    /**
-     * Creates and shows a dialog for creating or modifying an edge.
-     * 
-     * @param owner
-     *            the owner.
-     * @param graph
-     *            the {@link Graph}.
-     * @param edge
-     *            the {@link Edge} to modify (or {@code null} to create a new
-     *            edge).
-     * @return the newly created (or modified) {@link Edge}.
-     */
-    public static Edge showEdgeDialog(Window owner, Graph graph, Edge edge) {
+                        return !this.universe.containsID(text.toString());
+                    }
 
-        EdgeDialog dialog;
+                    return false;
+                }, "Id is already in use!")));
+        this.edgeIdTF.setValidationDecorator(new GraphicValidationDecoration());
+        this.edgeIdTF.setErrorDecorationEnabled(true);
+        this.validationGroup.registerSubValidationSupport(this.edgeIdTF,
+                this.edgeIdTF.validationSupport());
 
-        if (graph == null) {
 
-            dialog = new EdgeDialog(owner, "Create New Edge", graph, edge);
-        }
-        else {
+        this.sourceNodeCB.registerValidator(Validator.createPredicateValidator(
+                node -> {
+                    return node != null;
+                }, "Source node cannot be empty!"));
+        this.sourceNodeCB
+                .setValidationDecorator(new GraphicValidationDecoration());
+        this.sourceNodeCB.setErrorDecorationEnabled(true);
+        this.validationGroup.registerSubValidationSupport(this.sourceNodeCB,
+                this.sourceNodeCB.validationSupport());
 
-            dialog = new EdgeDialog(owner, "Edit Edge", graph, edge);
-        }
 
-        Action result = dialog.show();
+        this.targetNodeCB.registerValidator(Validator.createPredicateValidator(
+                node -> {
+                    return node != null;
+                }, "Target node cannot be empty!"));
+        this.targetNodeCB
+                .setValidationDecorator(new GraphicValidationDecoration());
+        this.targetNodeCB.setErrorDecorationEnabled(true);
+        this.validationGroup.registerSubValidationSupport(this.targetNodeCB,
+                this.targetNodeCB.validationSupport());
 
-        if (result == dialog.confirmAction) {
-
-            return dialog.edge;
-        }
-        return null;
+        this.getDialogPane().lookupButton(ButtonType.OK).disableProperty()
+                .bind(this.validationGroup.invalidProperty());
     }
 }
