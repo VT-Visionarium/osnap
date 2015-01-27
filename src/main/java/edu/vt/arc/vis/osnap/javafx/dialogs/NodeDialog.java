@@ -174,7 +174,7 @@ public class NodeDialog
                         }, "Id is already in use!")));
         this.nodeIdTF.setValidationDecorator(new GraphicValidationDecoration());
         this.nodeIdTF.setErrorDecorationEnabled(true);
-        this.validationGroup.registerSubValidationSupport(this.nodeIdTF,
+        this.validationGroup.registerSubValidation(this.nodeIdTF,
                 this.nodeIdTF.validationSupport());
 
         this.getDialogPane().lookupButton(ButtonType.OK).disableProperty()

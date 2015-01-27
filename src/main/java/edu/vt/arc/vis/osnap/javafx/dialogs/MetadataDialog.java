@@ -203,7 +203,7 @@ public class MetadataDialog
                 }, "Key cannot be empty!"));
         this.keyCB.setValidationDecorator(new GraphicValidationDecoration());
         this.keyCB.setErrorDecorationEnabled(true);
-        this.validationGroup.registerSubValidationSupport(this.keyCB,
+        this.validationGroup.registerSubValidation(this.keyCB,
                 this.keyCB.validationSupport());
 
         this.valueTF
@@ -224,7 +224,7 @@ public class MetadataDialog
 
         this.valueTF.setValidationDecorator(new GraphicValidationDecoration());
         this.valueTF.setErrorDecorationEnabled(true);
-        this.validationGroup.registerSubValidationSupport(this.valueTF,
+        this.validationGroup.registerSubValidation(this.valueTF,
                 this.valueTF.validationSupport());
 
 

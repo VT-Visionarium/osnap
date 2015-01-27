@@ -143,7 +143,7 @@ public class UniverseDialog
         this.universeIdTF
                 .setValidationDecorator(new GraphicValidationDecoration());
         this.universeIdTF.setErrorDecorationEnabled(true);
-        this.validationGroup.registerSubValidationSupport(this.universeIdTF,
+        this.validationGroup.registerSubValidation(this.universeIdTF,
                 this.universeIdTF.validationSupport());
 
         this.getDialogPane().lookupButton(ButtonType.OK).disableProperty()

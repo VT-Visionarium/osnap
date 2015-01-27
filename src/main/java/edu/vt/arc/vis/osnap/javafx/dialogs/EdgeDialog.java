@@ -215,7 +215,7 @@ public class EdgeDialog
                 }, "Id is already in use!")));
         this.edgeIdTF.setValidationDecorator(new GraphicValidationDecoration());
         this.edgeIdTF.setErrorDecorationEnabled(true);
-        this.validationGroup.registerSubValidationSupport(this.edgeIdTF,
+        this.validationGroup.registerSubValidation(this.edgeIdTF,
                 this.edgeIdTF.validationSupport());
 
 
@@ -226,7 +226,7 @@ public class EdgeDialog
         this.sourceNodeCB
                 .setValidationDecorator(new GraphicValidationDecoration());
         this.sourceNodeCB.setErrorDecorationEnabled(true);
-        this.validationGroup.registerSubValidationSupport(this.sourceNodeCB,
+        this.validationGroup.registerSubValidation(this.sourceNodeCB,
                 this.sourceNodeCB.validationSupport());
 
 
@@ -237,7 +237,7 @@ public class EdgeDialog
         this.targetNodeCB
                 .setValidationDecorator(new GraphicValidationDecoration());
         this.targetNodeCB.setErrorDecorationEnabled(true);
-        this.validationGroup.registerSubValidationSupport(this.targetNodeCB,
+        this.validationGroup.registerSubValidation(this.targetNodeCB,
                 this.targetNodeCB.validationSupport());
 
         this.getDialogPane().lookupButton(ButtonType.OK).disableProperty()

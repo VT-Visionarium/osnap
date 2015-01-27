@@ -184,7 +184,7 @@ public class SchemaEntryDialog
                 .createEmptyValidator("Key cannot be empty!"));
         this.keyTF.setValidationDecorator(new GraphicValidationDecoration());
         this.keyTF.setErrorDecorationEnabled(true);
-        this.validationGroup.registerSubValidationSupport(this.keyTF,
+        this.validationGroup.registerSubValidation(this.keyTF,
                 this.keyTF.validationSupport());
 
         this.typeCB.registerValidator(Validator.createPredicateValidator(
@@ -195,7 +195,7 @@ public class SchemaEntryDialog
                 }, "Type cannot be empty!"));
         this.typeCB.setValidationDecorator(new GraphicValidationDecoration());
         this.typeCB.setErrorDecorationEnabled(true);
-        this.validationGroup.registerSubValidationSupport(this.typeCB,
+        this.validationGroup.registerSubValidation(this.typeCB,
                 this.typeCB.validationSupport());
     }
 

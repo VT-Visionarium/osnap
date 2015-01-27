@@ -171,7 +171,7 @@ public class GraphDialog
         this.graphIdTF
                 .setValidationDecorator(new GraphicValidationDecoration());
         this.graphIdTF.setErrorDecorationEnabled(true);
-        this.validationGroup.registerSubValidationSupport(this.graphIdTF,
+        this.validationGroup.registerSubValidation(this.graphIdTF,
                 this.graphIdTF.validationSupport());
 
     }
