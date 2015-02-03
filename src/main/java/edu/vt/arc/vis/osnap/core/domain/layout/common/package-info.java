@@ -17,7 +17,7 @@
 
 /**
  * This package contains interfaces and base implementations for
- * {@link edu.vt.arc.vis.osnap.core.domain.layout.common.ILayoutComponent LayoutComponents}.
+ * {@link edu.vt.arc.vis.osnap.core.domain.layout.common.ILayout LayoutComponents}.
  * 
  * @author Peter J. Radics
  * @version 0.1

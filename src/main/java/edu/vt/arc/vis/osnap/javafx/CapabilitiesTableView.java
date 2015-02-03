@@ -80,7 +80,7 @@ public class CapabilitiesTableView
                 "Visual Property");
         visualProperty.setMinWidth(125);
         TableColumn<CapabilitiesObject, Boolean> enabled = new TableColumn<>(
-                "Current MappingStatus");
+                "Current MappedLayoutConfiguration");
         enabled.setMinWidth(125);
 
         visualProperty

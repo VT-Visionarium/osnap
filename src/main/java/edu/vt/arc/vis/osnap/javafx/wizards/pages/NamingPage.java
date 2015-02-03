@@ -1,182 +1,133 @@
-/*******************************************************************************
- * Copyright 2014 Virginia Tech Visionarium
- * 
+package edu.vt.arc.vis.osnap.javafx.wizards.pages;
+
+
+//@formatter:off
+/*
+ * _
+ * The Open Semantic Network Analysis Platform (OSNAP)
+ * _
+ * Copyright (C) 2012 - 2015 Visionarium at Virginia Tech
+ * _
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- ******************************************************************************/
+ * _
+ */
+//@formatter:on
 
-
-package edu.vt.arc.vis.osnap.javafx.wizards.pages;
-
-
-import java.util.Observable;
-import java.util.Observer;
-
-
-
-
-//import edu.vt.arc.vis.osnap.javafx.events.MapNamingEvent;
-
-import edu.vt.arc.vis.osnap.javafx.events.WizardCompleted;
-import edu.vt.arc.vis.osnap.javafx.wizards.IWizardWithStatus;
-import edu.vt.arc.vis.osnap.javafx.wizards.statusobjects.IStatus;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.scene.Parent;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.geometry.VPos;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBoxBuilder;
-import javafx.scene.text.Text;
+
+import org.controlsfx.validation.Validator;
+import org.controlsfx.validation.decoration.GraphicValidationDecoration;
+import org.jutility.javafx.control.labeled.LabeledTextArea;
+import org.jutility.javafx.control.labeled.LabeledTextField;
+
+import edu.vt.arc.vis.osnap.core.domain.layout.common.ILayout;
+import edu.vt.arc.vis.osnap.javafx.wizards.Wizard;
+import edu.vt.arc.vis.osnap.javafx.wizards.configurations.ILayoutConfiguration;
+import edu.vt.arc.vis.osnap.javafx.wizards.configurations.statuspanes.ILayoutConfigurationView;
 
 
 /**
- * page for selecting components for this layout type
+ * The {@code NamingPage} provides a {@link LayoutConfigurationWizardPage} for
+ * naming and describing {@link ILayout LayoutVisualizer Components}.
  *
- * @author Shawn P Neuman
+ * @param <O>
+ *            the type of the {@link ILayout}.
+ * @param <C>
+ *            the type of the {@link ILayoutConfiguration}.
+ * @param <T>
+ *            the type of the {@link ILayoutConfigurationView}.
  *
+ * @author Shawn P Neuman, Peter J. Radics
+ * @version 1.2.0
+ * @since 0.5.0
  */
-public class NamingPage
-        extends WizardPage
-        implements Observer {
+public class NamingPage<O extends ILayout, C extends ILayoutConfiguration<O>, T extends GridPane & ILayoutConfigurationView<O, C>>
+        extends LayoutConfigurationWizardPage<O, C, T> {
 
-    private Text      name;
-    private Text      description;
-    private TextField nameTF;
-    private TextArea  descriptionTF;
-//    private IStatus   status;
+    private final LabeledTextField nameTF;
+    private final LabeledTextArea  descriptionTF;
+
+
 
     /**
-     * constructor
-     */
-    public NamingPage() {
-
-        super("Name your Mapping");
-        this.setMinWidth(825.0);
-
-        this.getFinishButton().setDisable(true);
-        this.getNextButton().setDisable(true);
-    }
-
-    @Override
-    Parent getContent() {
-
-        GridPane grid = new GridPane();
-        grid.setVgap(10);
-        grid.setHgap(10);
-        name = new Text("Provide a name for this layout");
-        nameTF = new TextField();
-        description = new Text("Provide a Description for this layout");
-        descriptionTF = new TextArea();
-        descriptionTF.setPrefRowCount(10);
-        descriptionTF.setPrefColumnCount(20);
-        descriptionTF.setWrapText(true);
-        nameTF.textProperty().addListener(new ChangeListener<String>() {
-
-            @Override
-            public void changed(ObservableValue<? extends String> observable,
-                    String oldValue, String newValue) {
-
-                enableFinish();
-
-            }
-
-        });
-
-        descriptionTF.textProperty().addListener(new ChangeListener<String>() {
-
-            @Override
-            public void changed(ObservableValue<? extends String> observable,
-                    String oldValue, String newValue) {
-
-                enableFinish();
-
-            }
-
-
-
-        });
-
-        grid.add(name, 0, 0);
-        grid.add(nameTF, 1, 0);
-        grid.add(description, 0, 1);
-        grid.add(descriptionTF, 1, 1, 1, 4);
-
-
-        return VBoxBuilder.create().spacing(5).children(grid).build();
-
-    }
-
-    /**
-     * get the previous page
-     */
-    @Override
-    void priorPage() {
-
-        nameTF.clear();
-        super.priorPage();
-    }
-
-    @Override
-    void finish() {
-
-
-        IStatus status = ((IWizardWithStatus) this.getWizard())
-                .getStatusObject();
-
-        status.getLayoutComponent().setName(nameTF.getText());
-        status.getLayoutComponent().setDescription(descriptionTF.getText());
-        ((Observable) status).addObserver(this);
-        WizardCompleted wizardCompleted = new WizardCompleted(
-                WizardCompleted.WIZARD_COMPLETED, status);
-        fireEvent(wizardCompleted);
-
-        super.finish();
-
-
-    }
-
-    private void enableFinish() {
-
-        if (!(nameTF.getText() == null || descriptionTF.getText() == null
-                || "".equals(nameTF.getText()) || "".equals(descriptionTF
-                .getText()))) {
-
-            this.getFinishButton().setDisable(false);
-
-        }
-        else {
-
-            this.getFinishButton().setDisable(true);
-        }
-
-    }
-
-    /*
-     * (non-Javadoc)
+     * Creates a new instance of the {@code NamingPage} class.
      *
-     * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+     * @param configurationView
+     *            the {@link ILayoutConfigurationView}.
      */
-    @Override
-    public void update(Observable status, Object changedValue) {
+    public NamingPage(final T configurationView) {
+
+        super("Name LayoutVisualizer Component", configurationView);
 
 
-        if (status != null && status instanceof IStatus
-                && ((IStatus) status).getLayoutComponent() != null) {
-            nameTF.setText(((IStatus) status).getLayoutComponent().getName());
-            descriptionTF.setText(((IStatus) status).getLayoutComponent()
-                    .getDescription());
-        }
+        this.nameTF = new LabeledTextField("Provide a name for this layout");
+        this.nameTF.setHgap(10);
+        this.descriptionTF = new LabeledTextArea(
+                "Provide a Description for this layout");
+        this.descriptionTF.setHgap(10);
+        this.descriptionTF.setPrefRowCount(10);
+        this.descriptionTF.setPrefColumnCount(20);
 
+        this.descriptionTF.setWrapText(true);
+        GridPane.setValignment(this.descriptionTF.getLabel(), VPos.TOP);
+
+
+        this.getContentGridPane().add(this.nameTF, 0, 0);
+        this.getContentGridPane().add(this.descriptionTF, 0, 1);
+
+        this.setupValidation();
     }
 
+    private void setupValidation() {
+
+        this.nameTF.registerValidator(Validator
+                .createEmptyValidator("Name of LayoutVisualizer cannot be empty!"));
+        this.nameTF.setValidationDecorator(new GraphicValidationDecoration());
+        this.nameTF.setErrorDecorationEnabled(true);
+
+        this.descriptionTF
+                .registerValidator(Validator
+                        .createEmptyValidator("Description of LayoutVisualizer cannot be empty!"));
+        this.descriptionTF
+                .setValidationDecorator(new GraphicValidationDecoration());
+        this.descriptionTF.setErrorDecorationEnabled(true);
+
+        this.validationGroup().registerSubValidation(this.nameTF,
+                this.nameTF.validationSupport());
+        this.validationGroup().registerSubValidation(this.descriptionTF,
+                this.descriptionTF.validationSupport());
+    }
+
+    @Override
+    public void onEnteringPage(final Wizard wizard) {
+
+        super.onEnteringPage(wizard);
+
+        this.nameTF.setText(this.getConfigurationView().getConfiguration()
+                .getName());
+        this.descriptionTF.setText(this.getConfigurationView()
+                .getConfiguration().getDescription());
+    }
+
+    @Override
+    public void onExitingPage(final Wizard wizard) {
+
+        super.onExitingPage(wizard);
+
+        this.getConfigurationView().getConfiguration()
+                .setName(this.nameTF.getText());
+        this.getConfigurationView().getConfiguration()
+                .setDescription(this.descriptionTF.getText());
+    }
 }

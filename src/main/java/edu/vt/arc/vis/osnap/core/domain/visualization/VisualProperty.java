@@ -1,21 +1,27 @@
-/*******************************************************************************
- * Copyright 2014 Virginia Tech Visionarium
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- ******************************************************************************/
-
-
 package edu.vt.arc.vis.osnap.core.domain.visualization;
+
+
+//@formatter:off
+/*
+* _
+* The Open Semantic Network Analysis Platform (OSNAP)
+* _
+* Copyright (C) 2012 - 2015 Visionarium at Virginia Tech
+* _
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*      http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+* _
+*/
+//@formatter:on
 
 
 import javafx.scene.paint.Color;
@@ -32,11 +38,12 @@ import edu.vt.arc.vis.osnap.core.domain.IValueTypeContainer;
 
 
 /**
- * The <code>VisualProperty</code> enum provides the possible visual
- * characteristics of graph objects.
+ * The {@code VisualProperty} enum provides the possible visual characteristics
+ * of graph objects.
  * 
  * @author Peter J. Radics
- * @version 0.1
+ * @version 1.2.0
+ * @since 0.1.0
  */
 @XmlEnum
 @XmlRootElement(name = "VisualProperty")
@@ -48,94 +55,109 @@ public enum VisualProperty
      * The shape of a node.
      */
     @XmlEnumValue(value = "graphVis:node.shape")
-    NODE_SHAPE("graphVis:node.shape", true, false, false, Shape.class),
+    NODE_SHAPE("graphVis:node.shape", "Node Shape", true, false, false,
+            Shape.class),
     /**
      * The color of a node.
      */
     @XmlEnumValue(value = "graphVis:node.color")
-    NODE_COLOR("graphVis:node.color", true, false, false, Color.class),
+    NODE_COLOR("graphVis:node.color", "Node Color", true, false, false,
+            Color.class),
     /**
      * The scale of a node.
      */
     @XmlEnumValue(value = "graphVis:node.scale")
-    NODE_SCALE("graphVis:node.scale", true, false, false, Scalef.class),
+    NODE_SCALE("graphVis:node.scale", "Node Scale", true, false, false,
+            Scalef.class),
     /**
      * The label text of a node.
      */
     @XmlEnumValue(value = "graphVis:node.label")
-    NODE_LABEL_TEXT("graphVis:node.label", true, false, false, String.class),
+    NODE_LABEL_TEXT("graphVis:node.label", "Node Label Text", true, false,
+            false, String.class),
     /**
      * The x position of a node.
      */
     @XmlEnumValue(value = "graphVis:node.xPosition")
-    NODE_X_POSITION("graphVis:node.xPosition", true, false, false, Float.class),
+    NODE_X_POSITION("graphVis:node.xPosition", "Node X-Position", true, false,
+            false, Float.class),
     /**
      * The y position of a node.
      */
     @XmlEnumValue(value = "graphVis:node.yPosition")
-    NODE_Y_POSITION("graphVis:node.yPosition", true, false, false, Float.class),
+    NODE_Y_POSITION("graphVis:node.yPosition", "Node Y-Position", true, false,
+            false, Float.class),
     /**
      * The z position of a node.
      */
     @XmlEnumValue(value = "graphVis:node.zPosition")
-    NODE_Z_POSITION("graphVis:node.zPosition", true, false, false, Float.class),
+    NODE_Z_POSITION("graphVis:node.zPosition", "Node Z-Position", true, false,
+            false, Float.class),
 
 
     /**
      * The shape of an edge.
      */
     @XmlEnumValue(value = "graphVis:edge.shape")
-    EDGE_SHAPE("graphVis:edge.shape", false, true, false, Shape.class),
+    EDGE_SHAPE("graphVis:edge.shape", "Edge Shape", false, true, false,
+            Shape.class),
     /**
      * The color of an edge.
      */
     @XmlEnumValue(value = "graphVis:edge.color")
-    EDGE_COLOR("graphVis:edge.color", false, true, false, Color.class),
+    EDGE_COLOR("graphVis:edge.color", "Edge Color", false, true, false,
+            Color.class),
     /**
      * The scale of an edge.
      */
     @XmlEnumValue(value = "graphVis:edge.scale")
-    EDGE_SCALE("graphVis:edge.scale", false, true, false, Scalef.class),
+    EDGE_SCALE("graphVis:edge.scale", "Edge Scale", false, true, false,
+            Scalef.class),
     /**
      * The label text of an edge.
      */
     @XmlEnumValue(value = "graphVis:edge.label")
-    EDGE_LABEL_TEXT("graphVis:edge.label", false, true, false, String.class),
+    EDGE_LABEL_TEXT("graphVis:edge.label", "Edge Label Text", false, true,
+            false, String.class),
 
     /**
      * The shape of a hyperedge.
      */
     @XmlEnumValue(value = "graphVis:hyperEdge.shape")
-    HYPEREDGE_SHAPE("graphVis:hyperEdge.shape", false, false, true, Shape.class),
+    HYPEREDGE_SHAPE("graphVis:hyperEdge.shape", "Hyperedge Shape", false,
+            false, true, Shape.class),
     /**
      * The color of a hyperedge.
      */
     @XmlEnumValue(value = "graphVis:hyperEdge.color")
-    HYPEREDGE_COLOR("graphVis:hyperEdge.color", false, false, true, Color.class),
+    HYPEREDGE_COLOR("graphVis:hyperEdge.color", "Hyperedge Color", false,
+            false, true, Color.class),
     /**
      * The scale of a hyperedge.
      */
     @XmlEnumValue(value = "graphVis:hyperEdge.scale")
-    HYPEREDGE_SCALE("graphVis:hyperEdge.scale", false, false, true,
-            Scalef.class),
+    HYPEREDGE_SCALE("graphVis:hyperEdge.scale", "Hyperedge Scale", false,
+            false, true, Scalef.class),
     /**
      * The label text of a hyperedge.
      */
     @XmlEnumValue(value = "graphVis:hyperEdge.label")
-    HYPEREDGE_LABEL_TEXT("graphVis:hyperEdge.label", false, false, true,
-            String.class),
+    HYPEREDGE_LABEL_TEXT("graphVis:hyperEdge.label", "Hyperedge Label Text",
+            false, false, true, String.class),
 
 
     /**
      * A Viewpoint in the Universe.
      */
     @XmlEnumValue(value = "graphVis:universe.viewpoint")
-    UNIVERSE_VIEWPOINT("graphVis:universe.viewpoint", true, true, false,
-            Viewpoint.class);
+    UNIVERSE_VIEWPOINT("graphVis:universe.viewpoint", "Viewpoint", true, true,
+            false, Viewpoint.class);
 
 
-    @XmlAttribute(name = "name")
+    @XmlAttribute(name = "key")
     private final String   key;
+    @XmlAttribute(name = "name")
+    private final String   name;
     @XmlAttribute
     private final boolean  nodeProperty;
     @XmlAttribute
@@ -147,10 +169,11 @@ public enum VisualProperty
     private final Class<?> valueType;
 
 
-    private VisualProperty(String key, boolean nodeProperty,
+    private VisualProperty(String key, String name, boolean nodeProperty,
             boolean edgeProperty, boolean hyperedgeProperty, Class<?> valueType) {
 
         this.key = key;
+        this.name = name;
 
         this.nodeProperty = nodeProperty;
         this.edgeProperty = edgeProperty;
@@ -163,6 +186,17 @@ public enum VisualProperty
     public String getKey() {
 
         return key;
+    }
+
+
+    /**
+     * Returns the name.
+     * 
+     * @return the name.
+     */
+    public String getName() {
+
+        return this.name;
     }
 
     @Override
@@ -179,10 +213,10 @@ public enum VisualProperty
     }
 
     /**
-     * Determines whether a <code>VisualProperty</code> belongs to a node.
+     * Determines whether a {@code VisualProperty} belongs to a node.
      * 
-     * @return <code>true</code> if the <code>VisualPropery</code> is a node
-     *         property; <code>false</code> otherwise.
+     * @return {@code true} if the {@code VisualPropery} is a node property;
+     *         {@code false} otherwise.
      */
     public boolean isNodeProperty() {
 
@@ -190,10 +224,10 @@ public enum VisualProperty
     }
 
     /**
-     * Determines whether a <code>VisualProperty</code> belongs to an edge.
+     * Determines whether a {@code VisualProperty} belongs to an edge.
      * 
-     * @return <code>true</code> if the <code>VisualPropery</code> is an edge
-     *         property; <code>false</code> otherwise.
+     * @return {@code true} if the {@code VisualPropery} is an edge property;
+     *         {@code false} otherwise.
      */
     public boolean isEdgeProperty() {
 
@@ -201,10 +235,10 @@ public enum VisualProperty
     }
 
     /**
-     * Determines whether a <code>VisualProperty</code> belongs to a hyperedge.
+     * Determines whether a {@code VisualProperty} belongs to a hyperedge.
      * 
-     * @return <code>true</code> if the <code>VisualPropery</code> is a
-     *         hyperedge property; <code>false</code> otherwise.
+     * @return {@code true} if the {@code VisualPropery} is a hyperedge
+     *         property; {@code false} otherwise.
      */
     public boolean isHyperedgeProperty() {
 

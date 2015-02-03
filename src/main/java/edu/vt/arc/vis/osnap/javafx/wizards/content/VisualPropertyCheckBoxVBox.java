@@ -1,27 +1,12 @@
-/*******************************************************************************
- * Copyright 2014 Virginia Tech Visionarium
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- ******************************************************************************/
-
-
 package edu.vt.arc.vis.osnap.javafx.wizards.content;
 
+
+// @formatter:off
 /*
  * _
  * The Open Semantic Network Analysis Platform (OSNAP)
  * _
- * Copyright (C) 2012 - 2014 Visionarium at Virginia Tech
+ * Copyright (C) 2012 - 2015 Visionarium at Virginia Tech
  * _
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +21,7 @@ package edu.vt.arc.vis.osnap.javafx.wizards.content;
  * limitations under the License.
  * _
  */
-
+// @formatter:on
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -47,75 +32,92 @@ import java.util.Set;
 
 import org.controlsfx.dialog.Dialogs;
 
+import edu.vt.arc.vis.osnap.core.domain.visualization.VisualProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 
 /**
- * @author Shawn P Neuman
- * @param <T>
+ * @author Shawn P Neuman, Peter J. Radics
  * 
  */
-public class VisualPropertyCheckBoxVBox<T extends Enum<?>>
+public class VisualPropertyCheckBoxVBox
         extends GridPane {
 
-    private Text             label;
-    private Map<CheckBox, T> properties;
-    int                      numSelected = 0;
-    int                      selectionLimit;
+    private final Map<CheckBox, VisualProperty> properties;
+    private int                                 numSelected = 0;
+    private int                                 selectionLimit;
 
     /**
-     * @param title
      * @param values
-     * @param selectionLimit
      */
-    public VisualPropertyCheckBoxVBox(String title, Collection<T> values,
-            int selectionLimit) {
+    public VisualPropertyCheckBoxVBox(Collection<VisualProperty> values) {
 
-
-        this.selectionLimit = selectionLimit;
-        label = new Text(title);
-        label.setFont(Font.font("verdana", 16));
-        this.setPadding(new Insets(10, 10, 10, 10));
-        this.setVgap(15);
-        this.getChildren().add(label);
-
-        properties = new LinkedHashMap<>();
-        populateList(values);
-
+        this(values, values.size());
     }
 
     /**
-     * @param title
-     * @param values
-     */
-    public VisualPropertyCheckBoxVBox(String title, Collection<T> values) {
-
-        this(title, values, values.size());
-    }
-
-    /**
-     * @param title
      * @param values
      */
     @SafeVarargs
-    public VisualPropertyCheckBoxVBox(String title, T... values) {
+    public VisualPropertyCheckBoxVBox(VisualProperty... values) {
 
-        this(title, Arrays.asList(values));
+        this(Arrays.asList(values));
     }
 
+
+    /**
+     * @param values
+     * @param selectionLimit
+     */
+    public VisualPropertyCheckBoxVBox(Collection<VisualProperty> values,
+            int selectionLimit) {
+
+        this.setPadding(new Insets(10, 10, 10, 10));
+        this.setVgap(15);
+        this.setHgap(10);
+
+        this.selectionLimit = selectionLimit;
+
+        this.properties = new LinkedHashMap<>();
+
+
+        for (VisualProperty visualProperty : values) {
+
+            switch (visualProperty) {
+
+                case HYPEREDGE_COLOR:
+                case HYPEREDGE_SCALE:
+                case HYPEREDGE_LABEL_TEXT:
+                case HYPEREDGE_SHAPE:
+                    break;
+                default:
+
+                    CheckBox checkbox = new CheckBox(visualProperty.getName());
+                    checkbox.setId(visualProperty.getKey());
+                    checkbox.setFont(Font.font("verdana", 14));
+                    this.properties.put(checkbox, visualProperty);
+
+                    break;
+            }
+        }
+
+
+        populateList(values);
+    }
 
     /**
      * populate a list of CheckBoxes
      * 
      * @param values
      */
-    public void populateList(Collection<T> values) {
+    public void populateList(Collection<VisualProperty> values) {
 
         int i = 1;
         int k = 1;
@@ -126,7 +128,7 @@ public class VisualPropertyCheckBoxVBox<T extends Enum<?>>
 
         // check for node property types first
         // add only node shape, color, scale, label
-        for (T value : values) {
+        for (VisualProperty value : values) {
 
             if (value.toString().contains("node")
                     && !value.toString().contains("Pos")) {
@@ -176,7 +178,7 @@ public class VisualPropertyCheckBoxVBox<T extends Enum<?>>
         i++;
 
         // add edge check boxes next
-        for (T value : values) {
+        for (VisualProperty value : values) {
 
             if (value.toString().contains("edge")) {
 
@@ -222,7 +224,7 @@ public class VisualPropertyCheckBoxVBox<T extends Enum<?>>
         }
 
         // check for node x, y or z position
-        for (T value : values) {
+        for (VisualProperty value : values) {
 
             if (value.toString().contains("Pos")) {
 
@@ -268,7 +270,7 @@ public class VisualPropertyCheckBoxVBox<T extends Enum<?>>
         }
 
         // check for node x, y or z position
-        for (T value : values) {
+        for (VisualProperty value : values) {
 
             if (value.toString().contains("viewpoint")) {
 
@@ -319,9 +321,9 @@ public class VisualPropertyCheckBoxVBox<T extends Enum<?>>
      * 
      * @return the list of selected values.
      */
-    public Set<T> getList() {
+    public Set<VisualProperty> getList() {
 
-        Set<T> selectedList = new LinkedHashSet<>();
+        Set<VisualProperty> selectedList = new LinkedHashSet<>();
 
         for (CheckBox box : properties.keySet()) {
             if (box.isSelected()) {

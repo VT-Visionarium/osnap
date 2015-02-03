@@ -32,7 +32,7 @@ import com.hp.hpl.jena.ontology.OntModel;
 import edu.vt.arc.vis.osnap.core.domain.Project;
 import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
 import edu.vt.arc.vis.osnap.core.domain.graph.common.GraphObjectProperty;
-import edu.vt.arc.vis.osnap.core.domain.layout.Layout;
+import edu.vt.arc.vis.osnap.core.domain.layout.LayoutVisualizer;
 import edu.vt.arc.vis.osnap.core.domain.layout.LayoutComponentRegistry;
 import edu.vt.arc.vis.osnap.core.domain.visualization.Visualization;
 import edu.vt.arc.vis.osnap.io.graphML.GraphMLConverter;
@@ -93,7 +93,7 @@ public class IOManager
         LayoutComponentRegistry.Instance();
         XmlSerializer.Instance().registerClass(Project.class);
         XmlSerializer.Instance().registerClass(GraphObjectProperty.class);
-        XmlSerializer.Instance().registerClass(Layout.class);
+        XmlSerializer.Instance().registerClass(LayoutVisualizer.class);
     }
 
     @Override
@@ -347,8 +347,8 @@ public class IOManager
         }
         try {
 
-            XmlSerializer.Instance().deserialize(url, Layout.class);
-            return Layout.class;
+            XmlSerializer.Instance().deserialize(url, LayoutVisualizer.class);
+            return LayoutVisualizer.class;
         }
         catch (Exception e) {
             // Nothing to be done

@@ -1,34 +1,36 @@
 /*******************************************************************************
  * Copyright 2014 Virginia Tech Visionarium
  * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  * 
- *   http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  ******************************************************************************/
 
 
 package edu.vt.arc.vis.osnap.core.domain.graph.common;
+
 
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 
 
 /**
- * The <code>GraphObjectProperty</code> enum provides all properties that of any
+ * The {@code GraphObjectProperty} enum provides all properties that of any
  * object within a graph universe. </p> This includes the properties of
- * <code>Node</code>scale, <code>Edge</code>scale, <code>HyperEdge</code>scale,
- * <code>Graph</code>scale, and <code>Universe</code>scale.
+ * {@code Node}scale, {@code Edge}scale, {@code HyperEdge}scale, {@code Graph}
+ * scale, and {@code Universe}scale.
  * 
  * @author Peter J. Radics
- * @version 0.1
+ * @version 1.2.0
+ * @since 0.1.0
  */
 @XmlEnum
 public enum GraphObjectProperty
@@ -294,10 +296,10 @@ public enum GraphObjectProperty
         this.key = name;
         this.valueType = valueType;
     }
-    
+
     @Override
     public String getKey() {
-    
+
         return this.key;
     }
 
@@ -315,13 +317,13 @@ public enum GraphObjectProperty
     }
 
     /**
-     * Returns the GraphObjectProperty with the provided string, or
-     * <code>null</code>.
+     * Returns the GraphObjectProperty with the provided string, or {@code null}
+     * .
      * 
      * @param string
      *            the String representation of a GraphObjectProperty
-     * @return the GraphObjectProperty with the provided string, or
-     *         <code>null</code>.
+     * @return the GraphObjectProperty with the provided string, or {@code null}
+     *         .
      */
     public static GraphObjectProperty fromString(String string) {
 

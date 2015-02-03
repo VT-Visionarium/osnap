@@ -18,14 +18,14 @@ import edu.vt.arc.vis.osnap.core.domain.graph.common.INode;
 import edu.vt.arc.vis.osnap.core.domain.graph.metadata.BooleanMetadata;
 import edu.vt.arc.vis.osnap.core.domain.graph.metadata.IMetadataContainer;
 import edu.vt.arc.vis.osnap.core.domain.graph.metadata.Metadata;
-import edu.vt.arc.vis.osnap.core.domain.layout.complexComponents.SolarSystemCoordinateLayoutComponent;
-import edu.vt.arc.vis.osnap.core.domain.layout.complexComponents.SolarSystemCoordinateLayoutComponent.ComponentNode;
+import edu.vt.arc.vis.osnap.core.domain.layout.complexComponents.TieredOrbitalLayout;
+import edu.vt.arc.vis.osnap.core.domain.layout.complexComponents.TieredOrbitalLayout.ComponentNode;
 import edu.vt.arc.vis.osnap.core.domain.visualization.Visualization;
 
 
 /**
  * The {@link SolarSystemCoordinateLayoutComponentTest} class provides tests for
- * the {@link SolarSystemCoordinateLayoutComponent} class.
+ * the {@link TieredOrbitalLayout} class.
  * 
  * @author Peter J. Radics
  * @version 0.1
@@ -58,14 +58,14 @@ public class SolarSystemCoordinateLayoutComponentTest {
     private float                                maximumNodeSize;
     private float                                depthModifier;
 
-    private SolarSystemCoordinateLayoutComponent smallSolarSystemLayout;
-    private SolarSystemCoordinateLayoutComponent smallSolarSystemLayoutWithMetadata;
-    private SolarSystemCoordinateLayoutComponent smallSolarSystemLayoutInverted;
-    private SolarSystemCoordinateLayoutComponent smallSolarSystemLayoutWithMetadataInverted;
-    private SolarSystemCoordinateLayoutComponent largeSolarSystemLayout;
-    private SolarSystemCoordinateLayoutComponent largeSolarSystemLayoutWithMetadata;
-    private SolarSystemCoordinateLayoutComponent largeSolarSystemLayoutInverted;
-    private SolarSystemCoordinateLayoutComponent largeSolarSystemLayoutWithMetadataInverted;
+    private TieredOrbitalLayout smallSolarSystemLayout;
+    private TieredOrbitalLayout smallSolarSystemLayoutWithMetadata;
+    private TieredOrbitalLayout smallSolarSystemLayoutInverted;
+    private TieredOrbitalLayout smallSolarSystemLayoutWithMetadataInverted;
+    private TieredOrbitalLayout largeSolarSystemLayout;
+    private TieredOrbitalLayout largeSolarSystemLayoutWithMetadata;
+    private TieredOrbitalLayout largeSolarSystemLayoutInverted;
+    private TieredOrbitalLayout largeSolarSystemLayoutWithMetadataInverted;
 
     /**
      * Sets up the testing harness.
@@ -146,23 +146,23 @@ public class SolarSystemCoordinateLayoutComponentTest {
             }
         }
         System.out.println("What the what?");
-        this.smallSolarSystemLayout = new SolarSystemCoordinateLayoutComponent(
+        this.smallSolarSystemLayout = new TieredOrbitalLayout(
                 this.rootNode, null, this.minimalDistance,
                 this.maximumNodeSize, this.depthModifier, false);
         this.smallSolarSystemLayout.layout(new Visualization(universe));
 
-        this.smallSolarSystemLayoutWithMetadata = new SolarSystemCoordinateLayoutComponent(
+        this.smallSolarSystemLayoutWithMetadata = new TieredOrbitalLayout(
                 this.rootNode, this.metadata, this.minimalDistance,
                 this.maximumNodeSize, this.depthModifier, false);
         this.smallSolarSystemLayoutWithMetadata.layout(new Visualization(
                 universe));
 
-        this.smallSolarSystemLayoutInverted = new SolarSystemCoordinateLayoutComponent(
+        this.smallSolarSystemLayoutInverted = new TieredOrbitalLayout(
                 this.rootNode, null, this.minimalDistance,
                 this.maximumNodeSize, this.depthModifier, true);
         this.smallSolarSystemLayoutInverted.layout(new Visualization(universe));
 
-        this.smallSolarSystemLayoutWithMetadataInverted = new SolarSystemCoordinateLayoutComponent(
+        this.smallSolarSystemLayoutWithMetadataInverted = new TieredOrbitalLayout(
                 this.rootNode, this.metadata, this.minimalDistance,
                 this.maximumNodeSize, this.depthModifier, true);
         this.smallSolarSystemLayoutWithMetadataInverted
@@ -181,23 +181,23 @@ public class SolarSystemCoordinateLayoutComponentTest {
         F_Z.getMetadataProperty().addMetadata(criterion);
         H_F.getMetadataProperty().addMetadata(criterion);
 
-        this.largeSolarSystemLayout = new SolarSystemCoordinateLayoutComponent(
+        this.largeSolarSystemLayout = new TieredOrbitalLayout(
                 this.rootNode, null, this.minimalDistance,
                 this.maximumNodeSize, this.depthModifier, false);
         this.largeSolarSystemLayout.layout(new Visualization(universe));
 
-        this.largeSolarSystemLayoutWithMetadata = new SolarSystemCoordinateLayoutComponent(
+        this.largeSolarSystemLayoutWithMetadata = new TieredOrbitalLayout(
                 this.rootNode, this.metadata, this.minimalDistance,
                 this.maximumNodeSize, this.depthModifier, false);
         this.largeSolarSystemLayoutWithMetadata.layout(new Visualization(
                 universe));
 
-        this.largeSolarSystemLayoutInverted = new SolarSystemCoordinateLayoutComponent(
+        this.largeSolarSystemLayoutInverted = new TieredOrbitalLayout(
                 this.rootNode, null, this.minimalDistance,
                 this.maximumNodeSize, this.depthModifier, true);
         this.largeSolarSystemLayoutInverted.layout(new Visualization(universe));
 
-        this.largeSolarSystemLayoutWithMetadataInverted = new SolarSystemCoordinateLayoutComponent(
+        this.largeSolarSystemLayoutWithMetadataInverted = new TieredOrbitalLayout(
                 this.rootNode, this.metadata, this.minimalDistance,
                 this.maximumNodeSize, this.depthModifier, true);
         this.largeSolarSystemLayoutWithMetadataInverted
@@ -208,7 +208,7 @@ public class SolarSystemCoordinateLayoutComponentTest {
 
     /**
      * Test method for
-     * {@link edu.vt.arc.vis.osnap.core.domain.layout.complexComponents.SolarSystemCoordinateLayoutComponent#getMetadata()}
+     * {@link edu.vt.arc.vis.osnap.core.domain.layout.complexComponents.TieredOrbitalLayout#getMetadata()}
      * .
      */
     @Test
@@ -231,7 +231,7 @@ public class SolarSystemCoordinateLayoutComponentTest {
 
     /**
      * Test method for
-     * {@link edu.vt.arc.vis.osnap.core.domain.layout.complexComponents.SolarSystemCoordinateLayoutComponent#getRootNode()}
+     * {@link edu.vt.arc.vis.osnap.core.domain.layout.complexComponents.TieredOrbitalLayout#getRootNode()}
      * .
      */
     @Test
@@ -256,7 +256,7 @@ public class SolarSystemCoordinateLayoutComponentTest {
 
     /**
      * Test method for
-     * {@link edu.vt.arc.vis.osnap.core.domain.layout.complexComponents.SolarSystemCoordinateLayoutComponent#getWeight()}
+     * {@link edu.vt.arc.vis.osnap.core.domain.layout.complexComponents.TieredOrbitalLayout#getWeight()}
      * .
      */
     @Test
@@ -891,7 +891,7 @@ public class SolarSystemCoordinateLayoutComponentTest {
 
     /**
      * Test method for
-     * {@link edu.vt.arc.vis.osnap.core.domain.layout.complexComponents.SolarSystemCoordinateLayoutComponent#getMinimalDistance()}
+     * {@link edu.vt.arc.vis.osnap.core.domain.layout.complexComponents.TieredOrbitalLayout#getMinimalDistance()}
      * .
      */
     @Test
@@ -924,41 +924,41 @@ public class SolarSystemCoordinateLayoutComponentTest {
 
     /**
      * Test method for
-     * {@link edu.vt.arc.vis.osnap.core.domain.layout.complexComponents.SolarSystemCoordinateLayoutComponent#getMaximumNodeSize()}
+     * {@link edu.vt.arc.vis.osnap.core.domain.layout.complexComponents.TieredOrbitalLayout#getMaximumNodeRadius()}
      * .
      */
     @Test
     public void testGetMaximumNodeSize() {
 
         assertEquals(this.maximumNodeSize,
-                smallSolarSystemLayout.getMaximumNodeSize(), 0.0001f);
+                smallSolarSystemLayout.getMaximumNodeRadius(), 0.0001f);
         assertEquals(this.maximumNodeSize,
-                smallSolarSystemLayoutWithMetadata.getMaximumNodeSize(),
+                smallSolarSystemLayoutWithMetadata.getMaximumNodeRadius(),
                 0.0001f);
         assertEquals(this.maximumNodeSize,
-                smallSolarSystemLayoutInverted.getMaximumNodeSize(), 0.0001f);
+                smallSolarSystemLayoutInverted.getMaximumNodeRadius(), 0.0001f);
         assertEquals(
                 this.maximumNodeSize,
-                smallSolarSystemLayoutWithMetadataInverted.getMaximumNodeSize(),
+                smallSolarSystemLayoutWithMetadataInverted.getMaximumNodeRadius(),
                 0.0001f);
 
 
         assertEquals(this.maximumNodeSize,
-                largeSolarSystemLayout.getMaximumNodeSize(), 0.0001f);
+                largeSolarSystemLayout.getMaximumNodeRadius(), 0.0001f);
         assertEquals(this.maximumNodeSize,
-                largeSolarSystemLayoutWithMetadata.getMaximumNodeSize(),
+                largeSolarSystemLayoutWithMetadata.getMaximumNodeRadius(),
                 0.0001f);
         assertEquals(this.maximumNodeSize,
-                largeSolarSystemLayoutInverted.getMaximumNodeSize(), 0.0001f);
+                largeSolarSystemLayoutInverted.getMaximumNodeRadius(), 0.0001f);
         assertEquals(
                 this.maximumNodeSize,
-                largeSolarSystemLayoutWithMetadataInverted.getMaximumNodeSize(),
+                largeSolarSystemLayoutWithMetadataInverted.getMaximumNodeRadius(),
                 0.0001f);
     }
 
     /**
      * Test method for
-     * {@link edu.vt.arc.vis.osnap.core.domain.layout.complexComponents.SolarSystemCoordinateLayoutComponent#getDepthModifier()}
+     * {@link edu.vt.arc.vis.osnap.core.domain.layout.complexComponents.TieredOrbitalLayout#getDepthModifier()}
      * .
      */
     @Test
@@ -988,7 +988,7 @@ public class SolarSystemCoordinateLayoutComponentTest {
 
     /**
      * Test method for
-     * {@link edu.vt.arc.vis.osnap.core.domain.layout.complexComponents.SolarSystemCoordinateLayoutComponent#getMinimumSpanningTree()}
+     * {@link edu.vt.arc.vis.osnap.core.domain.layout.complexComponents.TieredOrbitalLayout#getMinimumSpanningTree()}
      * .
      */
     @Test
@@ -999,10 +999,10 @@ public class SolarSystemCoordinateLayoutComponentTest {
     }
 
     private void testMinimumSpanningTree(
-            SolarSystemCoordinateLayoutComponent layout) {
+            TieredOrbitalLayout layout) {
 
         float delta = layout.getMinimalDistance();
-        float s = layout.getMaximumNodeSize();
+        float s = layout.getMaximumNodeRadius();
 
 
         Tree<INode> mst = layout.getMinimumSpanningTree();

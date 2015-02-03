@@ -152,25 +152,25 @@ public class VisualizationDetailsVBox
         edgeBox.getChildren().add(text2);
 
         this.graphListView = new ListViewWithSearchPanel<>(
-                "Graph Layout",
+                "Graph LayoutVisualizer",
                 new VisualGraphObjectStringConverter<VisualGraph>(
                         VisualGraphObjectStringConverterConfiguration.GRAPH_OBJECT_ID));
 
         this.nodeListView = new ListViewWithSearchPanel<>(
-                "Node Layout",
+                "Node LayoutVisualizer",
                 new VisualObjectStringConverter<VisualNode>(
                         VisualGraphObjectStringConverterConfiguration.GRAPH_OBJECT_ID));
 
 
 
         this.edgeListView = new ListViewWithSearchPanel<>(
-                "Edge Layout",
+                "Edge LayoutVisualizer",
                 new VisualObjectStringConverter<VisualEdge>(
                         VisualGraphObjectStringConverterConfiguration.GRAPH_OBJECT_ID));
 
 
-        this.nodeData = new VisualObjectData("Node Layout Data");
-        this.edgeData = new VisualObjectData("Edge Layout Data");
+        this.nodeData = new VisualObjectData("Node LayoutVisualizer Data");
+        this.edgeData = new VisualObjectData("Edge LayoutVisualizer Data");
 
         this.exportButton = new Button("Export Visualization to X3D");
         this.addLayoutComponentButton = new Button(

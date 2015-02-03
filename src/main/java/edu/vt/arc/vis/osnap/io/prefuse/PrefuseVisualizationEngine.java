@@ -28,9 +28,9 @@ import org.jutility.io.IConverter;
 
 import edu.vt.arc.vis.osnap.core.domain.graph.Node;
 import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
-import edu.vt.arc.vis.osnap.core.domain.layout.common.BaseCoordinateLayoutComponent;
+import edu.vt.arc.vis.osnap.core.domain.layout.common.BaseCoordinateLayout;
 import edu.vt.arc.vis.osnap.core.domain.layout.common.CoordinateComponent;
-import edu.vt.arc.vis.osnap.core.domain.layout.prefuseComponents.IPrefuseLayoutComponent;
+import edu.vt.arc.vis.osnap.core.domain.layout.prefuseComponents.IPrefuseLayout;
 import edu.vt.arc.vis.osnap.core.domain.visualization.VisualNode;
 import prefuse.Visualization;
 import prefuse.data.Graph;
@@ -48,7 +48,7 @@ public class PrefuseVisualizationEngine
         implements IConverter {
 
     private edu.vt.arc.vis.osnap.core.domain.visualization.Visualization visualization;
-    private final IPrefuseLayoutComponent               layoutComponent;
+    private final IPrefuseLayout               layoutComponent;
 
 
 
@@ -96,7 +96,7 @@ public class PrefuseVisualizationEngine
      *            {@link edu.vt.arc.vis.osnap.core.domain.visualization.Visualization
      *            visualization}.
      */
-    public PrefuseVisualizationEngine(IPrefuseLayoutComponent layoutComponent) {
+    public PrefuseVisualizationEngine(IPrefuseLayout layoutComponent) {
 
         this(layoutComponent, null);
     }
@@ -112,7 +112,7 @@ public class PrefuseVisualizationEngine
      *            the {@link edu.vt.arc.vis.osnap.core.domain.visualization.Visualization
      *            visualization} to modify.
      */
-    public PrefuseVisualizationEngine(IPrefuseLayoutComponent layoutComponent,
+    public PrefuseVisualizationEngine(IPrefuseLayout layoutComponent,
             edu.vt.arc.vis.osnap.core.domain.visualization.Visualization visualization) {
 
         this.layoutComponent = layoutComponent;
@@ -204,11 +204,11 @@ public class PrefuseVisualizationEngine
 
 //                    System.out.println("\t\tTrying to set x, y to " + x + ", "
 //                            + y + " for visual node " + visualNode.getID());
-                BaseCoordinateLayoutComponent
+                BaseCoordinateLayout
                         .setValue(this.layoutComponent, visualNode,
                                 CoordinateComponent.FIRST_COMPONENT,
                                 firstComponent);
-                BaseCoordinateLayoutComponent.setValue(
+                BaseCoordinateLayout.setValue(
                         this.layoutComponent, visualNode,
                         CoordinateComponent.SECOND_COMPONENT,
                         secondComponent);

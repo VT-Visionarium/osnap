@@ -21,7 +21,7 @@ import edu.vt.arc.vis.osnap.core.domain.graph.Node;
 import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
 import edu.vt.arc.vis.osnap.core.domain.graph.metadata.Metadata;
 import edu.vt.arc.vis.osnap.core.domain.graph.metadata.Schema;
-import edu.vt.arc.vis.osnap.core.domain.layout.Layout;
+import edu.vt.arc.vis.osnap.core.domain.layout.LayoutVisualizer;
 import edu.vt.arc.vis.osnap.core.services.GraphService;
 import edu.vt.arc.vis.osnap.core.services.LayoutService;
 import edu.vt.arc.vis.osnap.core.services.ProjectService;
@@ -489,16 +489,16 @@ public class ProjectQueryController {
 
 
     /**
-     * Retrieves all {@link Layout Layouts} of the {@link Project} with the
+     * Retrieves all {@link LayoutVisualizer Layouts} of the {@link Project} with the
      * provided id.
      * 
      * @param id
      *            the id
-     * @return all {@link Layout Layouts} of the {@link Project} with the
+     * @return all {@link LayoutVisualizer Layouts} of the {@link Project} with the
      *         provided id.
      */
     @RequestMapping(method = RequestMethod.GET, value = "/{id}/layouts")
-    public ResponseEntity<List<Layout>> getAllLayouts(@PathVariable String id) {
+    public ResponseEntity<List<LayoutVisualizer>> getAllLayouts(@PathVariable String id) {
 
         try {
 
@@ -522,19 +522,19 @@ public class ProjectQueryController {
 
 
     /**
-     * Retrieves the requested {@link Layout} of the {@link Project} with the
+     * Retrieves the requested {@link LayoutVisualizer} of the {@link Project} with the
      * provided id.
      * 
      * @param projectId
      *            the project id.
      * @param layoutId
      *            the layout id.
-     * @return the requested {@link Layout} of the {@link Project} with the
+     * @return the requested {@link LayoutVisualizer} of the {@link Project} with the
      *         provided id.
      */
     @RequestMapping(method = RequestMethod.GET,
             value = "/{projectId}/layouts/{layoutId}")
-    public ResponseEntity<Layout> getLayout(@PathVariable String projectId,
+    public ResponseEntity<LayoutVisualizer> getLayout(@PathVariable String projectId,
             @PathVariable String layoutId) {
 
         try {

@@ -10,9 +10,9 @@ import org.x3d.model.X3DDocument;
 
 import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
 import edu.vt.arc.vis.osnap.core.domain.graph.common.INode;
-import edu.vt.arc.vis.osnap.core.domain.layout.Layout;
-import edu.vt.arc.vis.osnap.core.domain.layout.common.ILayoutComponent;
-import edu.vt.arc.vis.osnap.core.domain.layout.complexComponents.SolarSystemCoordinateLayoutComponent;
+import edu.vt.arc.vis.osnap.core.domain.layout.LayoutVisualizer;
+import edu.vt.arc.vis.osnap.core.domain.layout.common.ILayout;
+import edu.vt.arc.vis.osnap.core.domain.layout.complexComponents.TieredOrbitalLayout;
 import edu.vt.arc.vis.osnap.core.domain.visualization.VisualProperty;
 import edu.vt.arc.vis.osnap.core.domain.visualization.Visualization;
 import edu.vt.arc.vis.osnap.io.owl.OWLConverter;
@@ -221,7 +221,7 @@ public class GraphVisualizer {
 
         System.out.println("======================================\n\nLayout:");
 
-        Layout layout = Layout.defaultLayout(universe);
+        LayoutVisualizer layoutVisualizer = LayoutVisualizer.defaultLayout(universe);
 
 
         INode rootNode = universe.getNode("owl:Thing");
@@ -260,17 +260,17 @@ public class GraphVisualizer {
         //
         // System.out.println("Filtered Edges size: " + filteredEdges.size());
 
-        ILayoutComponent provider = null;
-        provider = new SolarSystemCoordinateLayoutComponent(rootNode, null,
+        ILayout provider = null;
+        provider = new TieredOrbitalLayout(rootNode, null,
                 0.1f, 1.0f, 250f, true);
 
 
-        // provider = new BalloonTreeCoordinateLayoutComponent(rootNode);
-        // provider = new NodeLinkTreeCoordinateLayoutComponent(rootNode);
-        // provider = new RadialTreeCoordinateLayoutComponent(rootNode);
-        // provider = new SquarifiedTreeMapCoordinateLayoutComponent(rootNode);
-        // provider = new ForceDirectedCoordinateLayoutComponent();
-        // provider = new FruchtermanReingoldCoordinateLayoutComponent();
+        // provider = new PrefuseBalloonTreeLayout(rootNode);
+        // provider = new PrefuseNodeLinkTreeLayout(rootNode);
+        // provider = new PrefuseRadialTreeLayout(rootNode);
+        // provider = new PrefuseSquarifiedTreeMapLayout(rootNode);
+        // provider = new ForceDirectedLayout();
+        // provider = new PrefuseFruchtermanReingoldLayout();
 
 
         // provider.setXOutput(CoordinateComponent.FIRST_COMPONENT);
@@ -281,8 +281,8 @@ public class GraphVisualizer {
         // universe.getNodeSchema().getEntry("rdfs:label");
         //
         //
-        // MappedShapeLayoutComponent<SchemaEntry, String> map = new
-        // MappedShapeLayoutComponent<SchemaEntry, String>(
+        // MappedShapeLayout<SchemaEntry, String> map = new
+        // MappedShapeLayout<SchemaEntry, String>(
         // domainKey, VisualProperty.NODE_SHAPE, String.class);
         //
         //
@@ -316,8 +316,8 @@ public class GraphVisualizer {
         // layout.addLayoutProviderForVisualProperty(map,
         // VisualProperty.NODE_SHAPE);
 
-        ILayoutComponent defaultCoordinates = null;
-        for (KeyValuePair<ILayoutComponent, VisualProperty> pair : layout
+        ILayout defaultCoordinates = null;
+        for (KeyValuePair<ILayout, VisualProperty> pair : layoutVisualizer
                 .getLayoutComponents()) {
 
             switch (pair.getValue()) {
@@ -333,30 +333,30 @@ public class GraphVisualizer {
             }
         }
 
-        layout.removeLayoutProviderForVisualProperty(defaultCoordinates,
+        layoutVisualizer.removeLayoutProviderForVisualProperty(defaultCoordinates,
                 VisualProperty.NODE_X_POSITION);
-        layout.removeLayoutProviderForVisualProperty(defaultCoordinates,
+        layoutVisualizer.removeLayoutProviderForVisualProperty(defaultCoordinates,
                 VisualProperty.NODE_Y_POSITION);
-        layout.removeLayoutProviderForVisualProperty(defaultCoordinates,
+        layoutVisualizer.removeLayoutProviderForVisualProperty(defaultCoordinates,
                 VisualProperty.NODE_Z_POSITION);
 
-        layout.addLayoutProviderForVisualProperty(provider,
+        layoutVisualizer.addLayoutProviderForVisualProperty(provider,
                 VisualProperty.NODE_X_POSITION);
-        layout.addLayoutProviderForVisualProperty(provider,
+        layoutVisualizer.addLayoutProviderForVisualProperty(provider,
                 VisualProperty.NODE_Y_POSITION);
-        layout.addLayoutProviderForVisualProperty(provider,
+        layoutVisualizer.addLayoutProviderForVisualProperty(provider,
                 VisualProperty.NODE_Z_POSITION);
 
         System.out.println("LayoutComponents: ");
-        for (KeyValuePair<ILayoutComponent, VisualProperty> component : layout
+        for (KeyValuePair<ILayout, VisualProperty> component : layoutVisualizer
                 .getLayoutComponents()) {
             System.out.println("\t" + component.getValue() + ": "
                     + component.getKey().getName());
         }
 
-        System.out.print("\nApplying Layout to Visualization.");
+        System.out.print("\nApplying LayoutVisualizer to Visualization.");
 
-        layout.layout();
+        layoutVisualizer.layout();
 
         System.out.println(" Done.");
 
@@ -366,7 +366,7 @@ public class GraphVisualizer {
 
 
 
-        Visualization visualization = layout.getVisualization();
+        Visualization visualization = layoutVisualizer.getVisualization();
 
         X3DDocument x3dDocument = null;
         try {

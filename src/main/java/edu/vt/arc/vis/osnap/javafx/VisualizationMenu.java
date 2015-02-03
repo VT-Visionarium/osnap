@@ -37,7 +37,7 @@ import org.controlsfx.control.action.ActionUtils;
 import org.x3d.model.X3DDocument;
 
 import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
-import edu.vt.arc.vis.osnap.core.domain.layout.Layout;
+import edu.vt.arc.vis.osnap.core.domain.layout.LayoutVisualizer;
 import edu.vt.arc.vis.osnap.core.domain.visualization.Visualization;
 import edu.vt.arc.vis.osnap.io.IOManager;
 
@@ -54,7 +54,7 @@ public class VisualizationMenu
 
     private final Stage                         stage;
     private final ObjectProperty<Visualization> visualization;
-    private final ObjectProperty<Layout>        layout;
+    private final ObjectProperty<LayoutVisualizer>        layoutVisualizer;
     private final ObjectProperty<Universe>      universe;
 
     private final Action                        createFromLayoutMI;
@@ -105,34 +105,34 @@ public class VisualizationMenu
     }
 
     /**
-     * Returns the layout property.
+     * Returns the layoutVisualizer property.
      * 
-     * @return the layout property.
+     * @return the layoutVisualizer property.
      */
-    public ObjectProperty<Layout> layout() {
+    public ObjectProperty<LayoutVisualizer> layoutVisualizer() {
 
-        return this.layout;
+        return this.layoutVisualizer;
     }
 
     /**
-     * Returns the layout.
+     * Returns the layoutVisualizer.
      * 
-     * @return the layout.
+     * @return the layoutVisualizer.
      */
-    public Layout getLayout() {
+    public LayoutVisualizer getLayout() {
 
-        return this.layout.get();
+        return this.layoutVisualizer.get();
     }
 
     /**
-     * Sets the layout.
+     * Sets the layoutVisualizer.
      * 
-     * @param layout
-     *            the layout.
+     * @param layoutVisualizer
+     *            the layoutVisualizer.
      */
-    public void setLayout(Layout layout) {
+    public void setLayout(LayoutVisualizer layoutVisualizer) {
 
-        this.layout.set(layout);
+        this.layoutVisualizer.set(layoutVisualizer);
     }
 
     /**
@@ -181,11 +181,11 @@ public class VisualizationMenu
 
         this.stage = stage;
         this.visualization = new SimpleObjectProperty<>();
-        this.layout = new SimpleObjectProperty<>();
+        this.layoutVisualizer = new SimpleObjectProperty<>();
         this.universe = new SimpleObjectProperty<>();
 
         this.createFromLayoutMI = new Action(
-                "Create Visualization from Layout", actionEvent -> {
+                "Create Visualization from LayoutVisualizer", actionEvent -> {
 
                     this.getLayout().layout();
                     this.setVisualization(null);

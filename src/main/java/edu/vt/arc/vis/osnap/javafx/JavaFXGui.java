@@ -1,27 +1,12 @@
-/*******************************************************************************
- * Copyright 2014 Virginia Tech Visionarium
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- ******************************************************************************/
-
-
 package edu.vt.arc.vis.osnap.javafx;
 
+
+// @formatter:off
 /*
  * _
  * The Open Semantic Network Analysis Platform (OSNAP)
  * _
- * Copyright (C) 2012 - 2014 Visionarium at Virginia Tech
+ * Copyright (C) 2012 - 2015 Visionarium at Virginia Tech
  * _
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +21,7 @@ package edu.vt.arc.vis.osnap.javafx;
  * limitations under the License.
  * _
  */
-
+// @formatter:on
 
 import java.io.File;
 
@@ -47,7 +32,7 @@ import org.x3d.model.X3DDocument;
 
 import edu.vt.arc.vis.osnap.core.domain.Project;
 import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
-import edu.vt.arc.vis.osnap.core.domain.layout.Layout;
+import edu.vt.arc.vis.osnap.core.domain.layout.LayoutVisualizer;
 import edu.vt.arc.vis.osnap.core.domain.visualization.Visualization;
 import edu.vt.arc.vis.osnap.io.IOManager;
 import edu.vt.arc.vis.osnap.javafx.engine.JavaFX3DEngine;
@@ -84,32 +69,32 @@ import javafx.stage.Stage;
 public class JavaFXGui
         extends Application {
 
-    private String                              title = "Open Semantic Network Analysis Platform";
+    private String                                 title = "Open Semantic Network Analysis Platform";
 
-    private Stage                               stage;
-    private Scene                               scene;
+    private Stage                                  stage;
+    private Scene                                  scene;
 
-    private UniverseDetailsVBox                 universeDetails;
-    private GraphDetailsVBox                    graphDetails;
-    private LayoutDetailsVBox                   layoutDetails;
-    private VisualizationDetailsVBox            visDetails;
-    private TabPane                             tabPane;
+    private UniverseDetailsVBox                    universeDetails;
+    private GraphDetailsVBox                       graphDetails;
+    private LayoutDetailsVBox                      layoutDetails;
+    private VisualizationDetailsVBox               visDetails;
+    private TabPane                                tabPane;
 
 
-    private final ObjectProperty<Project>       project;
-    private final ObjectProperty<Universe>      universe;
-    private final ObjectProperty<Layout>        layout;
-    private final ObjectProperty<Visualization> visualization;
+    private final ObjectProperty<Project>          project;
+    private final ObjectProperty<Universe>         universe;
+    private final ObjectProperty<LayoutVisualizer> layoutVisualizer;
+    private final ObjectProperty<Visualization>    visualization;
 
-    private Tab                                 graphInformationTab;
-    private Tab                                 layoutInformationTab;
-    private Tab                                 visualizationInformationTab;
-    private Tab                                 universeInformationTab;
-    private Tab                                 previewTab;
+    private Tab                                    graphInformationTab;
+    private Tab                                    layoutInformationTab;
+    private Tab                                    visualizationInformationTab;
+    private Tab                                    universeInformationTab;
+    private Tab                                    previewTab;
 
-    private FileMenu                            fileMenu;
-    private LayoutMenu                          layoutMenu;
-    private VisualizationMenu                   visualizationMenu;
+    private FileMenu                               fileMenu;
+    private LayoutMenu                             layoutMenu;
+    private VisualizationMenu                      visualizationMenu;
 
 
     /**
@@ -175,34 +160,34 @@ public class JavaFXGui
     }
 
     /**
-     * Returns the layout property.
+     * Returns the layoutVisualizer property.
      * 
-     * @return the layout property.
+     * @return the layoutVisualizer property.
      */
-    public ObjectProperty<Layout> layout() {
+    public ObjectProperty<LayoutVisualizer> layoutVisualizer() {
 
-        return this.layout;
+        return this.layoutVisualizer;
     }
 
     /**
-     * Returns the layout.
+     * Returns the layoutVisualizer.
      * 
-     * @return the layout.
+     * @return the layoutVisualizer.
      */
-    public Layout getLayout() {
+    public LayoutVisualizer getLayout() {
 
-        return layout.get();
+        return layoutVisualizer.get();
     }
 
     /**
-     * Sets the layout.
+     * Sets the layoutVisualizer.
      * 
-     * @param layout
-     *            the layout.
+     * @param layoutVisualizer
+     *            the layoutVisualizer.
      */
-    public void setLayout(Layout layout) {
+    public void setLayout(LayoutVisualizer layoutVisualizer) {
 
-        this.layout.set(layout);
+        this.layoutVisualizer.set(layoutVisualizer);
     }
 
     /**
@@ -259,7 +244,7 @@ public class JavaFXGui
 
         this.project = new SimpleObjectProperty<>();
         this.universe = new SimpleObjectProperty<>();
-        this.layout = new SimpleObjectProperty<>();
+        this.layoutVisualizer = new SimpleObjectProperty<>();
         this.visualization = new SimpleObjectProperty<>();
     }
 
@@ -304,7 +289,7 @@ public class JavaFXGui
 
                             if (!x3dSaveFile.getAbsolutePath().endsWith(".x3d")) {
 
-//                                System.out.println("File extension");
+                                // System.out.println("File extension");
                                 x3dSaveFile = new File(x3dSaveFile
                                         .getAbsolutePath() + ".x3d");
                             }
@@ -323,7 +308,8 @@ public class JavaFXGui
 
         this.layoutDetails = new LayoutDetailsVBox();
         this.layoutDetails.universe().bindBidirectional(this.universe);
-        this.layoutDetails.layoutProperty().bindBidirectional(this.layout);
+        this.layoutDetails.layoutProperty().bindBidirectional(
+                this.layoutVisualizer);
         this.layoutDetails.visualization()
                 .bindBidirectional(this.visualization);
 
@@ -377,8 +363,10 @@ public class JavaFXGui
 
                     if (!newValue.getLayouts().isEmpty()) {
 
-//                        System.out.println("Layouts: " + newValue.getLayouts());
-                        JavaFXGui.this.layout.set(newValue.getLayouts().get(0));
+                        // System.out.println("Layouts: " +
+                        // newValue.getLayouts());
+                        JavaFXGui.this.layoutVisualizer.set(newValue
+                                .getLayouts().get(0));
                     }
                     if (!newValue.getVisualizations().isEmpty()) {
 
@@ -406,43 +394,46 @@ public class JavaFXGui
 
                 if (requiresUniverse) {
 
-                    layout.set(null);
+                    layoutVisualizer.set(null);
                     visualization.set(null);
                 }
             }
 
         });
 
-        this.layout.addListener(new ChangeListener<Layout>() {
+        this.layoutVisualizer
+                .addListener(new ChangeListener<LayoutVisualizer>() {
 
-            @Override
-            public void changed(ObservableValue<? extends Layout> observable,
-                    Layout oldValue, Layout newValue) {
+                    @Override
+                    public void changed(
+                            ObservableValue<? extends LayoutVisualizer> observable,
+                            LayoutVisualizer oldValue, LayoutVisualizer newValue) {
 
 
-                boolean requiresLayout = (newValue == null);
-                layoutInformationTab.setDisable(requiresLayout);
-                visualizationMenu.setDisable(requiresLayout);
+                        boolean requiresLayout = (newValue == null);
+                        layoutInformationTab.setDisable(requiresLayout);
+                        visualizationMenu.setDisable(requiresLayout);
 
-                if (JavaFXGui.this.getProject() != null) {
-                    JavaFXGui.this.getProject().clearLayouts();
-                }
-                // Layout not null
-                if (!requiresLayout) {
+                        if (JavaFXGui.this.getProject() != null) {
+                            JavaFXGui.this.getProject().clearLayouts();
+                        }
+                        // LayoutVisualizer not null
+                        if (!requiresLayout) {
 
-                    if (JavaFXGui.this.getProject() != null) {
+                            if (JavaFXGui.this.getProject() != null) {
 
-                        JavaFXGui.this.getProject().addLayout(newValue);
+                                JavaFXGui.this.getProject().addLayout(newValue);
+                            }
+                            tabPane.getSelectionModel().select(
+                                    layoutInformationTab);
+                        }
+                        // LayoutVisualizer null
+                        else {
+
+                            visualization.set(null);
+                        }
                     }
-                    tabPane.getSelectionModel().select(layoutInformationTab);
-                }
-                // Layout null
-                else {
-
-                    visualization.set(null);
-                }
-            }
-        });
+                });
 
         this.visualization.addListener(new ChangeListener<Visualization>() {
 
@@ -534,14 +525,16 @@ public class JavaFXGui
         this.project.bind(this.fileMenu.project());
 
         this.layoutMenu = new LayoutMenu(this.stage);
-        this.layoutMenu.layout().bindBidirectional(this.layout);
+        this.layoutMenu.layoutVisualizer().bindBidirectional(
+                this.layoutVisualizer);
         this.layoutMenu.universe().bindBidirectional(this.universe);
         this.layoutMenu.setDisable(true);
 
         this.visualizationMenu = new VisualizationMenu(this.stage);
         this.visualizationMenu.visualization().bindBidirectional(
                 this.visualization);
-        this.visualizationMenu.layout().bindBidirectional(this.layout);
+        this.visualizationMenu.layoutVisualizer().bindBidirectional(
+                this.layoutVisualizer);
         this.visualizationMenu.universe().bindBidirectional(this.universe);
         this.visualizationMenu.setDisable(true);
 

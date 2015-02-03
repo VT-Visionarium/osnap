@@ -35,7 +35,7 @@ import edu.vt.arc.vis.osnap.core.domain.graph.Graph;
 import edu.vt.arc.vis.osnap.core.domain.graph.HyperEdge;
 import edu.vt.arc.vis.osnap.core.domain.graph.Node;
 import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
-import edu.vt.arc.vis.osnap.core.domain.layout.Layout;
+import edu.vt.arc.vis.osnap.core.domain.layout.LayoutVisualizer;
 import edu.vt.arc.vis.osnap.events.NotFoundException;
 import edu.vt.arc.vis.osnap.io.IOManager;
 
@@ -211,14 +211,14 @@ public class DataStore
     }
 
 
-    public Layout getLayout(final Project project, String id)
+    public LayoutVisualizer getLayout(final Project project, String id)
             throws NotFoundException {
 
-        for (Layout layout : project.getLayouts()) {
+        for (LayoutVisualizer layoutVisualizer : project.getLayouts()) {
 
-            if (layout.getId().equals(id)) {
+            if (layoutVisualizer.getId().equals(id)) {
 
-                return layout;
+                return layoutVisualizer;
             }
         }
 

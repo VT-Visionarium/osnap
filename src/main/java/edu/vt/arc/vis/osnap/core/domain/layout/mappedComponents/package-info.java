@@ -17,7 +17,7 @@
 
 /**
  * This package contains implementations of
- * {@link edu.vt.arc.vis.osnap.core.domain.layout.common.ILayoutComponent LayoutComponents} that
+ * {@link edu.vt.arc.vis.osnap.core.domain.layout.common.ILayout LayoutComponents} that
  * are based on a {@link edu.vt.arc.vis.osnap.core.domain.mappings.Mapping}.
  * 
  * @author Peter J. Radics

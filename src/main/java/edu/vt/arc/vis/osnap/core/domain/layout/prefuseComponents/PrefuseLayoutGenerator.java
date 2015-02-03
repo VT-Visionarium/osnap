@@ -1,22 +1,27 @@
-/*******************************************************************************
- * Copyright 2014 Virginia Tech Visionarium
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
-
-
 package edu.vt.arc.vis.osnap.core.domain.layout.prefuseComponents;
 
+
+//@formatter:off
+/*
+* _
+* The Open Semantic Network Analysis Platform (OSNAP)
+* _
+* Copyright (C) 2012 - 2015 Visionarium at Virginia Tech
+* _
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+* 
+*      http://www.apache.org/licenses/LICENSE-2.0
+* 
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+* _
+*/
+//@formatter:on
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -28,7 +33,7 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.controlsfx.dialog.Dialogs;
+import org.controlsfx.dialog.ExceptionDialog;
 import org.jutility.io.ConversionException;
 
 import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
@@ -53,12 +58,13 @@ import prefuse.visual.VisualItem;
 
 
 /**
- * The <code>PrefuseLayoutGenerator</code> class provides factory methods for
- * the various 2D graph visualization layouts available through the prefuse
+ * The {@code PrefuseLayoutGenerator} class provides factory methods for the
+ * various 2D graph visualization layouts available through the prefuse
  * visualization toolkit.
  * 
  * @author Peter J. Radics
- * @version 0.5
+ * @version 1.2.0
+ * @since 0.5.0
  */
 public class PrefuseLayoutGenerator {
 
@@ -90,7 +96,7 @@ public class PrefuseLayoutGenerator {
 
 
     /**
-     * Creates a new <code>PrefuseLayoutGenerator</code> instance.
+     * Creates a new {@code PrefuseLayoutGenerator} instance.
      */
     protected PrefuseLayoutGenerator() {
 
@@ -103,70 +109,78 @@ public class PrefuseLayoutGenerator {
 
 
     /**
-     * Runs the layout of the provided {@link IPrefuseLayoutComponent} and
-     * applies it to the {@link Visualization}.
+     * Runs the layout of the provided {@link IPrefuseLayout} and applies it to
+     * the {@link Visualization}.
      * 
      * @param layoutComponent
      *            the layout component to run.
      * @param visualization
      *            the visualization to modify.
      */
-    public void layout(IPrefuseLayoutComponent layoutComponent,
+    public void layout(
+            IPrefuseLayout layoutComponent,
             edu.vt.arc.vis.osnap.core.domain.visualization.Visualization visualization) {
-
-        Graph graph = null;
 
         try {
 
+            Graph graph = null;
+
             graph = this.obtainGraph(visualization.getUniverse());
-        }
-        catch (ConversionException e1) {
-            // Nothing to do. Or throw meaningful exception.
-            Dialogs.create().title("Messed up").showException(e1);
-            System.exit(-1);
-        }
 
-        if (graph != null) {
+            if (graph != null) {
 
-            Predicate filter = this.createFilterPredicate(layoutComponent);
+                Predicate filter = this.createFilterPredicate(layoutComponent);
 
-            Visualization vis = this.createAndRunVisualization(graph,
-                    layoutComponent, filter);
+                Visualization vis = this.createAndRunVisualization(graph,
+                        layoutComponent, filter);
 
-            this.progressLock.lock();
-            try {
-
-                this.layoutFinished.await();
-
-            }
-            catch (InterruptedException e) {
-                // TODO Throw appropriate exception.
-            }
-            finally {
-                this.progressLock.unlock();
-            }
-
-            if (this.continueLayout) {
-
-                PrefuseVisualizationEngine engine = new PrefuseVisualizationEngine(
-                        layoutComponent, visualization);
-
+                this.progressLock.lock();
                 try {
-                    engine.convert(vis,
-                            edu.vt.arc.vis.osnap.core.domain.visualization.Visualization.class);
-                }
-                catch (ConversionException e) {
 
-                    Dialogs.create().title("Conversion borked")
-                            .showException(e);
-                    // Nothing to do. Or throw meaningful exception.
+                    this.layoutFinished.await();
+                }
+                catch (InterruptedException e) {
+
+                    ExceptionDialog edlg = new ExceptionDialog(e);
+
+                    edlg.setTitle("Layout interrupted!");
+
+                    edlg.setHeaderText("Layout " + layoutComponent.getName()
+                            + " was interrupted during layout!");
+
+                    edlg.showAndWait();
+                }
+                finally {
+
+                    this.progressLock.unlock();
+                }
+
+                if (this.continueLayout) {
+
+                    PrefuseVisualizationEngine engine = new PrefuseVisualizationEngine(
+                            layoutComponent, visualization);
+
+                    engine.convert(
+                            vis,
+                            edu.vt.arc.vis.osnap.core.domain.visualization.Visualization.class);
+
+                }
+                else {
+                    // TODOCUMENT
                 }
             }
-            else {
-            }
+        }
+        catch (ConversionException e) {
+
+            ExceptionDialog edlg = new ExceptionDialog(e);
+
+            edlg.setTitle("Conversion failed!");
+
+            edlg.setHeaderText("Conversion of internal graph format to native prefuse format failed!");
+
+            edlg.showAndWait();
         }
     }
-
 
     /**
      * Creates or retrieves the Prefuse {@link Graph} associated with a provided
@@ -199,7 +213,7 @@ public class PrefuseLayoutGenerator {
 
     /**
      * Creates and runs the Prefuse {@link Visualization} using the provided
-     * Prefuse {@link Graph}, {@link IPrefuseLayoutComponent}, and Prefuse
+     * Prefuse {@link Graph}, {@link IPrefuseLayout}, and Prefuse
      * {@link Predicate Filter Predicate}.
      * 
      * @param graph
@@ -211,7 +225,7 @@ public class PrefuseLayoutGenerator {
      * @return a visualization.
      */
     private Visualization createAndRunVisualization(Graph graph,
-            IPrefuseLayoutComponent layoutComponent, Predicate filter) {
+            IPrefuseLayout layoutComponent, Predicate filter) {
 
         // -- 2. the visualization --------------------------------------------
 
@@ -338,14 +352,13 @@ public class PrefuseLayoutGenerator {
 
     /**
      * Creates a {@link Predicate PredicateFilter} based on the restriction
-     * contained in the {@link IPrefuseLayoutComponent}.
+     * contained in the {@link IPrefuseLayout}.
      * 
      * @param layoutComponent
      *            the layout componen on which to base the restriction.
      * @return the filter predicate.
      */
-    private Predicate createFilterPredicate(
-            IPrefuseLayoutComponent layoutComponent) {
+    private Predicate createFilterPredicate(IPrefuseLayout layoutComponent) {
 
         Predicate filter = null;
 
@@ -365,7 +378,7 @@ public class PrefuseLayoutGenerator {
      * creation of an equivalent {@link Predicate PredicateFilter}.
      * 
      * @param restriction
-     *            the restriction of a {@link IPrefuseLayoutComponent}.
+     *            the restriction of a {@link IPrefuseLayout}.
      * @return the restriction expression.
      */
     String createRestrictionExpression(Collection<IGraphObject> restriction) {

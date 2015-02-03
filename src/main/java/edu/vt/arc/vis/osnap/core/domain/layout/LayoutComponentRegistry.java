@@ -1,45 +1,6 @@
 package edu.vt.arc.vis.osnap.core.domain.layout;
 
 
-import edu.vt.arc.vis.osnap.core.domain.layout.common.BaseMappedLayoutComponent;
-import edu.vt.arc.vis.osnap.core.domain.layout.common.ILayoutComponent;
-import edu.vt.arc.vis.osnap.core.domain.layout.complexComponents.SolarSystemCoordinateLayoutComponent;
-import edu.vt.arc.vis.osnap.core.domain.layout.complexComponents.SphereCoordinateLayoutComponent;
-import edu.vt.arc.vis.osnap.core.domain.layout.complexComponents.TwoDGridCoordinateLayoutComponent;
-import edu.vt.arc.vis.osnap.core.domain.layout.mappedComponents.MappedColorLayoutComponent;
-import edu.vt.arc.vis.osnap.core.domain.layout.mappedComponents.MappedCoordinateLayoutComponent;
-import edu.vt.arc.vis.osnap.core.domain.layout.mappedComponents.MappedLabelTextLayoutComponent;
-import edu.vt.arc.vis.osnap.core.domain.layout.mappedComponents.MappedScaleLayoutComponent;
-import edu.vt.arc.vis.osnap.core.domain.layout.mappedComponents.MappedShapeLayoutComponent;
-import edu.vt.arc.vis.osnap.core.domain.layout.mappedComponents.MappedViewpointLayoutComponent;
-import edu.vt.arc.vis.osnap.core.domain.layout.prefuseComponents.BalloonTreeCoordinateLayoutComponent;
-import edu.vt.arc.vis.osnap.core.domain.layout.prefuseComponents.ForceDirectedCoordinateLayoutComponent;
-import edu.vt.arc.vis.osnap.core.domain.layout.prefuseComponents.FruchtermanReingoldCoordinateLayoutComponent;
-import edu.vt.arc.vis.osnap.core.domain.layout.prefuseComponents.NodeLinkTreeCoordinateLayoutComponent;
-import edu.vt.arc.vis.osnap.core.domain.layout.prefuseComponents.RadialTreeCoordinateLayoutComponent;
-import edu.vt.arc.vis.osnap.core.domain.layout.simpleComponents.SimpleColorLayoutComponent;
-import edu.vt.arc.vis.osnap.core.domain.layout.simpleComponents.SimpleCoordinateLayoutComponent;
-import edu.vt.arc.vis.osnap.core.domain.layout.simpleComponents.SimpleLabelTextLayoutComponent;
-import edu.vt.arc.vis.osnap.core.domain.layout.simpleComponents.SimpleScaleLayoutComponent;
-import edu.vt.arc.vis.osnap.core.domain.layout.simpleComponents.SimpleShapeLayoutComponent;
-import edu.vt.arc.vis.osnap.core.domain.visualization.VisualProperty;
-import edu.vt.arc.vis.osnap.javafx.wizards.BalloonTreeWizard;
-import edu.vt.arc.vis.osnap.javafx.wizards.ColorLayoutWizard;
-import edu.vt.arc.vis.osnap.javafx.wizards.CoordinateLayoutWizard;
-import edu.vt.arc.vis.osnap.javafx.wizards.ForceDirectedWizard;
-import edu.vt.arc.vis.osnap.javafx.wizards.FruchtermanReingoldWizard;
-import edu.vt.arc.vis.osnap.javafx.wizards.IWizardWithStatus;
-import edu.vt.arc.vis.osnap.javafx.wizards.LabelTextLayoutWizard;
-import edu.vt.arc.vis.osnap.javafx.wizards.MappedVisualPropertyProviderWizard;
-import edu.vt.arc.vis.osnap.javafx.wizards.NodeLinkTreeWizard;
-import edu.vt.arc.vis.osnap.javafx.wizards.RadialTreeWizard;
-import edu.vt.arc.vis.osnap.javafx.wizards.ScaleLayoutWizard;
-import edu.vt.arc.vis.osnap.javafx.wizards.ShapeLayoutWizard;
-import edu.vt.arc.vis.osnap.javafx.wizards.SolarSystemWizard;
-import edu.vt.arc.vis.osnap.javafx.wizards.SphereLayoutWizard;
-import edu.vt.arc.vis.osnap.javafx.wizards.TwoDGridWizard;
-import edu.vt.arc.vis.osnap.javafx.wizards.ViewPointWizard;
-
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Collections;
@@ -52,22 +13,66 @@ import org.jutility.common.reflection.ReflectionException;
 import org.jutility.common.reflection.ReflectionUtils;
 import org.jutility.io.xml.XmlSerializer;
 
+import edu.vt.arc.vis.osnap.core.domain.layout.common.BaseMappedLayout;
+import edu.vt.arc.vis.osnap.core.domain.layout.common.ILayout;
+import edu.vt.arc.vis.osnap.core.domain.layout.common.IMappedLayout;
+import edu.vt.arc.vis.osnap.core.domain.layout.complexComponents.Grid2DLayout;
+import edu.vt.arc.vis.osnap.core.domain.layout.complexComponents.SphericalLayout;
+import edu.vt.arc.vis.osnap.core.domain.layout.complexComponents.TieredOrbitalLayout;
+import edu.vt.arc.vis.osnap.core.domain.layout.mappedComponents.MappedColorLayout;
+import edu.vt.arc.vis.osnap.core.domain.layout.mappedComponents.MappedCoordinateLayout;
+import edu.vt.arc.vis.osnap.core.domain.layout.mappedComponents.MappedLabelTextLayout;
+import edu.vt.arc.vis.osnap.core.domain.layout.mappedComponents.MappedScaleLayout;
+import edu.vt.arc.vis.osnap.core.domain.layout.mappedComponents.MappedShapeLayout;
+import edu.vt.arc.vis.osnap.core.domain.layout.prefuseComponents.PrefuseBalloonTreeLayout;
+import edu.vt.arc.vis.osnap.core.domain.layout.prefuseComponents.PrefuseForceDirectedLayout;
+import edu.vt.arc.vis.osnap.core.domain.layout.prefuseComponents.PrefuseFruchtermanReingoldLayout;
+import edu.vt.arc.vis.osnap.core.domain.layout.prefuseComponents.PrefuseNodeLinkTreeLayout;
+import edu.vt.arc.vis.osnap.core.domain.layout.prefuseComponents.PrefuseRadialTreeLayout;
+import edu.vt.arc.vis.osnap.core.domain.layout.simpleComponents.SimpleColorLayout;
+import edu.vt.arc.vis.osnap.core.domain.layout.simpleComponents.SimpleLabelTextLayout;
+import edu.vt.arc.vis.osnap.core.domain.layout.simpleComponents.SimpleScaleLayout;
+import edu.vt.arc.vis.osnap.core.domain.layout.simpleComponents.SimpleShapeLayout;
+import edu.vt.arc.vis.osnap.core.domain.layout.simpleComponents.SimpleViewpointLayout;
+import edu.vt.arc.vis.osnap.core.domain.visualization.VisualProperty;
+import edu.vt.arc.vis.osnap.javafx.wizards.Grid2DLayoutWizard;
+import edu.vt.arc.vis.osnap.javafx.wizards.IConfigurationWizard;
+import edu.vt.arc.vis.osnap.javafx.wizards.ILayoutConfigurationWizard;
+import edu.vt.arc.vis.osnap.javafx.wizards.MappedLayoutWizard;
+import edu.vt.arc.vis.osnap.javafx.wizards.PrefuseBalloonTreeLayoutWizard;
+import edu.vt.arc.vis.osnap.javafx.wizards.PrefuseForceDirectedLayoutWizard;
+import edu.vt.arc.vis.osnap.javafx.wizards.PrefuseFruchtermanReingoldLayoutWizard;
+import edu.vt.arc.vis.osnap.javafx.wizards.PrefuseNodeLinkTreeLayoutWizard;
+import edu.vt.arc.vis.osnap.javafx.wizards.PrefuseRadialTreeLayoutWizard;
+import edu.vt.arc.vis.osnap.javafx.wizards.SimpleColorLayoutConfigurationWizard;
+import edu.vt.arc.vis.osnap.javafx.wizards.SimpleLabelTextLayoutWizard;
+import edu.vt.arc.vis.osnap.javafx.wizards.SimpleScaleLayoutConfigurationWizard;
+import edu.vt.arc.vis.osnap.javafx.wizards.SimpleShapeLayoutConfigurationWizard;
+import edu.vt.arc.vis.osnap.javafx.wizards.SimpleViewpointLayoutConfigurationWizard;
+import edu.vt.arc.vis.osnap.javafx.wizards.SpericalLayoutWizard;
+import edu.vt.arc.vis.osnap.javafx.wizards.TieredOrbitalLayoutWizard;
+import edu.vt.arc.vis.osnap.javafx.wizards.configurations.ILayoutConfiguration;
+
 
 /**
- * @author Peter J. Radics
- * @version 0.1
+ * The {@code LayoutComponentRegistry} singleton class provides the registry of
+ * available {@link ILayout LayoutComponents} and their
+ * {@link IConfigurationWizard Wizards}.
  * 
+ * @author Peter J. Radics
+ * @version 1.2.0
+ * @since 0.5.0
  */
 public class LayoutComponentRegistry {
 
-    private final Map<String, Class<? extends ILayoutComponent>>                             classMap;
-    private final Map<Class<? extends ILayoutComponent>, String>                             nameMap;
-    private final Map<Class<? extends ILayoutComponent>, Class<? extends IWizardWithStatus>> wizardMap;
-    private final Map<String, String>                                                        descriptionMap;
-    private final Map<String, Set<VisualProperty>>                                           capabilityMap;
+    private final Map<String, Class<? extends ILayout>>                                            classMap;
+    private final Map<Class<? extends ILayout>, String>                                            nameMap;
+    private final Map<Class<? extends ILayout>, Class<? extends ILayoutConfigurationWizard<?, ?>>> wizardMap;
+    private final Map<String, String>                                                              descriptionMap;
+    private final Map<String, Set<VisualProperty>>                                                 capabilityMap;
 
 
-    private static LayoutComponentRegistry                                                   s_Instance;
+    private static LayoutComponentRegistry                                                         s_Instance;
 
     /**
      * Returns the singleton instance of the class.
@@ -95,81 +100,70 @@ public class LayoutComponentRegistry {
 
 
         // Simple layout components
-        this.registerLayoutComponent(SimpleColorLayoutComponent.class);
-        this.registerWizardForLayoutComponentClass(
-                SimpleColorLayoutComponent.class, ColorLayoutWizard.class);
+        this.registerLayoutComponent(SimpleColorLayout.class);
+        this.registerWizardForLayoutComponentClass(SimpleColorLayout.class,
+        // SimpleColorLayoutConfiguration.class,
+                SimpleColorLayoutConfigurationWizard.class);
 
-        this.registerLayoutComponent(SimpleShapeLayoutComponent.class);
-        this.registerWizardForLayoutComponentClass(
-                SimpleShapeLayoutComponent.class, ShapeLayoutWizard.class);
+        this.registerLayoutComponent(SimpleShapeLayout.class);
+        this.registerWizardForLayoutComponentClass(SimpleShapeLayout.class,
+                SimpleShapeLayoutConfigurationWizard.class);
 
-        this.registerLayoutComponent(SimpleScaleLayoutComponent.class);
-        this.registerWizardForLayoutComponentClass(
-                SimpleScaleLayoutComponent.class, ScaleLayoutWizard.class);
+        this.registerLayoutComponent(SimpleScaleLayout.class);
+        this.registerWizardForLayoutComponentClass(SimpleScaleLayout.class,
+                SimpleScaleLayoutConfigurationWizard.class);
 
-        this.registerLayoutComponent(SimpleLabelTextLayoutComponent.class);
-        this.registerWizardForLayoutComponentClass(
-                SimpleLabelTextLayoutComponent.class,
-                LabelTextLayoutWizard.class);
+        this.registerLayoutComponent(SimpleLabelTextLayout.class);
+        this.registerWizardForLayoutComponentClass(SimpleLabelTextLayout.class,
+                SimpleLabelTextLayoutWizard.class);
 
-        this.registerLayoutComponent(SimpleCoordinateLayoutComponent.class);
-        this.registerWizardForLayoutComponentClass(
-                SimpleCoordinateLayoutComponent.class,
-                CoordinateLayoutWizard.class);
 
         // mapped layout components
-        this.registerLayoutComponent(BaseMappedLayoutComponent.class);
-        this.registerWizardForLayoutComponentClass(
-                BaseMappedLayoutComponent.class,
-                MappedVisualPropertyProviderWizard.class);
-        this.registerLayoutComponent(MappedViewpointLayoutComponent.class);
-        this.registerWizardForLayoutComponentClass(
-                MappedViewpointLayoutComponent.class, ViewPointWizard.class);
+        this.registerLayoutComponent(BaseMappedLayout.class);
+        this.registerWizardForLayoutComponentClass(IMappedLayout.class,
+                MappedLayoutWizard.class);
+        this.registerLayoutComponent(SimpleViewpointLayout.class);
+        this.registerWizardForLayoutComponentClass(SimpleViewpointLayout.class,
+                SimpleViewpointLayoutConfigurationWizard.class);
 
-        XmlSerializer.Instance()
-                .registerClass(MappedColorLayoutComponent.class);
-        XmlSerializer.Instance().registerClass(
-                MappedCoordinateLayoutComponent.class);
-        XmlSerializer.Instance().registerClass(
-                MappedLabelTextLayoutComponent.class);
-        XmlSerializer.Instance()
-                .registerClass(MappedScaleLayoutComponent.class);
-        XmlSerializer.Instance()
-                .registerClass(MappedShapeLayoutComponent.class);
+        XmlSerializer.Instance().registerClass(MappedColorLayout.class);
+        XmlSerializer.Instance().registerClass(MappedCoordinateLayout.class);
+        XmlSerializer.Instance().registerClass(MappedLabelTextLayout.class);
+        XmlSerializer.Instance().registerClass(MappedScaleLayout.class);
+        XmlSerializer.Instance().registerClass(MappedShapeLayout.class);
 
         // complex layout components
-        this.registerLayoutComponent(SphereCoordinateLayoutComponent.class);
-        this.registerWizardForLayoutComponentClass(
-                SphereCoordinateLayoutComponent.class, SphereLayoutWizard.class);
-        this.registerLayoutComponent(TwoDGridCoordinateLayoutComponent.class);
-        this.registerWizardForLayoutComponentClass(
-                TwoDGridCoordinateLayoutComponent.class, TwoDGridWizard.class);
-        this.registerLayoutComponent(SolarSystemCoordinateLayoutComponent.class);
-        this.registerWizardForLayoutComponentClass(
-                SolarSystemCoordinateLayoutComponent.class,
-                SolarSystemWizard.class);
+        this.registerLayoutComponent(SphericalLayout.class);
+        this.registerWizardForLayoutComponentClass(SphericalLayout.class,
+                SpericalLayoutWizard.class);
+        this.registerLayoutComponent(Grid2DLayout.class);
+        this.registerWizardForLayoutComponentClass(Grid2DLayout.class,
+                Grid2DLayoutWizard.class);
+        this.registerLayoutComponent(TieredOrbitalLayout.class);
+        this.registerWizardForLayoutComponentClass(TieredOrbitalLayout.class,
+                TieredOrbitalLayoutWizard.class);
 
         // prefuse layout components
-        this.registerLayoutComponent(BalloonTreeCoordinateLayoutComponent.class);
+        this.registerLayoutComponent(PrefuseBalloonTreeLayout.class);
         this.registerWizardForLayoutComponentClass(
-                BalloonTreeCoordinateLayoutComponent.class,
-                BalloonTreeWizard.class);
-        this.registerLayoutComponent(ForceDirectedCoordinateLayoutComponent.class);
+                PrefuseBalloonTreeLayout.class,
+                PrefuseBalloonTreeLayoutWizard.class);
+        this.registerLayoutComponent(PrefuseForceDirectedLayout.class);
         this.registerWizardForLayoutComponentClass(
-                ForceDirectedCoordinateLayoutComponent.class,
-                ForceDirectedWizard.class);
-        this.registerLayoutComponent(FruchtermanReingoldCoordinateLayoutComponent.class);
+                PrefuseForceDirectedLayout.class,
+                PrefuseForceDirectedLayoutWizard.class);
+        this.registerLayoutComponent(PrefuseFruchtermanReingoldLayout.class);
         this.registerWizardForLayoutComponentClass(
-                FruchtermanReingoldCoordinateLayoutComponent.class,
-                FruchtermanReingoldWizard.class);
-        this.registerLayoutComponent(NodeLinkTreeCoordinateLayoutComponent.class);
+                PrefuseFruchtermanReingoldLayout.class,
+                PrefuseFruchtermanReingoldLayoutWizard.class);
+        this.registerLayoutComponent(PrefuseNodeLinkTreeLayout.class);
         this.registerWizardForLayoutComponentClass(
-                NodeLinkTreeCoordinateLayoutComponent.class,
-                NodeLinkTreeWizard.class);
-        this.registerLayoutComponent(RadialTreeCoordinateLayoutComponent.class);
+                PrefuseNodeLinkTreeLayout.class,
+                PrefuseNodeLinkTreeLayoutWizard.class);
+        this.registerLayoutComponent(PrefuseRadialTreeLayout.class);
         this.registerWizardForLayoutComponentClass(
-                RadialTreeCoordinateLayoutComponent.class,
-                RadialTreeWizard.class);
+                PrefuseRadialTreeLayout.class,
+                PrefuseRadialTreeLayoutWizard.class);
 
     }
 
@@ -188,7 +182,7 @@ public class LayoutComponentRegistry {
      * 
      * @return a set of classes.
      */
-    public Collection<Class<? extends ILayoutComponent>> getLayoutComponentClasses() {
+    public Collection<Class<? extends ILayout>> getLayoutComponentClasses() {
 
         return Collections.unmodifiableCollection(this.classMap.values());
     }
@@ -225,8 +219,7 @@ public class LayoutComponentRegistry {
      *            the name of the LayoutComponent.
      * @return the class of the LayoutComponent.
      */
-    public Class<? extends ILayoutComponent> getClassOfLayoutComponent(
-            String name) {
+    public Class<? extends ILayout> getClassOfLayoutComponent(String name) {
 
         return this.classMap.get(name);
     }
@@ -239,7 +232,7 @@ public class LayoutComponentRegistry {
      * @return the name of the LayoutComponent.
      */
     public String getNameOfLayoutComponentClass(
-            Class<? extends ILayoutComponent> layoutComponentClass) {
+            Class<? extends ILayout> layoutComponentClass) {
 
         return this.nameMap.get(layoutComponentClass);
     }
@@ -249,22 +242,21 @@ public class LayoutComponentRegistry {
      * Registers the provided LayoutComponent. Assumes that the layoutComponent
      * has static methods for name, description, and capabilities.
      * 
-     * @param layoutComponent
+     * @param layout
      *            the LayoutComponent to register.
      */
-    public void registerLayoutComponent(
-            Class<? extends ILayoutComponent> layoutComponent) {
+    public void registerLayoutComponent(Class<? extends ILayout> layout) {
 
         String name = null;
         String description = null;
         Set<VisualProperty> capabilities = null;
 
-        Object nameObject = this.invokeStaticMethod("name", layoutComponent,
+        Object nameObject = this.invokeStaticMethod("name", layout,
                 String.class);
         Object descriptionObject = this.invokeStaticMethod("description",
-                layoutComponent, String.class);
+                layout, String.class);
         Object capabilitiesObject = this.invokeStaticMethod("capabilities",
-                layoutComponent, Set.class);
+                layout, Set.class);
 
 
         if (nameObject != null && nameObject instanceof String) {
@@ -274,7 +266,7 @@ public class LayoutComponentRegistry {
         else {
 
             throw new IllegalArgumentException("Trying to register Layout "
-                    + "Component class with static name() method that "
+                    + "class with static name() method that "
                     + "does not return a String!");
         }
 
@@ -285,7 +277,7 @@ public class LayoutComponentRegistry {
         else {
 
             throw new IllegalArgumentException("Trying to register Layout "
-                    + "Component class with static description() method that "
+                    + "class with static description() method that "
                     + "does not return a String!");
         }
 
@@ -314,40 +306,40 @@ public class LayoutComponentRegistry {
         }
         else {
 
-            throw new IllegalArgumentException("Trying to register Layout "
-                    + "Component class with static capabilities() method that "
-                    + "does not return a Set!");
+            throw new IllegalArgumentException(
+                    "Trying to register Layout "
+                            + "Component class with static capabilities() method that "
+                            + "does not return a Set!");
         }
 
 
 
-        this.classMap.put(name, layoutComponent);
-        this.nameMap.put(layoutComponent, name);
+        this.classMap.put(name, layout);
+        this.nameMap.put(layout, name);
         this.descriptionMap.put(name, description);
         this.capabilityMap.put(name, capabilities);
 
-        XmlSerializer.Instance().registerClass(layoutComponent);
+        XmlSerializer.Instance().registerClass(layout);
     }
 
     /**
-     * Registers a {@link IWizardWithStatus Wizard} that can be used to create
-     * an instance of the {@link ILayoutComponent LayoutComponent class}.
+     * Registers a {@link ILayoutConfigurationWizard Wizard} that can be used to
+     * create an instance of the {@link ILayout Layout class}.
      * 
      * @param layoutComponentClass
-     *            the {@link ILayoutComponent LayoutComponent class}.
-     * @param wizard
-     *            the {@link IWizardWithStatus Wizard}.
+     *            the {@link ILayout Layout class}.
+     * @param wizardClass
+     *            the {@link ILayoutConfigurationWizard Wizard}.
      */
-    public void registerWizardForLayoutComponentClass(
-            Class<? extends ILayoutComponent> layoutComponentClass,
-            Class<? extends IWizardWithStatus> wizard) {
+    public <O extends ILayout, C extends ILayoutConfiguration<? extends O>, W extends ILayoutConfigurationWizard<? extends O, ? extends C>> void registerWizardForLayoutComponentClass(
+            Class<O> layoutComponentClass, Class<W> wizardClass) {
 
         if (!this.nameMap.containsKey(layoutComponentClass)) {
 
             this.registerLayoutComponent(layoutComponentClass);
         }
 
-        this.wizardMap.put(layoutComponentClass, wizard);
+        this.wizardMap.put(layoutComponentClass, wizardClass);
     }
 
 
@@ -356,17 +348,18 @@ public class LayoutComponentRegistry {
      * class.
      * 
      * @param layoutComponentClass
-     *            the class of the {@link ILayoutComponent} to create.
+     *            the class of the {@link ILayout} to create.
      * @param parameters
-     *            the constructor parameters of the {@link IWizardWithStatus
-     *            Wizard}.
-     * @return the {@link IWizardWithStatus Wizard}.
+     *            the constructor parameters of the
+     *            {@link ILayoutConfigurationWizard Wizard}.
+     * @return the {@link ILayoutConfigurationWizard Wizard}.
      */
-    public IWizardWithStatus createWizardForLayoutComponentClass(
-            Class<? extends ILayoutComponent> layoutComponentClass,
-            Object... parameters) {
+    public ILayoutConfigurationWizard<?, ?> createWizardForLayoutComponentClass(
+            Class<? extends ILayout> layoutComponentClass, Object... parameters) {
 
-        Class<? extends IWizardWithStatus> wizardClass = this.wizardMap
+
+
+        Class<? extends ILayoutConfigurationWizard<?, ?>> wizardClass = this.wizardMap
                 .get(layoutComponentClass);
 
         if (wizardClass != null) {
@@ -376,6 +369,7 @@ public class LayoutComponentRegistry {
                 return ReflectionUtils.createInstance(wizardClass, parameters);
             }
             catch (ReflectionException e) {
+
                 e.printStackTrace();
             }
         }
@@ -391,9 +385,10 @@ public class LayoutComponentRegistry {
         }
         catch (ReflectionException e) {
 
-            throw new IllegalArgumentException("Trying to register Layout "
-                    + "Component class that cannot execute static " + name
-                    + "() method!", e);
+            throw new IllegalArgumentException(
+                    "Trying to register Layout "
+                            + "Component class that cannot execute static "
+                            + name + "() method!", e);
         }
 
 
@@ -405,29 +400,29 @@ public class LayoutComponentRegistry {
             return ReflectionUtils.getMethod(clazz, returnType, name, null);
         }
         catch (ReflectionException e) {
-            throw new IllegalArgumentException("Trying to register Layout "
-                    + "Component class that does not declare static " + name
-                    + "() method!", e);
+            throw new IllegalArgumentException(
+                    "Trying to register Layout "
+                            + "Component class that does not declare static "
+                            + name + "() method!", e);
         }
     }
 
     /**
      * Unregisters the provided LayoutComponent.
      * 
-     * @param layoutComponent
+     * @param layout
      *            the LayoutComponent to unregister.
      */
-    public void unregisterLayoutComponent(
-            Class<? extends ILayoutComponent> layoutComponent) {
+    public void unregisterLayoutComponent(Class<? extends ILayout> layout) {
 
-        String name = this.nameMap.remove(layoutComponent);
+        String name = this.nameMap.remove(layout);
         if (name != null) {
             this.classMap.remove(name);
             this.descriptionMap.remove(name);
             this.capabilityMap.remove(name);
         }
 
-        XmlSerializer.Instance().unregisterClass(layoutComponent);
+        XmlSerializer.Instance().unregisterClass(layout);
     }
 
 }

@@ -38,11 +38,11 @@ import javafx.scene.text.Text;
 import javafx.stage.Window;
 import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
 import edu.vt.arc.vis.osnap.core.domain.layout.LayoutComponentRegistry;
-import edu.vt.arc.vis.osnap.core.domain.layout.common.I2DCoordinateLayoutComponent;
-import edu.vt.arc.vis.osnap.core.domain.layout.common.I3DCoordinateLayoutComponent;
-import edu.vt.arc.vis.osnap.core.domain.layout.common.ILayoutComponent;
-import edu.vt.arc.vis.osnap.core.domain.mappings.Mapping;
-import edu.vt.arc.vis.osnap.javafx.wizards.IWizardWithStatus;
+import edu.vt.arc.vis.osnap.core.domain.layout.common.I2DCoordinateLayout;
+import edu.vt.arc.vis.osnap.core.domain.layout.common.I3DCoordinateLayout;
+import edu.vt.arc.vis.osnap.core.domain.layout.common.ILayout;
+import edu.vt.arc.vis.osnap.core.domain.layout.common.IMappedLayout;
+import edu.vt.arc.vis.osnap.javafx.wizards.ILayoutConfigurationWizard;
 
 
 /**
@@ -53,7 +53,7 @@ import edu.vt.arc.vis.osnap.javafx.wizards.IWizardWithStatus;
  * 
  */
 public class LayoutComponentWizardSelectionDialog
-        extends Dialog<IWizardWithStatus> {
+        extends Dialog<ILayoutConfigurationWizard<?, ?>> {
 
     private final Universe    universe;
 
@@ -102,16 +102,16 @@ public class LayoutComponentWizardSelectionDialog
 
 
 
-        Text simple = new Text("Simple Layout Components");
+        Text simple = new Text("Simple Layouts");
         simple.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
 
-        Text prefuse = new Text("2D Coordinate Layout Components");
+        Text prefuse = new Text("2D Coordinate Layouts");
         prefuse.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
 
-        Text threeD = new Text("3D Coordinate Layout Components");
+        Text threeD = new Text("3D Coordinate Layouts");
         threeD.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
 
-        Text special = new Text("Mapped Layout Components");
+        Text special = new Text("Mapped Layouts");
         special.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
 
         this.group = new ToggleGroup();
@@ -127,7 +127,7 @@ public class LayoutComponentWizardSelectionDialog
         this.content.add(special, 3, 0);
 
 
-        for (Class<? extends ILayoutComponent> layoutComponentClass : LayoutComponentRegistry
+        for (Class<? extends ILayout> layoutComponentClass : LayoutComponentRegistry
                 .Instance().getLayoutComponentClasses()) {
 
             String name = LayoutComponentRegistry.Instance()
@@ -142,19 +142,20 @@ public class LayoutComponentWizardSelectionDialog
             button.setTooltip(tip);
 
 
-            if (Mapping.class.isAssignableFrom(layoutComponentClass)) {
+            if (IMappedLayout.class.isAssignableFrom(layoutComponentClass)) {
 
                 this.content.add(button, 3, mappings++);
             }
             else if (layoutComponentClass.getName().contains("Viewpoint")) {
+
                 this.content.add(button, 3, mappings++);
             }
-            else if (I3DCoordinateLayoutComponent.class
+            else if (I3DCoordinateLayout.class
                     .isAssignableFrom(layoutComponentClass)) {
 
                 this.content.add(button, 2, threeDLayoutComponents++);
             }
-            else if (I2DCoordinateLayoutComponent.class
+            else if (I2DCoordinateLayout.class
                     .isAssignableFrom(layoutComponentClass)) {
 
                 this.content.add(button, 1, twoDLayoutComponents++);
@@ -183,13 +184,13 @@ public class LayoutComponentWizardSelectionDialog
 
                     String layoutComponentClassName = radioButton.getText();
 
-                    Class<? extends ILayoutComponent> layoutComponentClass = LayoutComponentRegistry
+                    Class<? extends ILayout> layoutComponentClass = LayoutComponentRegistry
                             .Instance().getClassOfLayoutComponent(
                                     layoutComponentClassName);
 
                     return LayoutComponentRegistry.Instance()
                             .createWizardForLayoutComponentClass(
-                                    layoutComponentClass, this.universe);
+                                    layoutComponentClass, owner, this.universe);
                 }
             }
 

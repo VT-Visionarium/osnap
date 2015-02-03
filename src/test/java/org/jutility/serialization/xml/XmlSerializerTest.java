@@ -11,11 +11,11 @@ import org.jutility.io.xml.XmlSerializer;
 import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
 import edu.vt.arc.vis.osnap.core.domain.graph.common.IGraphObject;
 import edu.vt.arc.vis.osnap.core.domain.graph.common.INode;
-import edu.vt.arc.vis.osnap.core.domain.layout.Layout;
+import edu.vt.arc.vis.osnap.core.domain.layout.LayoutVisualizer;
 import edu.vt.arc.vis.osnap.core.domain.layout.LayoutComponentRegistry;
-import edu.vt.arc.vis.osnap.core.domain.layout.common.ILayoutComponent;
-import edu.vt.arc.vis.osnap.core.domain.layout.prefuseComponents.RadialTreeCoordinateLayoutComponent;
-import edu.vt.arc.vis.osnap.core.domain.layout.simpleComponents.SimpleColorLayoutComponent;
+import edu.vt.arc.vis.osnap.core.domain.layout.common.ILayout;
+import edu.vt.arc.vis.osnap.core.domain.layout.prefuseComponents.PrefuseRadialTreeLayout;
+import edu.vt.arc.vis.osnap.core.domain.layout.simpleComponents.SimpleColorLayout;
 import edu.vt.arc.vis.osnap.core.domain.visualization.VisualProperty;
 import edu.vt.arc.vis.osnap.core.domain.visualization.Visualization;
 import edu.vt.arc.vis.osnap.io.owl.OWLConverter;
@@ -114,9 +114,9 @@ public class XmlSerializerTest {
         System.exit(-1);
         System.out.println("======================================\n");
 
-        System.out.print("Creating Layout.");
+        System.out.print("Creating LayoutVisualizer.");
 
-        Layout layout = Layout.defaultLayout(universe);
+        LayoutVisualizer layoutVisualizer = LayoutVisualizer.defaultLayout(universe);
 
 
         INode rootNode = universe.getNode("owl:Thing");
@@ -128,24 +128,24 @@ public class XmlSerializerTest {
         }
         System.out.println("root node: " + rootNode);
 
-        ILayoutComponent provider = null;
-        // provider = new SolarSystemCoordinateLayoutComponent(rootNode, null,
+        ILayout provider = null;
+        // provider = new TieredOrbitalLayout(rootNode, null,
         // 0.1f, 1.0f, 250f, true);
         //
         //
         //
-        // provider = new BalloonTreeCoordinateLayoutComponent(rootNode);
+        // provider = new PrefuseBalloonTreeLayout(rootNode);
         //
-        // provider = new NodeLinkTreeCoordinateLayoutComponent(rootNode);
+        // provider = new PrefuseNodeLinkTreeLayout(rootNode);
         //
-        provider = new RadialTreeCoordinateLayoutComponent(rootNode);
+        provider = new PrefuseRadialTreeLayout(rootNode);
         //
         // provider = new
-        // SquarifiedTreeMapCoordinateLayoutComponent(rootNode);
+        // PrefuseSquarifiedTreeMapLayout(rootNode);
         //
-        // provider = new ForceDirectedCoordinateLayoutComponent();
+        // provider = new ForceDirectedLayout();
         //
-        // provider = new FruchtermanReingoldCoordinateLayoutComponent();
+        // provider = new PrefuseFruchtermanReingoldLayout();
         //
         //
         //
@@ -156,9 +156,9 @@ public class XmlSerializerTest {
         // provider.setZOutput(CoordinateComponent.SECOND_COMPONENT);
         //
         //
-        layout.addLayoutProviderForVisualProperty(provider,
+        layoutVisualizer.addLayoutProviderForVisualProperty(provider,
                 edu.vt.arc.vis.osnap.core.domain.visualization.VisualProperty.NODE_X_POSITION);
-        layout.addLayoutProviderForVisualProperty(provider,
+        layoutVisualizer.addLayoutProviderForVisualProperty(provider,
                 edu.vt.arc.vis.osnap.core.domain.visualization.VisualProperty.NODE_Y_POSITION);
         // layout.addLayoutProviderForVisualProperty(provider,
         // edu.vt.arc.vis.osnap.core.domain.visualization.VisualProperty.NODE_Z_POSITION);
@@ -169,13 +169,13 @@ public class XmlSerializerTest {
         restriction.add(universe.getNodes().iterator().next());
         restriction.add(universe.getEdges().iterator().next());
 
-        SimpleColorLayoutComponent sclc = new SimpleColorLayoutComponent(
+        SimpleColorLayout sclc = new SimpleColorLayout(
                 Color.RED);
 
         sclc.setRestriction(restriction);
 
 
-        layout.addLayoutProviderForVisualProperty(sclc,
+        layoutVisualizer.addLayoutProviderForVisualProperty(sclc,
                 VisualProperty.NODE_COLOR);
 
 
@@ -183,17 +183,17 @@ public class XmlSerializerTest {
 
         System.out.println();
 
-        System.out.print("XML Serializing Layout.");
-        XmlSerializer.Instance().serialize(layout, layoutFilename);
+        System.out.print("XML Serializing LayoutVisualizer.");
+        XmlSerializer.Instance().serialize(layoutVisualizer, layoutFilename);
         System.out.println(" Done.");
 
 
-        System.out.print("XML Deserializing Layout.");
-        Layout deserializedLayout = null;
+        System.out.print("XML Deserializing LayoutVisualizer.");
+        LayoutVisualizer deserializedLayout = null;
 
         try {
             deserializedLayout = XmlSerializer.Instance().deserialize(
-                    new File(layoutFilename), Layout.class);
+                    new File(layoutFilename), LayoutVisualizer.class);
         }
         catch (Exception ex) {
             System.out.println("Exception caught: ");
@@ -206,22 +206,22 @@ public class XmlSerializerTest {
 
         System.out.println(" Done.\n");
         System.out.println("Original layout equals deserialized layout: "
-                + layout.equals(deserializedLayout));
+                + layoutVisualizer.equals(deserializedLayout));
 
         System.out.println("Original layout identical to deserialized layout: "
-                + layout.isIdentical(deserializedLayout));
+                + layoutVisualizer.isIdentical(deserializedLayout));
 
-        System.out.println("Deserialized Layout: " + deserializedLayout);
+        System.out.println("Deserialized LayoutVisualizer: " + deserializedLayout);
         System.out.println("======================================\n");
 
-        System.out.print("Applying Layout.");
-        layout.layout();
+        System.out.print("Applying LayoutVisualizer.");
+        layoutVisualizer.layout();
         System.out.println(" Done.");
-        System.out.print("Applying deserialized Layout.");
+        System.out.print("Applying deserialized LayoutVisualizer.");
         deserializedLayout.layout();
         System.out.println(" Done.\n");
 
-        Visualization visualization = layout.getVisualization();
+        Visualization visualization = layoutVisualizer.getVisualization();
         Visualization duplicateVisualization = deserializedLayout
                 .getVisualization();
 

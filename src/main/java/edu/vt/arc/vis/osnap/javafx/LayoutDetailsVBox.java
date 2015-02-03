@@ -1,21 +1,27 @@
-/*******************************************************************************
- * Copyright 2014 Virginia Tech Visionarium
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- ******************************************************************************/
-
-
 package edu.vt.arc.vis.osnap.javafx;
+
+
+//@formatter:off
+/*
+* _
+* The Open Semantic Network Analysis Platform (OSNAP)
+* _
+* Copyright (C) 2012 - 2015 Visionarium at Virginia Tech
+* _
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+* 
+*      http://www.apache.org/licenses/LICENSE-2.0
+* 
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+* _
+*/
+//@formatter:on
 
 
 import java.util.HashSet;
@@ -43,46 +49,44 @@ import org.jutility.javafx.control.ListViewWithSearchPanel;
 
 import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
 import edu.vt.arc.vis.osnap.core.domain.graph.common.IGraphObject;
-import edu.vt.arc.vis.osnap.core.domain.layout.Layout;
-import edu.vt.arc.vis.osnap.core.domain.layout.common.ILayoutComponent;
-import edu.vt.arc.vis.osnap.core.domain.layout.complexComponents.SphereCoordinateLayoutComponent;
+import edu.vt.arc.vis.osnap.core.domain.layout.LayoutVisualizer;
+import edu.vt.arc.vis.osnap.core.domain.layout.common.ILayout;
 import edu.vt.arc.vis.osnap.core.domain.mappings.IValueMapping;
 import edu.vt.arc.vis.osnap.core.domain.mappings.Mapping;
 import edu.vt.arc.vis.osnap.core.domain.visualization.VisualProperty;
 import edu.vt.arc.vis.osnap.core.domain.visualization.Visualization;
 import edu.vt.arc.vis.osnap.javafx.dialogs.LayoutComponentWizardSelectionDialog;
 import edu.vt.arc.vis.osnap.javafx.events.ExportLayoutEvent;
-import edu.vt.arc.vis.osnap.javafx.events.WizardCompleted;
 import edu.vt.arc.vis.osnap.javafx.widgets.RoutingGridPane;
-import edu.vt.arc.vis.osnap.javafx.wizards.IWizardWithStatus;
-import edu.vt.arc.vis.osnap.javafx.wizards.WizardDialog;
+import edu.vt.arc.vis.osnap.javafx.wizards.ILayoutConfigurationWizard;
 import edu.vt.arc.vis.osnap.javafx.wizards.content.CapabilitiesObject;
 
 
 /**
- * the layout details page
+ * the layoutVisualizer details page
  * 
  * @author Shawn P Neuman
- * 
+ * @version 1.2.0
+ * @since 0.1.0
  */
 public class LayoutDetailsVBox
         extends VBox {
 
-    private final ObjectProperty<Universe>                                          universe;
-    private final ObjectProperty<Layout>                                            layout;
-    private final ObjectProperty<Visualization>                                     visualization;
+    private final ObjectProperty<Universe>                                 universe;
+    private final ObjectProperty<LayoutVisualizer>                         layoutVisualizer;
+    private final ObjectProperty<Visualization>                            visualization;
 
-    private TextField                                                               nameTF;
-    private TextArea                                                                descriptionTA;
+    private TextField                                                      nameTF;
+    private TextArea                                                       descriptionTA;
 
-    private RoutingGridPane                                                         routingGridPane;
+    private RoutingGridPane                                                routingGridPane;
 
-    private ListViewWithSearchPanel<KeyValuePair<ILayoutComponent, VisualProperty>> layoutComponentListView;
-    private ListViewWithSearchPanel<IGraphObject>                                   graphObjectListView;
-    private ListViewWithSearchPanel<IValueMapping<?, ?>>                            valueMappingListView;
-    private CapabilitiesTableView                                                   capabilities;
-    private Button                                                                  applyLayout;
-    private Button                                                                  export;
+    private ListViewWithSearchPanel<KeyValuePair<ILayout, VisualProperty>> layoutComponentListView;
+    private ListViewWithSearchPanel<IGraphObject>                          graphObjectListView;
+    private ListViewWithSearchPanel<IValueMapping<?, ?>>                   valueMappingListView;
+    private CapabilitiesTableView                                          capabilities;
+    private Button                                                         applyLayout;
+    private Button                                                         export;
 
 
 
@@ -121,35 +125,35 @@ public class LayoutDetailsVBox
 
 
     /**
-     * Returns the layout property.
+     * Returns the layoutVisualizer property.
      * 
-     * @return the layout property.
+     * @return the layoutVisualizer property.
      */
-    public ObjectProperty<Layout> layoutProperty() {
+    public ObjectProperty<LayoutVisualizer> layoutProperty() {
 
-        return this.layout;
+        return this.layoutVisualizer;
     }
 
     /**
-     * Returns the layout.
+     * Returns the layoutVisualizer.
      * 
-     * @return the layout.
+     * @return the layoutVisualizer.
      */
-    public Layout getLayout() {
+    public LayoutVisualizer getLayout() {
 
-        return this.layout.get();
+        return this.layoutVisualizer.get();
     }
 
 
     /**
-     * Sets the layout.
+     * Sets the layoutVisualizer.
      * 
-     * @param layout
-     *            the layout.
+     * @param layoutVisualizer
+     *            the layoutVisualizer.
      */
-    public void setLayout(Layout layout) {
+    public void setLayout(LayoutVisualizer layoutVisualizer) {
 
-        this.layout.set(layout);
+        this.layoutVisualizer.set(layoutVisualizer);
     }
 
 
@@ -195,7 +199,7 @@ public class LayoutDetailsVBox
     public LayoutDetailsVBox() {
 
         this.universe = new SimpleObjectProperty<>();
-        this.layout = new SimpleObjectProperty<>();
+        this.layoutVisualizer = new SimpleObjectProperty<>();
         this.visualization = new SimpleObjectProperty<>();
 
         this.setStyle("-fx-background-color: cornsilk");
@@ -210,7 +214,7 @@ public class LayoutDetailsVBox
         GridPane.setVgrow(layoutComponentListView, Priority.ALWAYS);
 
 
-        Text name = new Text("Name of layout");
+        Text name = new Text("Name");
 
         name.setFont(Font.font("verdana", 16));
         nameTF = new TextField();
@@ -234,11 +238,12 @@ public class LayoutDetailsVBox
         valueMappingListView = new ListViewWithSearchPanel<>("Mapping");
         GridPane.setVgrow(valueMappingListView, Priority.ALWAYS);
 
-        applyLayout = new Button("Create Visualization from this layout");
+        applyLayout = new Button(
+                "Create Visualization from this layoutVisualizer");
         applyLayout.setDisable(false);
 
 
-        export = new Button("Export Layout to X3D");
+        export = new Button("Export Visualization to X3D");
         export.setDisable(true);
 
 
@@ -271,7 +276,7 @@ public class LayoutDetailsVBox
         if (this.getLayout() != null) {
 
             this.layoutComponentListView.getItems().clear();
-            // System.out.println("Layout components: "
+            // System.out.println("LayoutVisualizer components: "
             // + this.getLayout().getLayoutComponents());
             this.layoutComponentListView.getItems().addAll(
                     this.getLayout().getLayoutComponents());
@@ -305,49 +310,46 @@ public class LayoutDetailsVBox
      * @param wizard
      *            the wizard with status object being started
      */
-    private void startWizard(IWizardWithStatus wizard) {
+    private void startWizard(final ILayoutConfigurationWizard<?, ?> wizard) {
 
         if (wizard != null) {
-            final WizardDialog dsw2 = new WizardDialog(wizard);
-            dsw2.addEventHandler(
-                    WizardCompleted.WIZARD_COMPLETED,
-                    event -> {
 
-                        ILayoutComponent comp = event.getStatusObject()
-                                .getLayoutComponent();
-
-                        Set<VisualProperty> visualProperty = event
-                                .getStatusObject().getVisualProperty();
-
-                        for (VisualProperty prop : visualProperty) {
-                            this.getLayout()
-                                    .addLayoutProviderForVisualProperty(comp,
-                                            prop);
-                        }
-
-                        Set<IGraphObject> restriction = new LinkedHashSet<>(
-                                event.getStatusObject().getGraphObjectList());
-                        comp.setRestriction(restriction);
-
-                        if (event.getStatusObject().getLayoutComponent() instanceof SphereCoordinateLayoutComponent) {
-                            // System.out
-                            // .println("I am a sphere layout component");
-                        }
+            wizard.showAndWait()
+                    .filter(buttonType -> buttonType == ButtonType.FINISH)
+                    .ifPresent(
+                            param -> {
 
 
-                        populateList();
+                                ILayout comp = wizard.getConfiguration()
+                                        .createConfiguredObject();
 
-                    });
-            wizard.setOwner(dsw2);
+                                Set<VisualProperty> visualProperty = wizard
+                                        .getConfiguration()
+                                        .getEnabledVisualProperties();
 
-            dsw2.show();
+                                for (VisualProperty prop : visualProperty) {
+                                    this.getLayout()
+                                            .addLayoutProviderForVisualProperty(
+                                                    comp, prop);
+                                }
+
+                                Set<IGraphObject> restriction = new LinkedHashSet<>(
+                                        wizard.getConfiguration()
+                                                .getRestriction());
+                                comp.setRestriction(restriction);
+
+
+                                populateList();
+
+                            });
+
         }
     }
 
     private void setUpEventHandlers() {
 
 
-        this.layout.addListener((observable, oldValue, newValue) -> {
+        this.layoutVisualizer.addListener((observable, oldValue, newValue) -> {
 
             if (newValue != null) {
 
@@ -368,29 +370,27 @@ public class LayoutDetailsVBox
 
                             if (newValue != null) {
 
-                                ILayoutComponent layoutComponent = newValue
-                                        .getKey();
+                                ILayout layout = newValue.getKey();
                                 VisualProperty visualProperty = newValue
                                         .getValue();
 
 
-                                this.nameTF.setText(layoutComponent.getName());
-                                this.descriptionTA.setText(layoutComponent
+                                this.nameTF.setText(layout.getName());
+                                this.descriptionTA.setText(layout
                                         .getDescription());
 
                                 this.graphObjectListView.getItems().addAll(
-                                        layoutComponent.getRestriction());
+                                        layout.getRestriction());
 
-                                this.routingGridPane
-                                        .setLayoutComponent(layoutComponent);
+                                this.routingGridPane.setLayout(layout);
 
-                                Set<VisualProperty> capabilities = layoutComponent
+                                Set<VisualProperty> capabilities = layout
                                         .providesCapabilities();
 
                                 Set<CapabilitiesObject> caps = new HashSet<>();
                                 for (VisualProperty property : capabilities) {
 
-                                    Boolean enabled = layoutComponent
+                                    Boolean enabled = layout
                                             .isEnabled(property);
                                     CapabilitiesObject co = new CapabilitiesObject(
                                             visualProperty, enabled);
@@ -400,16 +400,16 @@ public class LayoutDetailsVBox
                                 this.capabilities.populateCapabilities(caps);
 
 
-                                if (layoutComponent instanceof Mapping<?, ?, ?, ?>) {
+                                if (layout instanceof Mapping<?, ?, ?, ?>) {
 
-                                    Mapping<?, ?, ?, ?> mapping = (Mapping<?, ?, ?, ?>) layoutComponent;
+                                    Mapping<?, ?, ?, ?> mapping = (Mapping<?, ?, ?, ?>) layout;
                                     this.valueMappingListView.getItems()
                                             .addAll(mapping.getValueMappings());
                                 }
                             }
                             else {
 
-                                this.routingGridPane.setLayoutComponent(null);
+                                this.routingGridPane.setLayout(null);
                             }
 
                         });
@@ -418,7 +418,7 @@ public class LayoutDetailsVBox
 
         this.applyLayout.setOnAction(actionEvent -> {
 
-            if (this.layout != null) {
+            if (this.layoutVisualizer != null) {
 
                 // Date startTime = new Date();
                 this.getLayout().layout();
@@ -468,7 +468,7 @@ public class LayoutDetailsVBox
                 "Remove",
                 actionEvent -> {
 
-                    KeyValuePair<ILayoutComponent, VisualProperty> selectedItem = this.layoutComponentListView
+                    KeyValuePair<ILayout, VisualProperty> selectedItem = this.layoutComponentListView
                             .getSelectedItem();
 
                     Alert alert = new Alert(AlertType.CONFIRMATION);

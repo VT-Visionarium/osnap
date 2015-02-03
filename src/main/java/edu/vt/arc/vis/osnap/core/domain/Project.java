@@ -24,14 +24,14 @@ import edu.vt.arc.vis.osnap.core.domain.graph.base.GraphBase;
 import edu.vt.arc.vis.osnap.core.domain.graph.base.HyperEdgeBase;
 import edu.vt.arc.vis.osnap.core.domain.graph.base.NodeBase;
 import edu.vt.arc.vis.osnap.core.domain.graph.base.UniverseBase;
-import edu.vt.arc.vis.osnap.core.domain.layout.Layout;
+import edu.vt.arc.vis.osnap.core.domain.layout.LayoutVisualizer;
 import edu.vt.arc.vis.osnap.core.domain.visualization.Visualization;
 import edu.vt.arc.vis.osnap.events.domain.ProjectDetails;
 
 
 /**
  * The {@link Project} class provides a container for a visualization project,
- * namely a {@link Universe}, a number of {@link Layout Layouts}, and the
+ * namely a {@link Universe}, a number of {@link LayoutVisualizer Layouts}, and the
  * associated {@link Visualization Visualizations}.
  * 
  * @author Peter J. Radics
@@ -43,7 +43,7 @@ import edu.vt.arc.vis.osnap.events.domain.ProjectDetails;
         NodeBase.class, Node.class, EdgeBase.class, Edge.class,
         HyperEdgeBase.class, HyperEdge.class, EndpointBase.class,
         Endpoint.class })
-@XmlType(name = "OSNAP_Project", propOrder = { "universe", "layouts",
+@XmlType(name = "OSNAP_Project", propOrder = { "universe", "layoutVisualizers",
         "visualizations" })
 public class Project
         extends DomainObject {
@@ -51,9 +51,9 @@ public class Project
     @XmlElement(name = "Universe", type = Universe.class)
     private Universe                  universe;
 
-    @XmlElements({ @XmlElement(name = "Layout", type = Layout.class) })
+    @XmlElements({ @XmlElement(name = "LayoutVisualizer", type = LayoutVisualizer.class) })
     @XmlElementWrapper(name = "Layouts")
-    private final List<Layout>        layouts;
+    private final List<LayoutVisualizer>        layoutVisualizers;
     @XmlElements({ @XmlElement(name = "Visualization",
             type = Visualization.class) })
     @XmlElementWrapper(name = "Visualizations")
@@ -84,55 +84,55 @@ public class Project
 
 
     /**
-     * Returns the list of {@link Layout Layouts}..
+     * Returns the list of {@link LayoutVisualizer Layouts}..
      * 
-     * @return the list of {@link Layout Layouts}.
+     * @return the list of {@link LayoutVisualizer Layouts}.
      */
-    public List<Layout> getLayouts() {
+    public List<LayoutVisualizer> getLayouts() {
 
-        return this.layouts;
+        return this.layoutVisualizers;
     }
 
 
     @SuppressWarnings("unused")
-    private void setLayouts(List<Layout> layouts) {
+    private void setLayouts(List<LayoutVisualizer> layoutVisualizers) {
 
-        for (Layout layout : layouts) {
+        for (LayoutVisualizer layoutVisualizer : layoutVisualizers) {
 
-            this.addLayout(layout);
+            this.addLayout(layoutVisualizer);
         }
     }
 
     /**
-     * Adds the {@link Layout} to the list of layouts.
+     * Adds the {@link LayoutVisualizer} to the list of layoutVisualizers.
      * 
-     * @param layout
-     *            the {@link Layout} to add.
+     * @param layoutVisualizer
+     *            the {@link LayoutVisualizer} to add.
      * @return {@code true}, if the collection is changed by the operation.
      */
-    public boolean addLayout(Layout layout) {
+    public boolean addLayout(LayoutVisualizer layoutVisualizer) {
 
-        return this.layouts.add(layout);
+        return this.layoutVisualizers.add(layoutVisualizer);
     }
 
     /**
-     * Removes the {@link Layout} from the list of layouts.
+     * Removes the {@link LayoutVisualizer} from the list of layoutVisualizers.
      * 
-     * @param layout
-     *            the {@link Layout} to remove.
+     * @param layoutVisualizer
+     *            the {@link LayoutVisualizer} to remove.
      * @return {@code true}, if the collection is changed by the operation.
      */
-    public boolean removeLayout(Layout layout) {
+    public boolean removeLayout(LayoutVisualizer layoutVisualizer) {
 
-        return this.layouts.remove(layout);
+        return this.layoutVisualizers.remove(layoutVisualizer);
     }
 
     /**
-     * Clears the list of {@link Layout Layouts}.
+     * Clears the list of {@link LayoutVisualizer Layouts}.
      */
     public void clearLayouts() {
 
-        this.layouts.clear();
+        this.layoutVisualizers.clear();
     }
 
 
@@ -232,7 +232,7 @@ public class Project
             this.setId(null);
         }
         this.setUniverse(universe);
-        this.layouts = new LinkedList<>();
+        this.layoutVisualizers = new LinkedList<>();
         this.visualizations = new LinkedList<>();
     }
 
@@ -245,7 +245,7 @@ public class Project
         
         this.setId(projectToCopy.getId());
 
-        this.layouts = new LinkedList<>();
+        this.layoutVisualizers = new LinkedList<>();
         this.visualizations = new LinkedList<>();
     }
 
@@ -260,7 +260,7 @@ public class Project
 
         super(details);
 
-        this.layouts = new LinkedList<>();
+        this.layoutVisualizers = new LinkedList<>();
         this.visualizations = new LinkedList<>();
     }
 

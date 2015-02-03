@@ -33,7 +33,7 @@ import org.controlsfx.control.action.Action;
 import org.controlsfx.control.action.ActionUtils;
 
 import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
-import edu.vt.arc.vis.osnap.core.domain.layout.Layout;
+import edu.vt.arc.vis.osnap.core.domain.layout.LayoutVisualizer;
 
 
 /**
@@ -46,7 +46,7 @@ import edu.vt.arc.vis.osnap.core.domain.layout.Layout;
 public class LayoutMenu
         extends Menu {
 
-    private final ObjectProperty<Layout>   layout;
+    private final ObjectProperty<LayoutVisualizer>   layoutVisualizer;
     private final ObjectProperty<Universe> universe;
 
     private final Action                   createDefaultMI;
@@ -54,34 +54,34 @@ public class LayoutMenu
     private final Action                   closeMI;
 
     /**
-     * Returns the layout property.
+     * Returns the layoutVisualizer property.
      * 
-     * @return the layout property.
+     * @return the layoutVisualizer property.
      */
-    public ObjectProperty<Layout> layout() {
+    public ObjectProperty<LayoutVisualizer> layoutVisualizer() {
 
-        return this.layout;
+        return this.layoutVisualizer;
     }
 
     /**
-     * Returns the layout.
+     * Returns the layoutVisualizer.
      * 
-     * @return the layout.
+     * @return the layoutVisualizer.
      */
-    public Layout getLayout() {
+    public LayoutVisualizer getLayout() {
 
-        return this.layout.get();
+        return this.layoutVisualizer.get();
     }
 
     /**
-     * Sets the layout.
+     * Sets the layoutVisualizer.
      * 
-     * @param layout
-     *            the layout.
+     * @param layoutVisualizer
+     *            the layoutVisualizer.
      */
-    public void setLayout(Layout layout) {
+    public void setLayout(LayoutVisualizer layoutVisualizer) {
 
-        this.layout.set(layout);
+        this.layoutVisualizer.set(layoutVisualizer);
     }
 
     /**
@@ -139,7 +139,7 @@ public class LayoutMenu
 
         super("Layout", graphic);
 
-        this.layout = new SimpleObjectProperty<>();
+        this.layoutVisualizer = new SimpleObjectProperty<>();
         this.universe = new SimpleObjectProperty<>();
 
 
@@ -148,7 +148,7 @@ public class LayoutMenu
                 actionEvent -> {
 
 
-                    this.setLayout(Layout.defaultLayout(LayoutMenu.this
+                    this.setLayout(LayoutVisualizer.defaultLayout(LayoutMenu.this
                             .getUniverse()));
                 });
 
@@ -156,13 +156,13 @@ public class LayoutMenu
         this.createEmptyMI = new Action("Create Empty Layout", actionEvent -> {
 
 
-            this.setLayout(new Layout(LayoutMenu.this.getUniverse()));
+            this.setLayout(new LayoutVisualizer(LayoutMenu.this.getUniverse()));
         });
 
 
-        this.closeMI = new Action("Clear Layout", actionEvent -> {
+        this.closeMI = new Action("Clear LayoutVisualizer", actionEvent -> {
 
-            this.layout.set(null);
+            this.layoutVisualizer.set(null);
         });
 
         this.closeMI.disabledProperty().set(true);
@@ -172,7 +172,7 @@ public class LayoutMenu
                 ActionUtils.createMenuItem(closeMI));
 
 
-        this.layout.addListener((observable, oldValue, newValue) -> {
+        this.layoutVisualizer.addListener((observable, oldValue, newValue) -> {
 
             boolean requiresLayout = (newValue == null);
 
