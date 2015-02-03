@@ -25,10 +25,13 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 
+import org.controlsfx.dialog.ExceptionDialog;
 import org.jutility.io.ConversionException;
 import org.jutility.io.ISerializer;
 import org.jutility.io.SerializationException;
 import org.jutility.io.xml.XmlSerializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
@@ -50,6 +53,9 @@ import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
  */
 public class OWLTDBSerializer
         implements ISerializer {
+
+    private static final Logger     LOG = LoggerFactory
+                                                .getLogger(OWLTDBSerializer.class);
 
     private static OWLTDBSerializer s_Instance;
 
@@ -96,8 +102,7 @@ public class OWLTDBSerializer
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * edu.vt.arc.vis.osnap.io.ISerializer#supportsDeserializationOf(java
+     * @see edu.vt.arc.vis.osnap.io.ISerializer#supportsDeserializationOf(java
      * .lang.Class)
      */
     @Override
@@ -145,17 +150,14 @@ public class OWLTDBSerializer
         ontology.write(fileOutputStream);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see edu.vt.arc.vis.osnap.io.ISerializer#deserialize(java.lang.String,
-     * java.lang.Class)
-     */
     /**
      * @param filename
+     *            the file name
      * @param type
+     *            the type.
      * @return the deserialized file.
      * @throws SerializationException
+     *             if serialization fails.
      */
     public <T> T deserialize(String filename, Class<? extends T> type)
             throws SerializationException {
@@ -172,20 +174,11 @@ public class OWLTDBSerializer
 
         deserializedObject.read(filename);
 
-        if (deserializedObject != null) {
-            doc = type.cast(deserializedObject);
-        }
+        doc = type.cast(deserializedObject);
 
         return doc;
     }
 
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see edu.vt.arc.vis.osnap.io.ISerializer#deserialize(java.net.URL,
-     * java.lang.Class)
-     */
     @Override
     public <T> T deserialize(URL url, Class<? extends T> type)
             throws SerializationException {
@@ -194,12 +187,6 @@ public class OWLTDBSerializer
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see edu.vt.arc.vis.osnap.io.ISerializer#deserialize(java.io.File,
-     * java.lang.Class)
-     */
     @Override
     public <T> T deserialize(File file, Class<? extends T> type)
             throws SerializationException {
@@ -208,12 +195,6 @@ public class OWLTDBSerializer
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see edu.vt.arc.vis.osnap.io.ISerializer#deserialize(java.net.URI,
-     * java.lang.Class)
-     */
     @Override
     public <T> T deserialize(URI uri, Class<? extends T> type)
             throws SerializationException {
@@ -258,9 +239,26 @@ public class OWLTDBSerializer
         }
         catch (ConversionException e) {
             e.printStackTrace();
+
+
+            LOG.error("Could not convert ontology to graph universe!", e);
+
+            ExceptionDialog edlg = new ExceptionDialog(e);
+            edlg.setTitle("Error converting ontology!");
+            edlg.setContentText("Could not convert ontology to graph universe!");
+
+            edlg.showAndWait();
+
         }
         catch (SerializationException e) {
-            e.printStackTrace();
+
+            LOG.error("Could not serialize graph universe!", e);
+
+            ExceptionDialog edlg = new ExceptionDialog(e);
+            edlg.setTitle("Error serializing graph universe!");
+            edlg.setContentText("Could not serialize graph universe!");
+
+            edlg.showAndWait();
         }
 
 

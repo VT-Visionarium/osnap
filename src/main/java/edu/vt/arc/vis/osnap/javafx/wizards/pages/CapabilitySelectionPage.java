@@ -45,8 +45,9 @@ import edu.vt.arc.vis.osnap.javafx.wizards.content.VisualPropertyCheckBoxVBox;
  *            the type of the {@link ILayoutConfiguration}.
  * @param <T>
  *            the type of the {@link ILayoutConfigurationView}.
- * @author Shawn P Neuman
- * 
+ * @author Shawn P Neuman, Peter J. Radics
+ * @version 1.2.0
+ * @since 0.5.0
  */
 public class CapabilitySelectionPage<O extends ILayout, C extends ILayoutConfiguration<O>, T extends GridPane & ILayoutConfigurationView<O, C>>
         extends LayoutConfigurationWizardPage<O, C, T> {

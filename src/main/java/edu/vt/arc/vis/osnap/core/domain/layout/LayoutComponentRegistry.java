@@ -9,9 +9,12 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.controlsfx.dialog.ExceptionDialog;
 import org.jutility.common.reflection.ReflectionException;
 import org.jutility.common.reflection.ReflectionUtils;
 import org.jutility.io.xml.XmlSerializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import edu.vt.arc.vis.osnap.core.domain.layout.common.BaseMappedLayout;
 import edu.vt.arc.vis.osnap.core.domain.layout.common.ILayout;
@@ -64,6 +67,9 @@ import edu.vt.arc.vis.osnap.javafx.wizards.configurations.ILayoutConfiguration;
  * @since 0.5.0
  */
 public class LayoutComponentRegistry {
+
+    private static final Logger                                                                    LOG = LoggerFactory
+                                                                                                               .getLogger(LayoutComponentRegistry.class);
 
     private final Map<String, Class<? extends ILayout>>                                            classMap;
     private final Map<Class<? extends ILayout>, String>                                            nameMap;
@@ -306,10 +312,9 @@ public class LayoutComponentRegistry {
         }
         else {
 
-            throw new IllegalArgumentException(
-                    "Trying to register Layout "
-                            + "Component class with static capabilities() method that "
-                            + "does not return a Set!");
+            throw new IllegalArgumentException("Trying to register Layout "
+                    + "Component class with static capabilities() method that "
+                    + "does not return a Set!");
         }
 
 
@@ -370,7 +375,17 @@ public class LayoutComponentRegistry {
             }
             catch (ReflectionException e) {
 
-                e.printStackTrace();
+                LOG.error("Could not create instance of wizard class for "
+                        + layoutComponentClass + " using parameters "
+                        + parameters + "!");
+                
+                ExceptionDialog edlg = new ExceptionDialog(e);
+                edlg.setTitle("Error trying to create Wizard!");
+                edlg.setContentText("Could not create instance of wizard class for "
+                        + layoutComponentClass + " using parameters "
+                        + parameters + "!");
+                
+                edlg.showAndWait();
             }
         }
         return null;
@@ -385,10 +400,9 @@ public class LayoutComponentRegistry {
         }
         catch (ReflectionException e) {
 
-            throw new IllegalArgumentException(
-                    "Trying to register Layout "
-                            + "Component class that cannot execute static "
-                            + name + "() method!", e);
+            throw new IllegalArgumentException("Trying to register Layout "
+                    + "Component class that cannot execute static " + name
+                    + "() method!", e);
         }
 
 
@@ -400,10 +414,9 @@ public class LayoutComponentRegistry {
             return ReflectionUtils.getMethod(clazz, returnType, name, null);
         }
         catch (ReflectionException e) {
-            throw new IllegalArgumentException(
-                    "Trying to register Layout "
-                            + "Component class that does not declare static "
-                            + name + "() method!", e);
+            throw new IllegalArgumentException("Trying to register Layout "
+                    + "Component class that does not declare static " + name
+                    + "() method!", e);
         }
     }
 

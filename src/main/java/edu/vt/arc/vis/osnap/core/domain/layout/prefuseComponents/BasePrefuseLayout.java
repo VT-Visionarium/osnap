@@ -3,24 +3,24 @@ package edu.vt.arc.vis.osnap.core.domain.layout.prefuseComponents;
 
 //@formatter:off
 /*
-* _
-* The Open Semantic Network Analysis Platform (OSNAP)
-* _
-* Copyright (C) 2012 - 2015 Visionarium at Virginia Tech
-* _
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-* 
-*      http://www.apache.org/licenses/LICENSE-2.0
-* 
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-* _
-*/
+ * _
+ * The Open Semantic Network Analysis Platform (OSNAP)
+ * _
+ * Copyright (C) 2012 - 2015 Visionarium at Virginia Tech
+ * _
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * _
+ */
 //@formatter:on
 
 import java.awt.geom.Point2D;
@@ -61,8 +61,8 @@ import edu.vt.arc.vis.osnap.core.domain.visualization.Visualization;
  */
 @XmlType(name = "BasePrefuseLayout")
 public abstract class BasePrefuseLayout
-        extends Base2DCoordinateLayout
-        implements IPrefuseLayout {
+extends Base2DCoordinateLayout
+implements IPrefuseLayout {
 
     @XmlElement(name = "Duration")
     private long                duration;
@@ -124,7 +124,7 @@ public abstract class BasePrefuseLayout
      * Returns the coordinate components (the set of {@link CoordinateComponent
      * CoordinateComponents} that can be provided) by this
      * {@link ICoordinateLayout}.
-     * 
+     *
      * @return the components.
      */
     public static Set<CoordinateComponent> components() {
@@ -154,8 +154,8 @@ public abstract class BasePrefuseLayout
      * @param randomizeName
      *            whether or not to append a random number to the name.
      */
-    public BasePrefuseLayout(String name, String description,
-            boolean randomizeName) {
+    public BasePrefuseLayout(final String name, final String description,
+            final boolean randomizeName) {
 
         this(name, description, randomizeName, false);
     }
@@ -175,8 +175,8 @@ public abstract class BasePrefuseLayout
      *            whether or not the constructor is invoked during
      *            serialization.
      */
-    protected BasePrefuseLayout(String name, String description,
-            boolean randomizeName, boolean serialization) {
+    protected BasePrefuseLayout(final String name, final String description,
+            final boolean randomizeName, final boolean serialization) {
 
         super(CoordinateComponent.FIRST_COMPONENT,
                 CoordinateComponent.SECOND_COMPONENT,
@@ -194,20 +194,21 @@ public abstract class BasePrefuseLayout
     }
 
     @Override
-    public void layout(Visualization visualization) {
+    public void layout(final Visualization visualization) {
 
         PrefuseLayoutGenerator.Instance().layout(this, visualization);
     }
 
 
     @Override
-    public void layout(VisualGraph graph) {
+    public void layout(final VisualGraph graph) {
 
         // not used
     }
 
 
-    public void layout(VisualNode visualNode) {
+    @Override
+    public void layout(final VisualNode visualNode) {
 
         // not used.
 
@@ -215,7 +216,7 @@ public abstract class BasePrefuseLayout
 
 
     @Override
-    public void layout(VisualEdge visualEdge) {
+    public void layout(final VisualEdge visualEdge) {
 
         // not used.
 
@@ -223,7 +224,7 @@ public abstract class BasePrefuseLayout
 
 
     @Override
-    public void layout(VisualHyperEdge visualHyperEdge) {
+    public void layout(final VisualHyperEdge visualHyperEdge) {
 
         // not used.
 
@@ -231,7 +232,7 @@ public abstract class BasePrefuseLayout
 
 
     @Override
-    public void setDuration(long duration) {
+    public void setDuration(final long duration) {
 
         this.duration = duration;
     }
@@ -245,7 +246,7 @@ public abstract class BasePrefuseLayout
 
 
     @Override
-    public void setLayoutAnchor(double x, double y) {
+    public void setLayoutAnchor(final double x, final double y) {
 
         this.layoutAnchor = new Point2<>(x, y, Double.class);
     }
@@ -258,11 +259,12 @@ public abstract class BasePrefuseLayout
 
 
     @Override
-    public void setLayoutBounds(double x, double y, double width, double height) {
+    public void setLayoutBounds(final double x, final double y,
+            final double width, final double height) {
 
-        IPoint2<Double> topLeftCorner = new Point2<>(x, y, Double.class);
-        IPoint2<Double> bottomRightCorner = new Point2<>(x + width, y + height,
-                Double.class);
+        final IPoint2<Double> topLeftCorner = new Point2<>(x, y, Double.class);
+        final IPoint2<Double> bottomRightCorner = new Point2<>(x + width, y
+                + height, Double.class);
 
         this.layoutBounds = new Rectangle2<>(topLeftCorner, bottomRightCorner,
                 Double.class);
@@ -276,8 +278,8 @@ public abstract class BasePrefuseLayout
 
 
     @Override
-    public void setMargin(int topMargin, int bottomMargin, int leftMargin,
-            int rightMargin) {
+    public void setMargin(final int topMargin, final int bottomMargin,
+            final int leftMargin, final int rightMargin) {
 
         this.topMargin = topMargin;
         this.bottomMargin = bottomMargin;
@@ -323,20 +325,22 @@ public abstract class BasePrefuseLayout
                             .getLayoutAnchor().getY()));
 
 
-            double x = this.getLayoutBounds().getTopLeftCorner().getX();
-            double y = this.getLayoutBounds().getTopLeftCorner().getY();
-            double x2 = this.getLayoutBounds().getBottomRightCorner().getX();
-            double y2 = this.getLayoutBounds().getBottomRightCorner().getY();
+            final double x = this.getLayoutBounds().getTopLeftCorner().getX();
+            final double y = this.getLayoutBounds().getTopLeftCorner().getY();
+            final double x2 = this.getLayoutBounds().getBottomRightCorner()
+                    .getX();
+            final double y2 = this.getLayoutBounds().getBottomRightCorner()
+                    .getY();
 
-            double width = x2 - x;
-            double height = y2 - y;
+            final double width = x2 - x;
+            final double height = y2 - y;
 
             this.getLayout().setLayoutBounds(
                     new Rectangle2D.Double(x, y, width, height));
 
 
-            this.getLayout().setMargin(topMargin, leftMargin, bottomMargin,
-                    rightMargin);
+            this.getLayout().setMargin(this.topMargin, this.leftMargin,
+                    this.bottomMargin, this.rightMargin);
 
             this.getLayout().setDuration(this.duration);
         }

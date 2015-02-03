@@ -1,34 +1,19 @@
-/*******************************************************************************
- * Copyright 2014 Virginia Tech Visionarium
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
-
-
 package edu.vt.arc.vis.osnap.core.domain.graph.typedMetadata;
 
+
+// @formatter:off
 /*
  * _
  * The Open Semantic Network Analysis Platform (OSNAP)
  * _
- * Copyright (C) 2012 - 2014 Visionarium at Virginia Tech
+ * Copyright (C) 2012 - 2015 Visionarium at Virginia Tech
  * _
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,7 +21,7 @@ package edu.vt.arc.vis.osnap.core.domain.graph.typedMetadata;
  * limitations under the License.
  * _
  */
-
+// @formatter:on
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -60,7 +45,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  * This class represents schemata that can be associated with any object in a
  * graph universe.
  *
- * Schemata are collections of <CODE>Metadata</CODE> restrictions.
+ * Schemata are collections of {@code Metadata} restrictions.
  *
  * @author Peter J. Radics
  * @version 0.2
@@ -96,43 +81,43 @@ public class Schema {
 
 
     /**
-     * Returns the <CODE>SchemaEntries</CODE> of this <CODE>Schema</CODE>.
+     * Returns the {@code SchemaEntries} of this {@code Schema}.
      *
-     * @return a Collection of <CODE>SchemaEntries</CODE>.
+     * @return a Collection of {@code SchemaEntries}.
      */
     @XmlElement(name = "Entry")
     public Collection<SchemaEntry<?>> getEntries() {
 
-        return new ArrayList<>(schema.values());
+        return new ArrayList<>(this.schema.values());
     }
 
     /**
-     * Sets the <CODE>SchemaEntries</CODE> of this <CODE>Schema</CODE>.
+     * Sets the {@code SchemaEntries} of this {@code Schema}.
      *
      * @param entries
-     *            a Collection of <CODE>SchemaEntries</CODE>.
+     *            a Collection of {@code SchemaEntries}.
      */
-    public void setEntries(Collection<SchemaEntry<?>> entries) {
+    public void setEntries(final Collection<SchemaEntry<?>> entries) {
 
-        for (SchemaEntry<?> entry : entries) {
+        for (final SchemaEntry<?> entry : entries) {
 
             this.addEntry(entry);
         }
     }
 
     /**
-     * Returns the keys of the <CODE>SchemaEntries</CODE>.
+     * Returns the keys of the {@code SchemaEntries}.
      *
      * @return the keys.
      */
     public Set<String> getKeys() {
 
-        return Collections.unmodifiableSet(schema.keySet());
+        return Collections.unmodifiableSet(this.schema.keySet());
     }
 
 
     /**
-     * Creates a new <CODE>Schema</CODE> instance.
+     * Creates a new {@code Schema} instance.
      */
     @SuppressWarnings("unused")
     private Schema() {
@@ -141,19 +126,19 @@ public class Schema {
     }
 
     /**
-     * Creates a new <CODE>Schema</CODE> instance with the provided id.
+     * Creates a new {@code Schema} instance with the provided id.
      *
      * @param id
      *            the id of the new schema.
      */
-    public Schema(String id) {
+    public Schema(final String id) {
 
         this(id, false);
     }
 
-    private Schema(String id, boolean serialization) {
+    private Schema(final String id, final boolean serialization) {
 
-        if ((id == null || "".equals(id)) && !serialization) {
+        if (((id == null) || "".equals(id)) && !serialization) {
             throw new IllegalArgumentException(
                     "Cannot create a Schema without an ID.");
         }
@@ -165,34 +150,34 @@ public class Schema {
      * Copy Constructor.
      *
      * @param toCopy
-     *            the <CODE>Schema</CODE> to copy.
+     *            the {@code Schema} to copy.
      */
-    public Schema(Schema toCopy) {
+    public Schema(final Schema toCopy) {
 
         this(toCopy.getId());
 
-        for (SchemaEntry<?> entry : toCopy.schema.values()) {
+        for (final SchemaEntry<?> entry : toCopy.schema.values()) {
             this.schema.put(entry.getKey(), entry.deepCopy());
         }
     }
 
 
     /**
-     * Returns the <CODE>SchemaEntry</CODE> with the provided key.
+     * Returns the {@code SchemaEntry} with the provided key.
      *
      * @param key
      *            the key.
-     * @return the <CODE>SchemaEntry</CODE> or <CODE>null</CODE>, if the
-     *         <CODE>Schema</CODE> does not contain the key.
+     * @return the {@code SchemaEntry} or {@code null}, if the {@code Schema}
+     *         does not contain the key.
      */
-    public SchemaEntry<?> getEntry(String key) {
+    public SchemaEntry<?> getEntry(final String key) {
 
         return this.schema.get(key);
     }
 
 
     /**
-     * Creates a new <CODE>SchemaEntry</CODE> with the provided key and type.
+     * Creates a new {@code SchemaEntry} with the provided key and type.
      *
      * @param key
      *            the key.
@@ -200,14 +185,14 @@ public class Schema {
      *            the type.
      * @return returns the newly created entry.
      */
-    public <T> SchemaEntry<T> createEntry(String key, Class<T> type) {
+    public <T> SchemaEntry<T> createEntry(final String key, final Class<T> type) {
 
         return this.createEntry(key, type, null, false, false);
     }
 
     /**
-     * Creates a new <CODE>SchemaEntry</CODE> with the provided key, type,
-     * default value, requirement and uniqueness restrictions.
+     * Creates a new {@code SchemaEntry} with the provided key, type, default
+     * value, requirement and uniqueness restrictions.
      *
      * @param key
      *            the key.
@@ -221,15 +206,16 @@ public class Schema {
      *            the uniqueness restriction.
      * @return returns the newly created entry.
      */
-    public <T> SchemaEntry<T> createEntry(String key, Class<T> type,
-            T defaultValue, boolean required, boolean unique) {
+    public <T> SchemaEntry<T> createEntry(final String key,
+            final Class<T> type, final T defaultValue, final boolean required,
+            final boolean unique) {
 
         if (this.containsKey(key)) {
             throw new IllegalArgumentException("A SchemaEntry for key \"" + key
                     + "\" already exists!");
         }
 
-        SchemaEntry<T> entry = new SchemaEntry<>(key, type, defaultValue,
+        final SchemaEntry<T> entry = new SchemaEntry<>(key, type, defaultValue,
                 required, unique);
 
         this.addEntry(entry);
@@ -238,65 +224,59 @@ public class Schema {
     }
 
     /**
-     * Adds a deep copy of the <CODE>SchemaEntry</CODE> to the schema.
+     * Adds a deep copy of the {@code SchemaEntry} to the schema.
      *
      * @param schemaEntry
-     *            the <CODE>SchemaEntry</CODE> to add.
+     *            the {@code SchemaEntry} to add.
      */
-    public void addEntry(SchemaEntry<?> schemaEntry) {
+    public void addEntry(final SchemaEntry<?> schemaEntry) {
 
         this.schema.put(schemaEntry.getKey(), new SchemaEntry<>(schemaEntry));
-
-        // TODO: notify observers.
     }
 
     /**
-     * Removes the <CODE>SchemaEntry</CODE> provided from the
-     * <CODE>Schema</CODE>.
+     * Removes the {@code SchemaEntry} provided from the {@code Schema}.
      *
      * @param schemaEntry
      *            the entry to be removed.
      */
-    public void removeEntry(SchemaEntry<?> schemaEntry) {
+    public void removeEntry(final SchemaEntry<?> schemaEntry) {
 
         this.schema.remove(schemaEntry.getKey());
     }
 
     /**
-     * Removes the <CODE>SchemaEntry</CODE> identified by the key provided from
-     * the <CODE>Schema</CODE>.
+     * Removes the {@code SchemaEntry} identified by the key provided from the
+     * {@code Schema}.
      *
      * @param key
      *            the key of the entry to be removed.
      */
-    public void removeEntry(String key) {
+    public void removeEntry(final String key) {
 
         this.schema.remove(key);
     }
 
     /**
-     * Checks whether the provided key is contained in the <CODE>Schema</CODE>.
+     * Checks whether the provided key is contained in the {@code Schema}.
      *
      * @param key
      *            the key.
-     * @return <CODE>true</CODE>, if the key is contained; <CODE>false</CODE>
-     *         otherwise.
+     * @return {@code true}, if the key is contained; {@code false} otherwise.
      */
-    public boolean containsKey(String key) {
+    public boolean containsKey(final String key) {
 
         return this.schema.containsKey(key);
     }
 
     /**
-     * Checks whether the provided entry is contained in the <CODE>Schema</CODE>
-     * .
+     * Checks whether the provided entry is contained in the {@code Schema} .
      *
      * @param entry
      *            the entry to check.
-     * @return <CODE>true</CODE>, if the entry is contained; <CODE>false</CODE>
-     *         otherwise.
+     * @return {@code true}, if the entry is contained; {@code false} otherwise.
      */
-    public boolean contains(SchemaEntry<?> entry) {
+    public boolean contains(final SchemaEntry<?> entry) {
 
         return this.schema.containsKey(entry.getKey());
     }
@@ -304,14 +284,13 @@ public class Schema {
 
     /**
      * Checks whether the provided entry conflicts with an entry contained in
-     * the <CODE>Schema</CODE> .
+     * the {@code Schema} .
      *
      * @param entry
      *            the entry to check.
-     * @return <CODE>true</CODE>, if the entry is contained; <CODE>false</CODE>
-     *         otherwise.
+     * @return {@code true}, if the entry is contained; {@code false} otherwise.
      */
-    public boolean containsConflictingEntry(SchemaEntry<?> entry) {
+    public boolean containsConflictingEntry(final SchemaEntry<?> entry) {
 
         if (this.containsKey(entry.getKey())) {
             return !this.schema.get(entry.getKey()).isIdentical(entry);
@@ -321,7 +300,7 @@ public class Schema {
     }
 
     /**
-     * Clears the <CODE>Schema</CODE>.
+     * Clears the {@code Schema}.
      */
     public void clear() {
 
@@ -329,9 +308,9 @@ public class Schema {
     }
 
     /**
-     * Creates a deep copy of the <CODE>Schema</CODE> object.
+     * Creates a deep copy of the {@code Schema} object.
      *
-     * @return A deep copy of the <CODE>Schema</CODE> object.
+     * @return A deep copy of the {@code Schema} object.
      */
     public Schema deepCopy() {
 
@@ -340,17 +319,18 @@ public class Schema {
 
 
     /**
-     * Creates a new <CODE>Metadata</CODE> object consistent with this
-     * <CODE>Schema</CODE>. If the key is not present, the <CODE>Schema</CODE>
-     * is updated with the given key.
+     * Creates a new {@code Metadata} object consistent with this {@code Schema}
+     * . If the key is not present, the {@code Schema} is updated with the given
+     * key.
      *
      * @param key
-     *            the key of the <CODE>Metadata</CODE>.
+     *            the key of the {@code Metadata}.
      * @param value
-     *            the value of the <CODE>Metadata</CODE>.
-     * @return a new <CODE>Metadata</CODE> object.
+     *            the value of the {@code Metadata}.
+     * @return a new {@code Metadata} object.
      */
-    protected <T> TypedMetadata<?> createMetadata(String key, T value) {
+    protected <T> TypedMetadata<?> createMetadata(final String key,
+            final T value) {
 
         SchemaEntry<?> entry;
 
@@ -368,21 +348,21 @@ public class Schema {
             this.schema.put(key, entry);
         }
 
-        TypedMetadata<?> metadata = this.createMetadata(entry, value);
+        final TypedMetadata<?> metadata = this.createMetadata(entry, value);
 
         return metadata;
     }
 
     /**
-     * Creates a new <CODE>Metadata</CODE> object with a default value
-     * consistent with this <CODE>Schema</CODE>.
+     * Creates a new {@code Metadata} object with a default value consistent
+     * with this {@code Schema}.
      *
      * @param key
-     *            the key of the <CODE>Metadata</CODE>.
-     * @return a new <CODE>Metadata</CODE> object o <CODE>null</CODE>, if the
-     *         key is not present in the <CODE>Schema</CODE>.
+     *            the key of the {@code Metadata}.
+     * @return a new {@code Metadata} object o {@code null}, if the key is not
+     *         present in the {@code Schema}.
      */
-    protected TypedMetadata<?> createMetadata(String key) {
+    protected TypedMetadata<?> createMetadata(final String key) {
 
         if (this.containsKey(key)) {
 
@@ -395,9 +375,10 @@ public class Schema {
         }
     }
 
-    private <S, T> TypedMetadata<S> createMetadata(SchemaEntry<S> entry, T value) {
+    private <S, T> TypedMetadata<S> createMetadata(final SchemaEntry<S> entry,
+            final T value) {
 
-        if (value == null
+        if ((value == null)
                 || entry.getValueType().isAssignableFrom(value.getClass())) {
 
             return new TypedMetadata<>(entry.getKey(), entry.getValueType()
@@ -410,26 +391,25 @@ public class Schema {
     /**
      * Provides a test to check equality based on content.
      *
-     * Provided since equals() only checks the keys of the
-     * <CODE>SchemaEntries</CODE> contained but not their values.
+     * Provided since equals() only checks the keys of the {@link SchemaEntry
+     * SchemaEntries} contained but not their values.
      *
      * @param other
-     *            The <CODE>Schema</CODE> to compare this object with.
+     *            The {@code Schema} to compare this object with.
      *
-     * @return <CODE>true</CODE> if contents are equal. Otherwise
-     *         <CODE>false</CODE>.
+     * @return {@code true} if contents are equal. Otherwise {@code false}.
      */
-    public boolean isIdentical(Schema other) {
+    public boolean isIdentical(final Schema other) {
 
         if (this.equals(other)) {
 
-            boolean sameID = this.getId().equals(other.getId());
+            final boolean sameID = this.getId().equals(other.getId());
 
             if (sameID) {
-                for (SchemaEntry<?> entry : this.getEntries()) {
+                for (final SchemaEntry<?> entry : this.getEntries()) {
 
                     boolean identical = false;
-                    for (SchemaEntry<?> otherEntry : other.getEntries()) {
+                    for (final SchemaEntry<?> otherEntry : other.getEntries()) {
 
                         identical = entry.isIdentical(otherEntry);
                         if (identical) {
@@ -448,18 +428,19 @@ public class Schema {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
 
         if (this == obj) {
 
             return true;
         }
 
-        if (obj != null && obj instanceof Schema) {
+        if ((obj != null) && (obj instanceof Schema)) {
 
             final Schema other = (Schema) obj;
 
-            boolean sameEntries = this.getEntries().equals(other.getEntries());
+            final boolean sameEntries = this.getEntries().equals(
+                    other.getEntries());
 
             return sameEntries;
         }
@@ -470,18 +451,18 @@ public class Schema {
     public int hashCode() {
 
         int hash = 3;
-        hash = 37 * hash + this.getEntries().hashCode();
+        hash = (37 * hash) + this.getEntries().hashCode();
         return hash;
     }
 
     @Override
     public String toString() {
 
-        StringBuilder returnValue = new StringBuilder();
+        final StringBuilder returnValue = new StringBuilder();
         returnValue.append("Schema contains " + this.getEntries().size()
                 + " entries:\n");
 
-        for (SchemaEntry<?> entry : this.getEntries()) {
+        for (final SchemaEntry<?> entry : this.getEntries()) {
 
             returnValue.append("\t");
             returnValue.append(entry);
