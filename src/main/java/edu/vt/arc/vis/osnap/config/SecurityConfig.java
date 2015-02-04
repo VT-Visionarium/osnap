@@ -1,5 +1,7 @@
 package edu.vt.arc.vis.osnap.config;
 
+
+// @formatter:off
 /*
  * _
  * The Open Semantic Network Analysis Platform (OSNAP)
@@ -19,6 +21,7 @@ package edu.vt.arc.vis.osnap.config;
  * limitations under the License.
  * _
  */
+// @formatter:on
 
 
 import org.authalic.saint.server.config.filters.CORSFilter;
@@ -32,8 +35,8 @@ import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 
 /**
  * @author Peter J. Radics
- * @version 0.1
- * @since 0.1
+ * @version 1.2.0
+ * @since 1.1.0
  */
 @EnableWebSecurity
 @Configuration
@@ -45,8 +48,8 @@ public class SecurityConfig
     protected void configure(AuthenticationManagerBuilder auth)
             throws Exception {
 
-        auth.inMemoryAuthentication().withUser("osnap").password("0p3n$3m4nt1c")
-                .roles("USER");
+        auth.inMemoryAuthentication().withUser("osnap")
+                .password("0p3n$3m4nt1c").roles("USER");
     }
 
 
@@ -56,13 +59,11 @@ public class SecurityConfig
 
         http.csrf().disable();
         http.addFilterBefore(corsFilter(), ChannelProcessingFilter.class);
-        //http.authorizeRequests().antMatchers("/**").hasRole("USER")
-    //            .anyRequest().anonymous().and().httpBasic();
     }
-    
+
 
     private CORSFilter corsFilter() {
-        
+
         return new CORSFilter();
-    };
+    }
 }

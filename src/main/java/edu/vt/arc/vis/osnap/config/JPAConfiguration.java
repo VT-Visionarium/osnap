@@ -1,5 +1,7 @@
 package edu.vt.arc.vis.osnap.config;
 
+
+// @formatter:off
 /*
  * _
  * The Open Semantic Network Analysis Platform (OSNAP)
@@ -19,6 +21,7 @@ package edu.vt.arc.vis.osnap.config;
  * limitations under the License.
  * _
  */
+// @formatter:on
 
 
 import java.util.HashMap;
@@ -31,14 +34,11 @@ import javax.sql.DataSource;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableLoadTimeWeaving;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver;
 import org.springframework.instrument.classloading.tomcat.TomcatLoadTimeWeaver;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -51,16 +51,17 @@ import org.springframework.transaction.annotation.TransactionManagementConfigure
 
 /**
  * @author Peter J. Radics
- * @version 0.1
- * @since 0.1
+ * @version 1.2.0
+ * @since 1.1.0
  *
  */
 @Configuration
 @PropertySource("application.properties")
-//@EnableJpaRepositories(basePackages = "edu.vt.arc.vis.osnap.persistence.repository")
+// @EnableJpaRepositories(basePackages =
+// "edu.vt.arc.vis.osnap.persistence.repository")
 @EnableTransactionManagement
 @EnableLoadTimeWeaving
-//@ComponentScan(basePackages = "edu.vt.arc.vis.osnap.persistence.services")
+// @ComponentScan(basePackages = "edu.vt.arc.vis.osnap.persistence.services")
 public class JPAConfiguration
         implements TransactionManagementConfigurer {
 
@@ -116,8 +117,9 @@ public class JPAConfiguration
         jpaProperties.put("eclipselink.weaving", "true");
         jpaProperties.put("jpaDialect",
                 "org.springframework.orm.jpa.vendor.EclipseLinkJpaDialect");
-        jpaProperties.put("loadTimeWeaver",
-                "org.springframework.instrument.classloading.tomcat.TomcatLoadTimeWeaver");
+        jpaProperties
+                .put("loadTimeWeaver",
+                        "org.springframework.instrument.classloading.tomcat.TomcatLoadTimeWeaver");
         factory.setJpaPropertyMap(jpaProperties);
         vendorAdapter.setGenerateDdl(false);
         vendorAdapter.setShowSql(false);

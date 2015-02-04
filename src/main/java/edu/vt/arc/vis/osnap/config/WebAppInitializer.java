@@ -1,5 +1,7 @@
 package edu.vt.arc.vis.osnap.config;
 
+
+// @formatter:off
 /*
  * _
  * The Open Semantic Network Analysis Platform (OSNAP)
@@ -19,6 +21,7 @@ package edu.vt.arc.vis.osnap.config;
  * limitations under the License.
  * _
  */
+// @formatter:on
 
 import javax.servlet.Filter;
 
@@ -31,22 +34,21 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
  * Web Application Initializer.
  * 
  * @author Peter J. Radics
- * @version 0.1
- * @since 0.1
+ * @version 1.2.0
+ * @since 1.1.0
  */
 @Order(2)
 public class WebAppInitializer
         extends AbstractAnnotationConfigDispatcherServletInitializer {
 
 
-    // {!begin addToRootContext}
     @Override
     protected Class<?>[] getRootConfigClasses() {
 
-        return new Class<?>[] { SecurityConfig.class, JPAConfiguration.class, MVCConfig.class, CoreConfig.class };
+        return new Class<?>[] { SecurityConfig.class, JPAConfiguration.class,
+                MVCConfig.class, CoreConfig.class };
     }
 
-    // {!end addToRootContext}
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
@@ -61,6 +63,7 @@ public class WebAppInitializer
         return new String[] { "/" };
     }
 
+
     @Override
     protected Filter[] getServletFilters() {
 
@@ -68,6 +71,4 @@ public class WebAppInitializer
         characterEncodingFilter.setEncoding("UTF-8");
         return new Filter[] { characterEncodingFilter };
     }
-
-
 }
