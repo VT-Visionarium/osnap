@@ -27,12 +27,13 @@ import java.util.EnumSet;
 import java.util.Set;
 
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import edu.vt.arc.vis.osnap.core.domain.layout.common.ILayout;
 import edu.vt.arc.vis.osnap.core.domain.visualization.VisualProperty;
 import edu.vt.arc.vis.osnap.javafx.wizards.Wizard;
 import edu.vt.arc.vis.osnap.javafx.wizards.configurations.ILayoutConfiguration;
 import edu.vt.arc.vis.osnap.javafx.wizards.configurations.statuspanes.ILayoutConfigurationView;
-import edu.vt.arc.vis.osnap.javafx.wizards.content.VisualPropertyCheckBoxVBox;
+import edu.vt.arc.vis.osnap.javafx.wizards.content.CapabilityGridPane;
 
 
 /**
@@ -52,7 +53,7 @@ import edu.vt.arc.vis.osnap.javafx.wizards.content.VisualPropertyCheckBoxVBox;
 public class CapabilitySelectionPage<O extends ILayout, C extends ILayoutConfiguration<O>, T extends GridPane & ILayoutConfigurationView<O, C>>
         extends LayoutConfigurationWizardPage<O, C, T> {
 
-    private VisualPropertyCheckBoxVBox checkBox;
+    private CapabilityGridPane capabilityGridPane;
 
 
     /**
@@ -64,7 +65,6 @@ public class CapabilitySelectionPage<O extends ILayout, C extends ILayoutConfigu
     public CapabilitySelectionPage(final T configurationView) {
 
         this(configurationView, EnumSet.allOf(VisualProperty.class), 1);
-
     }
 
 
@@ -109,10 +109,13 @@ public class CapabilitySelectionPage<O extends ILayout, C extends ILayoutConfigu
             capabilities = EnumSet.allOf(VisualProperty.class);
         }
 
-        this.checkBox = new VisualPropertyCheckBoxVBox(capabilities, limit);
+        this.capabilityGridPane = new CapabilityGridPane(capabilities, limit);
+
+        GridPane.setHgrow(this.capabilityGridPane, Priority.SOMETIMES);
+        GridPane.setVgrow(this.capabilityGridPane, Priority.SOMETIMES);
 
 
-        this.getContentGridPane().add(this.checkBox, 0, 0);
+        this.getContentGridPane().add(this.capabilityGridPane, 0, 0);
     }
 
     @Override
@@ -126,7 +129,9 @@ public class CapabilitySelectionPage<O extends ILayout, C extends ILayoutConfigu
 
         super.onExitingPage(wizard);
 
-        this.getConfigurationView().getConfiguration()
-                .enableVisualProperties(this.checkBox.getList());
+        this.getConfigurationView()
+                .getConfiguration()
+                .enableVisualProperties(
+                        this.capabilityGridPane.getSelectedCapabilities());
     }
 }

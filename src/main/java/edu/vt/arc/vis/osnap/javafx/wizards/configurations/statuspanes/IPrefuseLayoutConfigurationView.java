@@ -42,7 +42,7 @@ import edu.vt.arc.vis.osnap.javafx.wizards.configurations.IPrefuseLayoutConfigur
  * @since 1.2.0
  */
 public interface IPrefuseLayoutConfigurationView<O extends IPrefuseLayout, C extends IPrefuseLayoutConfiguration<O>>
-        extends ILayoutConfigurationView<O, C> {
+        extends ICoordinateLayoutConfigurationView<O, C> {
 
     // tagging interface
 }

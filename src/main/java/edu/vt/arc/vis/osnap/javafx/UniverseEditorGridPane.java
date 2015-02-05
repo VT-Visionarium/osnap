@@ -1,23 +1,27 @@
-/*******************************************************************************
- * Copyright 2014 Virginia Tech Visionarium
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- ******************************************************************************/
-
-/**
- *
- */
 package edu.vt.arc.vis.osnap.javafx;
+
+
+//@formatter:off
+/*
+* _
+* The Open Semantic Network Analysis Platform (OSNAP)
+* _
+* Copyright (C) 2012 - 2015 Visionarium at Virginia Tech
+* _
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*      http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+* _
+*/
+//@formatter:on
 
 
 import javafx.beans.property.ObjectProperty;
@@ -41,8 +45,8 @@ import edu.vt.arc.vis.osnap.core.domain.graph.metadata.Schema;
 import edu.vt.arc.vis.osnap.javafx.dialogs.UniverseDialog;
 import edu.vt.arc.vis.osnap.javafx.dialogs.UniversePropertiesDialog;
 import edu.vt.arc.vis.osnap.javafx.events.MetadataChangedEvent;
-import edu.vt.arc.vis.osnap.javafx.stringConverters.GraphObjectStringConverter;
-import edu.vt.arc.vis.osnap.javafx.stringConverters.GraphObjectStringConverterConfiguration;
+import edu.vt.arc.vis.osnap.javafx.stringconverters.GraphObjectStringConverter;
+import edu.vt.arc.vis.osnap.javafx.stringconverters.GraphObjectStringConverterConfiguration;
 import edu.vt.arc.vis.osnap.javafx.widgets.MetaDataTable;
 import edu.vt.arc.vis.osnap.javafx.widgets.SchemaTableView;
 
@@ -51,7 +55,7 @@ import edu.vt.arc.vis.osnap.javafx.widgets.SchemaTableView;
  * @author Shawn P Neuman, Peter J. Radics
  * 
  */
-public class UniverseDetailsVBox
+public class UniverseEditorGridPane
         extends VBox {
 
     private final ObjectProperty<Universe>    universe;
@@ -96,9 +100,9 @@ public class UniverseDetailsVBox
     }
 
     /**
-     * Creates a new instance of the {@link UniverseDetailsVBox} class.
+     * Creates a new instance of the {@link UniverseEditorGridPane} class.
      */
-    public UniverseDetailsVBox() {
+    public UniverseEditorGridPane() {
 
         this.universe = new SimpleObjectProperty<>();
 

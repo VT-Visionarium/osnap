@@ -15,61 +15,66 @@
  ******************************************************************************/
 
 
-package edu.vt.arc.vis.osnap.javafx.stringConverters;
+package edu.vt.arc.vis.osnap.javafx.stringconverters;
 
 
 import org.jutility.javafx.stringconverter.IConfigurableStringConverter;
 import org.jutility.javafx.stringconverter.IStringConverterConfiguration;
 
-import edu.vt.arc.vis.osnap.core.domain.visualization.IVisualGraphObject;
+import edu.vt.arc.vis.osnap.core.domain.graph.common.IGraphObject;
+import edu.vt.arc.vis.osnap.core.domain.graph.common.IGraphObjectBasedValueTypeContainer;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.util.StringConverter;
 
 
 /**
- * The {@link VisualGraphObjectStringConverter} class provides a string
- * converter for {@link IVisualGraphObject VisualGraphObjects}.
+ * The {@link GraphObjectBasedValueTypeContainerStringConverter} class provides
+ * a string converter for
+ * {@link GraphObjectBasedValueTypeContainerStringConverter
+ * DatabaseObjectStringConverters}.
  * 
  * @author Peter J. Radics
  * @version 0.1
  * @param <T>
- *            the type of the StringConverter (subclass of
- *            {@link IVisualGraphObject} ).
+ *            the type of the StringConverter (subclass of {@link IGraphObject}
+ *            ).
  */
-public class VisualGraphObjectStringConverter<T extends IVisualGraphObject>
+public class GraphObjectBasedValueTypeContainerStringConverter<T extends IGraphObjectBasedValueTypeContainer>
         extends StringConverter<T>
         implements IConfigurableStringConverter<T> {
 
-    private final ObjectProperty<VisualGraphObjectStringConverterConfiguration> configuration;
+    private final ObjectProperty<GraphObjectBasedValueTypeContainerStringConverterConfiguration> configuration;
 
 
 
     /**
-     * Creates a new instance of the {@link VisualGraphObjectStringConverter}
-     * class with the default configuration.
+     * Creates a new instance of the
+     * {@link GraphObjectBasedValueTypeContainerStringConverter} class with the
+     * default configuration.
      */
-    public VisualGraphObjectStringConverter() {
+    public GraphObjectBasedValueTypeContainerStringConverter() {
 
-        this(VisualGraphObjectStringConverterConfiguration.DEFAULT);
+        this(GraphObjectBasedValueTypeContainerStringConverterConfiguration.DEFAULT);
     }
 
     /**
-     * Creates a new instance of the {@link VisualGraphObjectStringConverter}
-     * class with the provided configuration.
+     * Creates a new instance of the
+     * {@link GraphObjectBasedValueTypeContainerStringConverter} class with the
+     * provided configuration.
      * 
      * @param configuration
      *            the configuration to use.
      */
-    public VisualGraphObjectStringConverter(
-            VisualGraphObjectStringConverterConfiguration configuration) {
+    public GraphObjectBasedValueTypeContainerStringConverter(
+            GraphObjectBasedValueTypeContainerStringConverterConfiguration configuration) {
 
         this.configuration = new SimpleObjectProperty<>(
                 configuration);
     }
 
     @Override
-    public ObjectProperty<VisualGraphObjectStringConverterConfiguration> configuration() {
+    public ObjectProperty<GraphObjectBasedValueTypeContainerStringConverterConfiguration> configuration() {
 
         return this.configuration;
     }
@@ -77,15 +82,15 @@ public class VisualGraphObjectStringConverter<T extends IVisualGraphObject>
     @Override
     public void configure(IStringConverterConfiguration configuration) {
 
-        if (configuration instanceof VisualGraphObjectStringConverterConfiguration) {
+        if (configuration instanceof GraphObjectBasedValueTypeContainerStringConverterConfiguration) {
 
             this.configuration
-                    .set((VisualGraphObjectStringConverterConfiguration) configuration);
+                    .set((GraphObjectBasedValueTypeContainerStringConverterConfiguration) configuration);
         }
     }
 
     @Override
-    public VisualGraphObjectStringConverterConfiguration getConfiguration() {
+    public GraphObjectBasedValueTypeContainerStringConverterConfiguration getConfiguration() {
 
         return this.configuration.get();
     }
@@ -104,13 +109,10 @@ public class VisualGraphObjectStringConverter<T extends IVisualGraphObject>
 
                     return item.toString();
 
-                case GRAPH_OBJECT_ID:
-
-                    return item.getGraphObjectID();
                 default:
-                case ID:
+                case KEY:
 
-                    return item.getID();
+                    return item.getKey();
             }
         }
     }
@@ -118,9 +120,10 @@ public class VisualGraphObjectStringConverter<T extends IVisualGraphObject>
     @Override
     public boolean equals(Object obj) {
 
-        if (obj != null && obj instanceof VisualGraphObjectStringConverter<?>) {
+        if (obj != null
+                && obj instanceof GraphObjectBasedValueTypeContainerStringConverter<?>) {
 
-            VisualGraphObjectStringConverter<?> other = (VisualGraphObjectStringConverter<?>) obj;
+            GraphObjectBasedValueTypeContainerStringConverter<?> other = (GraphObjectBasedValueTypeContainerStringConverter<?>) obj;
 
             boolean sameConfiguration = this.getConfiguration().equals(
                     other.getConfiguration());
@@ -143,6 +146,6 @@ public class VisualGraphObjectStringConverter<T extends IVisualGraphObject>
     public T fromString(String stringRepresentation) {
 
         throw new UnsupportedOperationException(
-                "Cannot create visual graph object from string!");
+                "Cannot create graph object from string!");
     }
 }

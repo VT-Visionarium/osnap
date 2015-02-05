@@ -61,7 +61,7 @@ public class SimpleColorLayoutConfigurationView
 
         this.colorLabel = new Label("Color:");
         this.colorValue = new Text();
-        this.colorValue.setStyle("-fx-font-weight: bold");
+        this.colorLabel.setStyle("-fx-font-weight: bold");
 
 
         this.add(this.colorLabel, 0, super.rowsUsed());

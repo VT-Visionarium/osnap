@@ -39,7 +39,7 @@ import edu.vt.arc.vis.osnap.javafx.wizards.configurations.PrefuseBalloonTreeLayo
  */
 public class PrefuseBalloonTreeLayoutConfigurationView
         extends
-        PrefuseTreeLayoutComponentConfigurationView<PrefuseBalloonTreeLayout, PrefuseBalloonTreeLayoutConfiguration> {
+        PrefuseTreeLayoutConfigurationView<PrefuseBalloonTreeLayout, PrefuseBalloonTreeLayoutConfiguration> {
 
     private final Label minimumRadiusLabel;
     private final Text  minimumRadiusValue;
@@ -59,7 +59,7 @@ public class PrefuseBalloonTreeLayoutConfigurationView
 
         this.minimumRadiusLabel = new Label("Minimum Radius:");
         this.minimumRadiusValue = new Text();
-        this.minimumRadiusValue.setStyle("-fx-font-weight: bold");
+        this.minimumRadiusLabel.setStyle("-fx-font-weight: bold");
 
 
         this.add(this.minimumRadiusLabel, 0,

@@ -40,7 +40,8 @@ import javax.xml.bind.annotation.XmlType;
  * @see BaseLayout
  * 
  * @author Peter J. Radics
- * @version 0.1
+ * @version 1.2.0
+ * @since 0.1.0
  */
 @XmlType(name = "BaseLabelTextLayout")
 public abstract class BaseLabelTextLayout
@@ -54,7 +55,7 @@ public abstract class BaseLabelTextLayout
      */
     public static String name() {
 
-        return "Label Text LayoutVisualizer Component";
+        return "Label Text Layout";
     }
 
 
@@ -71,8 +72,7 @@ public abstract class BaseLabelTextLayout
 
 
     /**
-     * Returns the capabilities (the set of
-     * {@link edu.vt.arc.vis.osnap.core.domain.visualization.VisualProperty
+     * Returns the capabilities (the set of {@link VisualProperty
      * VisualProperties} that can be provided) of this {@code ILayout}.
      * 
      * @return the capabilities.

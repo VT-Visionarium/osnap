@@ -28,7 +28,7 @@ import org.springframework.stereotype.Service;
 
 import edu.vt.arc.vis.osnap.core.domain.Project;
 import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
-import edu.vt.arc.vis.osnap.core.domain.layout.LayoutVisualizer;
+import edu.vt.arc.vis.osnap.core.domain.layout.LayoutSet;
 import edu.vt.arc.vis.osnap.events.NotFoundException;
 import edu.vt.arc.vis.osnap.events.RequestDeniedException;
 import edu.vt.arc.vis.osnap.events.RequestFailedException;
@@ -60,7 +60,7 @@ public class LayoutServiceImpl
 
     }
 
-    public LayoutVisualizer createLayout(String projectId, String universeId,
+    public LayoutSet createLayout(String projectId, String universeId,
             String layoutId)
             throws RequestDeniedException, RequestFailedException,
             NotFoundException {
@@ -69,15 +69,15 @@ public class LayoutServiceImpl
         Universe universe = this.dataStore.getUniverse(project);
 
 
-        LayoutVisualizer layoutVisualizer = new LayoutVisualizer(universe);
-        layoutVisualizer.setId(layoutId);
+        LayoutSet layoutSet = new LayoutSet(universe);
+        layoutSet.setId(layoutId);
 
-        project.addLayout(layoutVisualizer);
+        project.addLayout(layoutSet);
 
-        return layoutVisualizer;
+        return layoutSet;
     }
 
-    public List<LayoutVisualizer> retrieveAllLayouts(String projectId)
+    public List<LayoutSet> retrieveAllLayouts(String projectId)
             throws RequestDeniedException, RequestFailedException,
             NotFoundException {
 
@@ -86,7 +86,7 @@ public class LayoutServiceImpl
         return project.getLayouts();
     }
 
-    public LayoutVisualizer retrieveLayout(String projectId, String layoutId)
+    public LayoutSet retrieveLayout(String projectId, String layoutId)
             throws RequestDeniedException, RequestFailedException,
             NotFoundException {
 
@@ -96,16 +96,16 @@ public class LayoutServiceImpl
 
     }
 
-    public LayoutVisualizer deleteLayout(String projectId, String layoutId)
+    public LayoutSet deleteLayout(String projectId, String layoutId)
             throws RequestDeniedException, RequestFailedException,
             NotFoundException {
 
         Project project = this.dataStore.getProject(projectId);
 
-        LayoutVisualizer layoutVisualizer = this.dataStore.getLayout(project, layoutId);
+        LayoutSet layoutSet = this.dataStore.getLayout(project, layoutId);
 
-        project.removeLayout(layoutVisualizer);
+        project.removeLayout(layoutSet);
 
-        return layoutVisualizer;
+        return layoutSet;
     }
 }

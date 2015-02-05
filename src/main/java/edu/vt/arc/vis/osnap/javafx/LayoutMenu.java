@@ -33,55 +33,56 @@ import org.controlsfx.control.action.Action;
 import org.controlsfx.control.action.ActionUtils;
 
 import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
-import edu.vt.arc.vis.osnap.core.domain.layout.LayoutVisualizer;
+import edu.vt.arc.vis.osnap.core.domain.layout.LayoutSet;
 
 
 /**
- * 
+ * The {@code LayoutMenu} class provides the options pertaining to
+ * {@link LayoutSet LayoutSets}.
  * 
  * @author Peter J. Radics
- * @version 0.1
+ * @version 1.2.0
+ * @since 0.1.0
  */
-
 public class LayoutMenu
         extends Menu {
 
-    private final ObjectProperty<LayoutVisualizer>   layoutVisualizer;
-    private final ObjectProperty<Universe> universe;
+    private final ObjectProperty<LayoutSet> layoutSet;
+    private final ObjectProperty<Universe>  universe;
 
-    private final Action                   createDefaultMI;
-    private final Action                   createEmptyMI;
-    private final Action                   closeMI;
+    private final Action                    createDefaultMI;
+    private final Action                    createEmptyMI;
+    private final Action                    closeMI;
 
     /**
-     * Returns the layoutVisualizer property.
+     * Returns the layoutSet property.
      * 
-     * @return the layoutVisualizer property.
+     * @return the layoutSet property.
      */
-    public ObjectProperty<LayoutVisualizer> layoutVisualizer() {
+    public ObjectProperty<LayoutSet> layoutSet() {
 
-        return this.layoutVisualizer;
+        return this.layoutSet;
     }
 
     /**
-     * Returns the layoutVisualizer.
+     * Returns the layoutSet.
      * 
-     * @return the layoutVisualizer.
+     * @return the layoutSet.
      */
-    public LayoutVisualizer getLayout() {
+    public LayoutSet getLayout() {
 
-        return this.layoutVisualizer.get();
+        return this.layoutSet.get();
     }
 
     /**
-     * Sets the layoutVisualizer.
+     * Sets the layoutSet.
      * 
-     * @param layoutVisualizer
-     *            the layoutVisualizer.
+     * @param layoutSet
+     *            the layoutSet.
      */
-    public void setLayout(LayoutVisualizer layoutVisualizer) {
+    public void setLayout(LayoutSet layoutSet) {
 
-        this.layoutVisualizer.set(layoutVisualizer);
+        this.layoutSet.set(layoutSet);
     }
 
     /**
@@ -139,7 +140,7 @@ public class LayoutMenu
 
         super("Layout", graphic);
 
-        this.layoutVisualizer = new SimpleObjectProperty<>();
+        this.layoutSet = new SimpleObjectProperty<>();
         this.universe = new SimpleObjectProperty<>();
 
 
@@ -148,7 +149,7 @@ public class LayoutMenu
                 actionEvent -> {
 
 
-                    this.setLayout(LayoutVisualizer.defaultLayout(LayoutMenu.this
+                    this.setLayout(LayoutSet.defaultLayout(LayoutMenu.this
                             .getUniverse()));
                 });
 
@@ -156,13 +157,13 @@ public class LayoutMenu
         this.createEmptyMI = new Action("Create Empty Layout", actionEvent -> {
 
 
-            this.setLayout(new LayoutVisualizer(LayoutMenu.this.getUniverse()));
+            this.setLayout(new LayoutSet(LayoutMenu.this.getUniverse()));
         });
 
 
-        this.closeMI = new Action("Clear LayoutVisualizer", actionEvent -> {
+        this.closeMI = new Action("Clear Layout", actionEvent -> {
 
-            this.layoutVisualizer.set(null);
+            this.layoutSet.set(null);
         });
 
         this.closeMI.disabledProperty().set(true);
@@ -172,7 +173,7 @@ public class LayoutMenu
                 ActionUtils.createMenuItem(closeMI));
 
 
-        this.layoutVisualizer.addListener((observable, oldValue, newValue) -> {
+        this.layoutSet.addListener((observable, oldValue, newValue) -> {
 
             boolean requiresLayout = (newValue == null);
 

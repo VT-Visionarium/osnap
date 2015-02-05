@@ -35,15 +35,15 @@ import edu.vt.arc.vis.osnap.core.domain.graph.Graph;
 import edu.vt.arc.vis.osnap.core.domain.graph.HyperEdge;
 import edu.vt.arc.vis.osnap.core.domain.graph.Node;
 import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
-import edu.vt.arc.vis.osnap.core.domain.layout.LayoutVisualizer;
+import edu.vt.arc.vis.osnap.core.domain.layout.LayoutSet;
 import edu.vt.arc.vis.osnap.events.NotFoundException;
 import edu.vt.arc.vis.osnap.io.IOManager;
 
 
 /**
  * @author Peter J. Radics
- * @version 0.1
- * @since 0.1
+ * @version 1.2.0
+ * @since 1.1.0
  *
  */
 @Component
@@ -56,13 +56,6 @@ public class DataStore
     private ResourceLoader             resourceLoader;
     private final Map<String, Project> projects;
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.springframework.context.ResourceLoaderAware#setResourceLoader(org
-     * .springframework.core.io.ResourceLoader)
-     */
     @Override
     public void setResourceLoader(ResourceLoader resourceLoader) {
 
@@ -142,6 +135,11 @@ public class DataStore
         return project;
     }
 
+    /**
+     * @param project
+     * @return
+     * @throws NotFoundException
+     */
     public Universe getUniverse(final Project project)
             throws NotFoundException {
 
@@ -211,14 +209,14 @@ public class DataStore
     }
 
 
-    public LayoutVisualizer getLayout(final Project project, String id)
+    public LayoutSet getLayout(final Project project, String id)
             throws NotFoundException {
 
-        for (LayoutVisualizer layoutVisualizer : project.getLayouts()) {
+        for (LayoutSet layoutSet : project.getLayouts()) {
 
-            if (layoutVisualizer.getId().equals(id)) {
+            if (layoutSet.getId().equals(id)) {
 
-                return layoutVisualizer;
+                return layoutSet;
             }
         }
 

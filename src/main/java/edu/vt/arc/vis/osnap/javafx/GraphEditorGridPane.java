@@ -1,6 +1,29 @@
 package edu.vt.arc.vis.osnap.javafx;
 
 
+//@formatter:off
+/*
+* _
+* The Open Semantic Network Analysis Platform (OSNAP)
+* _
+* Copyright (C) 2012 - 2015 Visionarium at Virginia Tech
+* _
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*      http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+* _
+*/
+//@formatter:on
+
+
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Insets;
@@ -21,6 +44,7 @@ import edu.vt.arc.vis.osnap.core.domain.graph.Edge;
 import edu.vt.arc.vis.osnap.core.domain.graph.Graph;
 import edu.vt.arc.vis.osnap.core.domain.graph.Node;
 import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
+import edu.vt.arc.vis.osnap.core.domain.graph.common.IGraph;
 import edu.vt.arc.vis.osnap.core.domain.graph.metadata.Schema;
 import edu.vt.arc.vis.osnap.javafx.dialogs.EdgeDialog;
 import edu.vt.arc.vis.osnap.javafx.dialogs.EdgePropertiesDialog;
@@ -29,46 +53,47 @@ import edu.vt.arc.vis.osnap.javafx.dialogs.GraphPropertiesDialog;
 import edu.vt.arc.vis.osnap.javafx.dialogs.NodeDialog;
 import edu.vt.arc.vis.osnap.javafx.dialogs.NodePropertiesDialog;
 import edu.vt.arc.vis.osnap.javafx.events.MetadataChangedEvent;
-import edu.vt.arc.vis.osnap.javafx.stringConverters.GraphObjectStringConverter;
-import edu.vt.arc.vis.osnap.javafx.stringConverters.GraphObjectStringConverterConfiguration;
+import edu.vt.arc.vis.osnap.javafx.stringconverters.GraphObjectStringConverter;
+import edu.vt.arc.vis.osnap.javafx.stringconverters.GraphObjectStringConverterConfiguration;
 import edu.vt.arc.vis.osnap.javafx.widgets.MetaDataTable;
 import edu.vt.arc.vis.osnap.javafx.widgets.SchemaTableView;
 
 
+
 /**
- * Container for all the main display panes for universe elements, including
- * list views of graphs, nodes, edges, meta data, schema entries
- * 
- * @author Shawn P Neuman, Peter J. Radics
- * 
+ * The {@code GraphEditorGridPane} class provides editing functionality for
+ * {@link IGraph Graphs}.
+ *
+ * @author Shawn P Neuman
+ * @version 1.2.0
+ * @since 0.1.0
  */
-public class GraphDetailsVBox
-        extends VBox {
+public class GraphEditorGridPane
+        extends GridPane {
 
 
-    private GridPane                       grid1 = null;
-    private final ObjectProperty<Universe> universe;
-    private ListViewWithSearchPanel<Graph> graphListView;
-    private ListViewWithSearchPanel<Node>  nodeListView;
-    private ListViewWithSearchPanel<Edge>  edgeListView;
+    private final ObjectProperty<Universe>       universe;
+    private final ListViewWithSearchPanel<Graph> graphListView;
+    private final ListViewWithSearchPanel<Node>  nodeListView;
+    private final ListViewWithSearchPanel<Edge>  edgeListView;
 
-    private MetaDataTable                  graphMetaDataTable;
-    private MetaDataTable                  nodeMetaDataTable;
-    private MetaDataTable                  edgeMetaDataTable;
+    private final MetaDataTable                  graphMetaDataTable;
+    private final MetaDataTable                  nodeMetaDataTable;
+    private final MetaDataTable                  edgeMetaDataTable;
 
-    private SchemaTableView                graphSchemaTableView;
-    private SchemaTableView                nodeSchemaTableView;
-    private SchemaTableView                edgeSchemaTableView;
+    private final SchemaTableView                graphSchemaTableView;
+    private final SchemaTableView                nodeSchemaTableView;
+    private final SchemaTableView                edgeSchemaTableView;
 
-    private Schema                         graphSchema;
-    private Schema                         nodeSchema;
-    private Schema                         edgeSchema;
+    private Schema                               graphSchema;
+    private Schema                               nodeSchema;
+    private Schema                               edgeSchema;
 
 
 
     /**
      * Returns the universe property.
-     * 
+     *
      * @return the universe property.
      */
     public ObjectProperty<Universe> universe() {
@@ -78,7 +103,7 @@ public class GraphDetailsVBox
 
     /**
      * Returns the universe.
-     * 
+     *
      * @return the universe.
      */
     public Universe getUniverse() {
@@ -89,37 +114,35 @@ public class GraphDetailsVBox
 
     /**
      * Sets the universe.
-     * 
+     *
      * @param universe
      *            the universe.
      */
-    public void setUniverse(Universe universe) {
+    public void setUniverse(final Universe universe) {
 
         this.universe.set(universe);
     }
 
 
     /**
-     * constructor
+     * Creates a new instance of the {@code GraphEditorGridPane} class.
      */
-    public GraphDetailsVBox() {
+    public GraphEditorGridPane() {
 
         this.universe = new SimpleObjectProperty<>();
 
         this.setStyle("-fx-background-color: cornsilk");
-        // main grid pane
-        grid1 = new GridPane();
-        grid1.setPadding(new Insets(10, 10, 10, 10));
+        this.setPadding(new Insets(10, 10, 10, 10));
 
         // first inner v box to contain graph information
         // using v box to layout label, and then inner grid pane to arrange
         // list views and tables
 
-        VBox graphBox = new VBox();
+        final VBox graphBox = new VBox();
         graphBox.setStyle("-fx-border-color: #000000; -fx-border-width: 1px");
         graphBox.setAlignment(Pos.CENTER);
         graphBox.setPadding(new Insets(10, 10, 10, 10));
-        Text text = new Text();
+        final Text text = new Text();
         text.setFont(new Font(20));
         text.setStyle("-fx-font-weight: bold");
         text.setTextAlignment(TextAlignment.CENTER);
@@ -129,22 +152,22 @@ public class GraphDetailsVBox
 
         // inner grid pane to house graph info
 
-        GridPane graphGrid = new GridPane();
+        final GridPane graphGrid = new GridPane();
         graphGrid.setHgap(25);
         graphGrid.setVgap(10);
         graphGrid.setPadding(new Insets(10, 10, 10, 10));
 
         // houses node info
 
-        VBox nodeBox = new VBox();
+        final VBox nodeBox = new VBox();
         nodeBox.setStyle("-fx-border-color: #000000; -fx-border-width: 1px");
         nodeBox.setAlignment(Pos.CENTER);
         nodeBox.setPadding(new Insets(10, 10, 10, 10));
-        GridPane nodeGrid = new GridPane();
+        final GridPane nodeGrid = new GridPane();
         nodeGrid.setHgap(25);
         nodeGrid.setVgap(10);
         nodeGrid.setPadding(new Insets(10, 10, 10, 10));
-        Text text1 = new Text();
+        final Text text1 = new Text();
         text1.setFont(new Font(20));
         text1.setStyle("-fx-font-weight: bold");
         text1.setTextAlignment(TextAlignment.CENTER);
@@ -152,15 +175,15 @@ public class GraphDetailsVBox
         nodeBox.getChildren().add(text1);
 
         // houses edge info
-        VBox edgeBox = new VBox();
+        final VBox edgeBox = new VBox();
         edgeBox.setStyle("-fx-border-color: #000000; -fx-border-width: 1px");
         edgeBox.setAlignment(Pos.CENTER);
         edgeBox.setPadding(new Insets(10, 10, 10, 10));
-        GridPane edgeGrid = new GridPane();
+        final GridPane edgeGrid = new GridPane();
         edgeGrid.setHgap(25);
         edgeGrid.setVgap(10);
         edgeGrid.setPadding(new Insets(10, 10, 10, 10));
-        Text text2 = new Text();
+        final Text text2 = new Text();
         text2.setFont(new Font(20));
         text2.setStyle("-fx-font-weight: bold");
         text2.setTextAlignment(TextAlignment.CENTER);
@@ -169,67 +192,65 @@ public class GraphDetailsVBox
 
 
 
-        graphListView = new ListViewWithSearchPanel<>("Graphs",
+        this.graphListView = new ListViewWithSearchPanel<>("Graphs",
                 new GraphObjectStringConverter<Graph>(
                         GraphObjectStringConverterConfiguration.ID));
-        graphListView.setVisible(false);
+        this.graphListView.setVisible(false);
 
 
-        nodeListView = new ListViewWithSearchPanel<>("Nodes",
+        this.nodeListView = new ListViewWithSearchPanel<>("Nodes",
                 new GraphObjectStringConverter<Node>(
                         GraphObjectStringConverterConfiguration.ID));
-        nodeListView.setVisible(false);
+        this.nodeListView.setVisible(false);
 
 
-        edgeListView = new ListViewWithSearchPanel<>("Edges",
+        this.edgeListView = new ListViewWithSearchPanel<>("Edges",
                 new GraphObjectStringConverter<Edge>(
                         GraphObjectStringConverterConfiguration.ID));
-        edgeListView.setVisible(false);
+        this.edgeListView.setVisible(false);
 
 
-        graphMetaDataTable = new MetaDataTable("Graph Metadata");
-        graphMetaDataTable.setVisible(false);
+        this.graphMetaDataTable = new MetaDataTable("Graph Metadata");
+        this.graphMetaDataTable.setVisible(false);
 
-        nodeMetaDataTable = new MetaDataTable("Node Metadata");
-        nodeMetaDataTable.setVisible(false);
+        this.nodeMetaDataTable = new MetaDataTable("Node Metadata");
+        this.nodeMetaDataTable.setVisible(false);
 
-        edgeMetaDataTable = new MetaDataTable("Edge Metadata");
-        edgeMetaDataTable.setVisible(false);
+        this.edgeMetaDataTable = new MetaDataTable("Edge Metadata");
+        this.edgeMetaDataTable.setVisible(false);
 
-        graphSchemaTableView = new SchemaTableView("Graph Schema");
-        graphSchemaTableView.setVisible(false);
+        this.graphSchemaTableView = new SchemaTableView("Graph Schema");
+        this.graphSchemaTableView.setVisible(false);
 
-        nodeSchemaTableView = new SchemaTableView("Node Schema");
-        nodeSchemaTableView.setVisible(false);
+        this.nodeSchemaTableView = new SchemaTableView("Node Schema");
+        this.nodeSchemaTableView.setVisible(false);
 
-        edgeSchemaTableView = new SchemaTableView("Edge Schema");
-        edgeSchemaTableView.setVisible(false);
+        this.edgeSchemaTableView = new SchemaTableView("Edge Schema");
+        this.edgeSchemaTableView.setVisible(false);
 
 
-        graphGrid.add(graphListView, 0, 1);
-        graphGrid.add(graphMetaDataTable, 1, 1);
-        graphGrid.add(graphSchemaTableView, 0, 2, 2, 1);
+        graphGrid.add(this.graphListView, 0, 1);
+        graphGrid.add(this.graphMetaDataTable, 1, 1);
+        graphGrid.add(this.graphSchemaTableView, 0, 2, 2, 1);
 
         graphBox.getChildren().add(graphGrid);
 
-        nodeGrid.add(nodeListView, 0, 1);
-        nodeGrid.add(nodeMetaDataTable, 1, 1);
-        nodeGrid.add(nodeSchemaTableView, 0, 2, 2, 1);
+        nodeGrid.add(this.nodeListView, 0, 1);
+        nodeGrid.add(this.nodeMetaDataTable, 1, 1);
+        nodeGrid.add(this.nodeSchemaTableView, 0, 2, 2, 1);
 
         nodeBox.getChildren().add(nodeGrid);
 
-        edgeGrid.add(edgeListView, 0, 1);
-        edgeGrid.add(edgeMetaDataTable, 1, 1);
-        edgeGrid.add(edgeSchemaTableView, 0, 2, 2, 1);
+        edgeGrid.add(this.edgeListView, 0, 1);
+        edgeGrid.add(this.edgeMetaDataTable, 1, 1);
+        edgeGrid.add(this.edgeSchemaTableView, 0, 2, 2, 1);
 
         edgeBox.getChildren().add(edgeGrid);
 
 
-        grid1.add(graphBox, 0, 0);
-        grid1.add(nodeBox, 1, 0);
-        grid1.add(edgeBox, 2, 0);
-        this.getChildren().addAll(grid1);
-
+        this.add(graphBox, 0, 0);
+        this.add(nodeBox, 1, 0);
+        this.add(edgeBox, 2, 0);
 
         this.setUpEventHandlers();
         this.setUpContextMenus();
@@ -242,7 +263,7 @@ public class GraphDetailsVBox
      *            the universe being passed in, either from a file, or from
      *            creation
      */
-    private void populate(Universe universe) {
+    private void populate(final Universe universe) {
 
 
         this.graphListView.getItems().addAll(universe.getGraphs());
@@ -255,8 +276,8 @@ public class GraphDetailsVBox
         this.graphSchemaTableView.iterateCollection(this.graphSchema);
         this.graphSchemaTableView.setVisible(true);
 
-        this.nodeSchemaTableView.iterateCollection(nodeSchema);
-        this.edgeSchemaTableView.iterateCollection(edgeSchema);
+        this.nodeSchemaTableView.iterateCollection(this.nodeSchema);
+        this.edgeSchemaTableView.iterateCollection(this.edgeSchema);
     }
 
     /**
@@ -276,17 +297,17 @@ public class GraphDetailsVBox
         this.nodeSchemaTableView.clear();
         this.edgeSchemaTableView.clear();
 
-        graphListView.setVisible(false);
-        nodeListView.setVisible(false);
-        edgeListView.setVisible(false);
+        this.graphListView.setVisible(false);
+        this.nodeListView.setVisible(false);
+        this.edgeListView.setVisible(false);
 
-        graphMetaDataTable.setVisible(false);
-        nodeMetaDataTable.setVisible(false);
-        edgeMetaDataTable.setVisible(false);
+        this.graphMetaDataTable.setVisible(false);
+        this.nodeMetaDataTable.setVisible(false);
+        this.edgeMetaDataTable.setVisible(false);
 
-        graphSchemaTableView.setVisible(false);
-        nodeSchemaTableView.setVisible(false);
-        edgeSchemaTableView.setVisible(false);
+        this.graphSchemaTableView.setVisible(false);
+        this.nodeSchemaTableView.setVisible(false);
+        this.edgeSchemaTableView.setVisible(false);
 
     }
 
@@ -403,7 +424,7 @@ public class GraphDetailsVBox
 
     private void setUpContextMenus() {
 
-        Action addGraph = new Action("Add", actionEvent -> {
+        final Action addGraph = new Action("Add", actionEvent -> {
 
             new GraphDialog(this, "Create Graph", this.getUniverse(), null)
                     .showAndWait().ifPresent(newGraph -> {
@@ -413,9 +434,9 @@ public class GraphDetailsVBox
 
         });
 
-        Action editGraph = new Action("Edit", actionEvent -> {
+        final Action editGraph = new Action("Edit", actionEvent -> {
 
-            Graph graph = this.graphListView.getSelectedItem();
+            final Graph graph = this.graphListView.getSelectedItem();
 
             new GraphDialog(this, "Edit Graph", this.getUniverse(), graph)
                     .showAndWait().ifPresent(
@@ -428,10 +449,10 @@ public class GraphDetailsVBox
 
         });
 
-        Action removeGraph = new Action("Remove", actionEvent -> {
+        final Action removeGraph = new Action("Remove", actionEvent -> {
 
-            Graph graph = this.graphListView.getSelectedItem();
-            Alert alert = new Alert(AlertType.CONFIRMATION);
+            final Graph graph = this.graphListView.getSelectedItem();
+            final Alert alert = new Alert(AlertType.CONFIRMATION);
             alert.setTitle("Confirm removal!");
             alert.setContentText("Are you sure you want to remove graph "
                     + graph.getId() + "?");
@@ -446,11 +467,12 @@ public class GraphDetailsVBox
         });
 
 
-        Action graphProperties = new Action("Properties", actionEvent -> {
+        final Action graphProperties = new Action("Properties",
+                actionEvent -> {
 
-            Graph graph = this.graphListView.getSelectedItem();
-            new GraphPropertiesDialog(this, graph).show();
-        });
+                    final Graph graph = this.graphListView.getSelectedItem();
+                    new GraphPropertiesDialog(this, graph).show();
+                });
 
         this.graphListView.contextMenuActions().addAll(addGraph, editGraph,
                 removeGraph, graphProperties);
@@ -461,12 +483,12 @@ public class GraphDetailsVBox
                 MetadataChangedEvent.METADATA_CHANGED,
                 metadataEvent -> {
 
-                    MetadataChangedEvent.Change change = metadataEvent
+                    final MetadataChangedEvent.Change change = metadataEvent
                             .getChange();
 
                     switch (change) {
                         case ADD:
-                            graphSchemaTableView.iterateCollection(this
+                            this.graphSchemaTableView.iterateCollection(this
                                     .getUniverse().getNodeSchema());
                             break;
                         case REMOVE:
@@ -477,10 +499,10 @@ public class GraphDetailsVBox
 
 
 
-        Action addNode = new Action("Add", actionEvent -> {
+        final Action addNode = new Action("Add", actionEvent -> {
 
 
-            Graph graph = this.graphListView.getSelectedItem();
+            final Graph graph = this.graphListView.getSelectedItem();
             new NodeDialog(this, "Create Node", graph, null).showAndWait()
                     .ifPresent(newNode -> {
 
@@ -489,11 +511,11 @@ public class GraphDetailsVBox
 
         });
 
-        Action editNode = new Action("Edit", actionEvent -> {
+        final Action editNode = new Action("Edit", actionEvent -> {
 
-            Node node = this.nodeListView.getSelectedItem();
+            final Node node = this.nodeListView.getSelectedItem();
 
-            Graph graph = this.graphListView.getSelectedItem();
+            final Graph graph = this.graphListView.getSelectedItem();
 
             new NodeDialog(this, "Edit Node", graph, node).showAndWait()
                     .ifPresent(
@@ -505,10 +527,10 @@ public class GraphDetailsVBox
                             });
         });
 
-        Action removeNode = new Action("Remove", actionEvent -> {
+        final Action removeNode = new Action("Remove", actionEvent -> {
 
-            Node node = this.nodeListView.getSelectedItem();
-            Alert alert = new Alert(AlertType.CONFIRMATION);
+            final Node node = this.nodeListView.getSelectedItem();
+            final Alert alert = new Alert(AlertType.CONFIRMATION);
             alert.setTitle("Confirm removal!");
             alert.setContentText("Are you sure you want to remove node "
                     + node.getId() + "?");
@@ -523,9 +545,9 @@ public class GraphDetailsVBox
         });
 
 
-        Action nodeProperties = new Action("Properties", actionEvent -> {
+        final Action nodeProperties = new Action("Properties", actionEvent -> {
 
-            Node node = this.nodeListView.getSelectedItem();
+            final Node node = this.nodeListView.getSelectedItem();
             new NodePropertiesDialog(this, node).show();
         });
 
@@ -537,12 +559,12 @@ public class GraphDetailsVBox
                 MetadataChangedEvent.METADATA_CHANGED,
                 metadataEvent -> {
 
-                    MetadataChangedEvent.Change change = metadataEvent
+                    final MetadataChangedEvent.Change change = metadataEvent
                             .getChange();
 
                     switch (change) {
                         case ADD:
-                            nodeSchemaTableView.iterateCollection(this
+                            this.nodeSchemaTableView.iterateCollection(this
                                     .getUniverse().getNodeSchema());
                             break;
                         case REMOVE:
@@ -556,10 +578,10 @@ public class GraphDetailsVBox
 
 
 
-        Action addEdge = new Action("Add", actionEvent -> {
+        final Action addEdge = new Action("Add", actionEvent -> {
 
 
-            Graph graph = this.graphListView.getSelectedItem();
+            final Graph graph = this.graphListView.getSelectedItem();
 
             new EdgeDialog(this, "Create Edge", graph, null).showAndWait()
                     .ifPresent(newEdge -> {
@@ -569,11 +591,11 @@ public class GraphDetailsVBox
 
         });
 
-        Action editEdge = new Action("Edit", actionEvent -> {
+        final Action editEdge = new Action("Edit", actionEvent -> {
 
-            Edge edge = this.edgeListView.getSelectedItem();
+            final Edge edge = this.edgeListView.getSelectedItem();
 
-            Graph graph = this.graphListView.getSelectedItem();
+            final Graph graph = this.graphListView.getSelectedItem();
 
             new EdgeDialog(this, "Edit Edge", graph, edge).showAndWait()
                     .ifPresent(
@@ -585,11 +607,11 @@ public class GraphDetailsVBox
 
         });
 
-        Action removeEdge = new Action("Remove", actionEvent -> {
+        final Action removeEdge = new Action("Remove", actionEvent -> {
 
 
-            Edge edge = this.edgeListView.getSelectedItem();
-            Alert alert = new Alert(AlertType.CONFIRMATION);
+            final Edge edge = this.edgeListView.getSelectedItem();
+            final Alert alert = new Alert(AlertType.CONFIRMATION);
             alert.setTitle("Confirm removal!");
             alert.setContentText("Are you sure you want to remove edge "
                     + edge.getId() + "?");
@@ -604,10 +626,11 @@ public class GraphDetailsVBox
         });
 
 
-        Action edgeProperties = new Action("Properties", actionEvent -> {
+        final Action edgeProperties = new Action("Properties", actionEvent -> {
 
-            Edge edge = this.edgeListView.getSelectedItem();
-            EdgePropertiesDialog epd = new EdgePropertiesDialog(this, edge);
+            final Edge edge = this.edgeListView.getSelectedItem();
+            final EdgePropertiesDialog epd = new EdgePropertiesDialog(this,
+                    edge);
             epd.show();
         });
 
@@ -620,12 +643,12 @@ public class GraphDetailsVBox
                 MetadataChangedEvent.METADATA_CHANGED,
                 metadataEvent -> {
 
-                    MetadataChangedEvent.Change change = metadataEvent
+                    final MetadataChangedEvent.Change change = metadataEvent
                             .getChange();
 
                     switch (change) {
                         case ADD:
-                            edgeSchemaTableView.iterateCollection(this
+                            this.edgeSchemaTableView.iterateCollection(this
                                     .getUniverse().getNodeSchema());
                             break;
                         case REMOVE:

@@ -32,7 +32,7 @@ import org.x3d.model.X3DDocument;
 
 import edu.vt.arc.vis.osnap.core.domain.Project;
 import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
-import edu.vt.arc.vis.osnap.core.domain.layout.LayoutVisualizer;
+import edu.vt.arc.vis.osnap.core.domain.layout.LayoutSet;
 import edu.vt.arc.vis.osnap.core.domain.visualization.Visualization;
 import edu.vt.arc.vis.osnap.io.IOManager;
 import edu.vt.arc.vis.osnap.javafx.engine.JavaFX3DEngine;
@@ -74,8 +74,8 @@ public class JavaFXGui
     private Stage                                  stage;
     private Scene                                  scene;
 
-    private UniverseDetailsVBox                    universeDetails;
-    private GraphDetailsVBox                       graphDetails;
+    private UniverseEditorGridPane                    universeDetails;
+    private GraphEditorGridPane                       graphDetails;
     private LayoutDetailsVBox                      layoutDetails;
     private VisualizationDetailsVBox               visDetails;
     private TabPane                                tabPane;
@@ -83,7 +83,7 @@ public class JavaFXGui
 
     private final ObjectProperty<Project>          project;
     private final ObjectProperty<Universe>         universe;
-    private final ObjectProperty<LayoutVisualizer> layoutVisualizer;
+    private final ObjectProperty<LayoutSet> layoutSet;
     private final ObjectProperty<Visualization>    visualization;
 
     private Tab                                    graphInformationTab;
@@ -160,34 +160,34 @@ public class JavaFXGui
     }
 
     /**
-     * Returns the layoutVisualizer property.
+     * Returns the layoutSet property.
      * 
-     * @return the layoutVisualizer property.
+     * @return the layoutSet property.
      */
-    public ObjectProperty<LayoutVisualizer> layoutVisualizer() {
+    public ObjectProperty<LayoutSet> layoutSet() {
 
-        return this.layoutVisualizer;
+        return this.layoutSet;
     }
 
     /**
-     * Returns the layoutVisualizer.
+     * Returns the layoutSet.
      * 
-     * @return the layoutVisualizer.
+     * @return the layoutSet.
      */
-    public LayoutVisualizer getLayout() {
+    public LayoutSet getLayout() {
 
-        return layoutVisualizer.get();
+        return layoutSet.get();
     }
 
     /**
-     * Sets the layoutVisualizer.
+     * Sets the layoutSet.
      * 
-     * @param layoutVisualizer
-     *            the layoutVisualizer.
+     * @param layoutSet
+     *            the layoutSet.
      */
-    public void setLayout(LayoutVisualizer layoutVisualizer) {
+    public void setLayout(LayoutSet layoutSet) {
 
-        this.layoutVisualizer.set(layoutVisualizer);
+        this.layoutSet.set(layoutSet);
     }
 
     /**
@@ -244,7 +244,7 @@ public class JavaFXGui
 
         this.project = new SimpleObjectProperty<>();
         this.universe = new SimpleObjectProperty<>();
-        this.layoutVisualizer = new SimpleObjectProperty<>();
+        this.layoutSet = new SimpleObjectProperty<>();
         this.visualization = new SimpleObjectProperty<>();
     }
 
@@ -300,16 +300,16 @@ public class JavaFXGui
                     }
                 });
 
-        this.universeDetails = new UniverseDetailsVBox();
+        this.universeDetails = new UniverseEditorGridPane();
         this.universeDetails.universe().bindBidirectional(this.universe);
 
-        this.graphDetails = new GraphDetailsVBox();
+        this.graphDetails = new GraphEditorGridPane();
         this.graphDetails.universe().bindBidirectional(this.universe);
 
         this.layoutDetails = new LayoutDetailsVBox();
         this.layoutDetails.universe().bindBidirectional(this.universe);
         this.layoutDetails.layoutProperty().bindBidirectional(
-                this.layoutVisualizer);
+                this.layoutSet);
         this.layoutDetails.visualization()
                 .bindBidirectional(this.visualization);
 
@@ -365,7 +365,7 @@ public class JavaFXGui
 
                         // System.out.println("Layouts: " +
                         // newValue.getLayouts());
-                        JavaFXGui.this.layoutVisualizer.set(newValue
+                        JavaFXGui.this.layoutSet.set(newValue
                                 .getLayouts().get(0));
                     }
                     if (!newValue.getVisualizations().isEmpty()) {
@@ -394,20 +394,20 @@ public class JavaFXGui
 
                 if (requiresUniverse) {
 
-                    layoutVisualizer.set(null);
+                    layoutSet.set(null);
                     visualization.set(null);
                 }
             }
 
         });
 
-        this.layoutVisualizer
-                .addListener(new ChangeListener<LayoutVisualizer>() {
+        this.layoutSet
+                .addListener(new ChangeListener<LayoutSet>() {
 
                     @Override
                     public void changed(
-                            ObservableValue<? extends LayoutVisualizer> observable,
-                            LayoutVisualizer oldValue, LayoutVisualizer newValue) {
+                            ObservableValue<? extends LayoutSet> observable,
+                            LayoutSet oldValue, LayoutSet newValue) {
 
 
                         boolean requiresLayout = (newValue == null);
@@ -417,7 +417,7 @@ public class JavaFXGui
                         if (JavaFXGui.this.getProject() != null) {
                             JavaFXGui.this.getProject().clearLayouts();
                         }
-                        // LayoutVisualizer not null
+                        // LayoutSet not null
                         if (!requiresLayout) {
 
                             if (JavaFXGui.this.getProject() != null) {
@@ -427,7 +427,7 @@ public class JavaFXGui
                             tabPane.getSelectionModel().select(
                                     layoutInformationTab);
                         }
-                        // LayoutVisualizer null
+                        // LayoutSet null
                         else {
 
                             visualization.set(null);
@@ -525,16 +525,16 @@ public class JavaFXGui
         this.project.bind(this.fileMenu.project());
 
         this.layoutMenu = new LayoutMenu(this.stage);
-        this.layoutMenu.layoutVisualizer().bindBidirectional(
-                this.layoutVisualizer);
+        this.layoutMenu.layoutSet().bindBidirectional(
+                this.layoutSet);
         this.layoutMenu.universe().bindBidirectional(this.universe);
         this.layoutMenu.setDisable(true);
 
         this.visualizationMenu = new VisualizationMenu(this.stage);
         this.visualizationMenu.visualization().bindBidirectional(
                 this.visualization);
-        this.visualizationMenu.layoutVisualizer().bindBidirectional(
-                this.layoutVisualizer);
+        this.visualizationMenu.layoutSet().bindBidirectional(
+                this.layoutSet);
         this.visualizationMenu.universe().bindBidirectional(this.universe);
         this.visualizationMenu.setDisable(true);
 

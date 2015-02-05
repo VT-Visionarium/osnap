@@ -35,6 +35,7 @@ import edu.vt.arc.vis.osnap.javafx.wizards.pages.NamingPage;
 import edu.vt.arc.vis.osnap.javafx.wizards.pages.PrefuseBalloonTreeLayoutPage;
 import edu.vt.arc.vis.osnap.javafx.wizards.pages.PrefuseLayoutPage;
 import edu.vt.arc.vis.osnap.javafx.wizards.pages.RootNodeSelectionPage;
+import edu.vt.arc.vis.osnap.javafx.wizards.pages.RoutingPage;
 
 
 
@@ -76,16 +77,19 @@ public class PrefuseBalloonTreeLayoutWizard
         WizardPane page2 = new GraphObjectSelectionPage<>(
                 this.configurationView, universe);
 
-        WizardPane page3 = new RootNodeSelectionPage<>(this.configurationView);
+        WizardPane page3 = new RoutingPage<>(this.configurationView,
+                PrefuseBalloonTreeLayout.components());
+        
+        WizardPane page4 = new RootNodeSelectionPage<>(this.configurationView);
 
-        WizardPane page4 = new PrefuseBalloonTreeLayoutPage(
+        WizardPane page5 = new PrefuseBalloonTreeLayoutPage(
                 this.configurationView);
 
-        WizardPane page5 = new PrefuseLayoutPage<>(this.configurationView);
+        WizardPane page6 = new PrefuseLayoutPage<>(this.configurationView);
 
-        WizardPane page6 = new NamingPage<>(this.configurationView);
+        WizardPane page7 = new NamingPage<>(this.configurationView);
 
-        this.setFlow(new LinearFlow(page1, page2, page3, page4, page5, page6));
+        this.setFlow(new LinearFlow(page1, page2, page3, page4, page5, page6, page7));
     }
 
     @Override

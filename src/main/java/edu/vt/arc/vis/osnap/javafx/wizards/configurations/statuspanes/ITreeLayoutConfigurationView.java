@@ -41,7 +41,7 @@ import edu.vt.arc.vis.osnap.javafx.wizards.configurations.ITreeLayoutConfigurati
  * @since 1.2.0
  */
 public interface ITreeLayoutConfigurationView<O extends ITreeLayout, C extends ITreeLayoutConfiguration<O>>
-        extends ILayoutConfigurationView<O, C> {
+        extends ICoordinateLayoutConfigurationView<O, C> {
 
     // tagging interface
 }

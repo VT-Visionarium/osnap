@@ -38,7 +38,6 @@ package edu.vt.arc.vis.osnap.javafx.widgets;
  */
 
 
-import edu.vt.arc.vis.osnap.javafx.wizards.content.GraphObjectTreeView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 

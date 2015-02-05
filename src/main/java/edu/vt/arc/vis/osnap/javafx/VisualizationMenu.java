@@ -37,24 +37,26 @@ import org.controlsfx.control.action.ActionUtils;
 import org.x3d.model.X3DDocument;
 
 import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
-import edu.vt.arc.vis.osnap.core.domain.layout.LayoutVisualizer;
+import edu.vt.arc.vis.osnap.core.domain.layout.LayoutSet;
 import edu.vt.arc.vis.osnap.core.domain.visualization.Visualization;
 import edu.vt.arc.vis.osnap.io.IOManager;
 
 
+
 /**
- * 
+ * The {@code VisualizationMenu} class provides the options pertaining to
+ * {@link Visualization Visualizations}.
  * 
  * @author Peter J. Radics
- * @version 0.1
+ * @version 1.2.0
+ * @since 0.1.0
  */
-
 public class VisualizationMenu
         extends Menu {
 
     private final Stage                         stage;
     private final ObjectProperty<Visualization> visualization;
-    private final ObjectProperty<LayoutVisualizer>        layoutVisualizer;
+    private final ObjectProperty<LayoutSet>     layoutSet;
     private final ObjectProperty<Universe>      universe;
 
     private final Action                        createFromLayoutMI;
@@ -105,34 +107,34 @@ public class VisualizationMenu
     }
 
     /**
-     * Returns the layoutVisualizer property.
+     * Returns the layoutSet property.
      * 
-     * @return the layoutVisualizer property.
+     * @return the layoutSet property.
      */
-    public ObjectProperty<LayoutVisualizer> layoutVisualizer() {
+    public ObjectProperty<LayoutSet> layoutSet() {
 
-        return this.layoutVisualizer;
+        return this.layoutSet;
     }
 
     /**
-     * Returns the layoutVisualizer.
+     * Returns the layoutSet.
      * 
-     * @return the layoutVisualizer.
+     * @return the layoutSet.
      */
-    public LayoutVisualizer getLayout() {
+    public LayoutSet getLayout() {
 
-        return this.layoutVisualizer.get();
+        return this.layoutSet.get();
     }
 
     /**
-     * Sets the layoutVisualizer.
+     * Sets the layoutSet.
      * 
-     * @param layoutVisualizer
-     *            the layoutVisualizer.
+     * @param layoutSet
+     *            the layoutSet.
      */
-    public void setLayout(LayoutVisualizer layoutVisualizer) {
+    public void setLayout(LayoutSet layoutSet) {
 
-        this.layoutVisualizer.set(layoutVisualizer);
+        this.layoutSet.set(layoutSet);
     }
 
     /**
@@ -181,11 +183,11 @@ public class VisualizationMenu
 
         this.stage = stage;
         this.visualization = new SimpleObjectProperty<>();
-        this.layoutVisualizer = new SimpleObjectProperty<>();
+        this.layoutSet = new SimpleObjectProperty<>();
         this.universe = new SimpleObjectProperty<>();
 
         this.createFromLayoutMI = new Action(
-                "Create Visualization from LayoutVisualizer", actionEvent -> {
+                "Create Visualization from LayoutSet", actionEvent -> {
 
                     this.getLayout().layout();
                     this.setVisualization(null);
@@ -232,19 +234,16 @@ public class VisualizationMenu
 
 
 
-        this.visualization.addListener((
-                    observable,
-                     oldValue,  newValue) ->{
+        this.visualization.addListener((observable, oldValue, newValue) -> {
 
-                boolean requiresVisualization = (newValue == null);
+            boolean requiresVisualization = (newValue == null);
 
 
-                this.createFromLayoutMI.disabledProperty().set(
-                        !requiresVisualization);
+            this.createFromLayoutMI.disabledProperty().set(
+                    !requiresVisualization);
 
-                this.exportToX3DMI.disabledProperty()
-                        .set(requiresVisualization);
-                this.closeMI.disabledProperty().set(requiresVisualization);
+            this.exportToX3DMI.disabledProperty().set(requiresVisualization);
+            this.closeMI.disabledProperty().set(requiresVisualization);
         });
     }
 }

@@ -31,7 +31,6 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
-import javafx.geometry.Insets;
 import javafx.scene.layout.GridPane;
 
 import org.controlsfx.validation.Validator;
@@ -292,7 +291,6 @@ public class RoutingGridPane
 
         this.setHgap(25);
         this.setVgap(10);
-        this.setPadding(new Insets(10, 10, 10, 10));
 
         this.validationGroup = new ValidationGroup();
 
@@ -302,16 +300,19 @@ public class RoutingGridPane
                 .observableSet(new LinkedHashSet<>());
         this.layoutProperty = new SimpleObjectProperty<>();
 
-        this.xCoordinate = new LabeledComboBox<>(
-                "Output to use for X coordinate");
-        this.yCoordinate = new LabeledComboBox<>(
-                "Output to use for Y coordinate");
-        this.zCoordinate = new LabeledComboBox<>(
-                "Output to use for Z coordinate");
+        this.xCoordinate = new LabeledComboBox<>("Output for X");
+        this.xCoordinate.setHgap(10);
+        this.yCoordinate = new LabeledComboBox<>("Output for Y");
+        this.yCoordinate.setHgap(10);
+        this.zCoordinate = new LabeledComboBox<>("Output for Z");
+        this.zCoordinate.setHgap(10);
 
-        this.firstComponentScale = new LabeledTextField("scaled by factor");
-        this.secondComponentScale = new LabeledTextField("scaled by factor");
-        this.thirdComponentScale = new LabeledTextField("scaled by factor");
+        this.firstComponentScale = new LabeledTextField("scaled by");
+        this.firstComponentScale.setHgap(10);
+        this.secondComponentScale = new LabeledTextField("scaled by");
+        this.secondComponentScale.setHgap(10);
+        this.thirdComponentScale = new LabeledTextField("scaled by");
+        this.thirdComponentScale.setHgap(10);
 
 
         this.xCoordinate.getItems().addAll(CoordinateComponent.values());

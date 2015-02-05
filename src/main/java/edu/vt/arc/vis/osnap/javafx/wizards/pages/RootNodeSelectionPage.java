@@ -41,8 +41,8 @@ import edu.vt.arc.vis.osnap.javafx.wizards.configurations.statuspanes.ITreeLayou
 
 
 /**
- * The {@code RootNodeSelectionPage} provides a page for selecting the root {@link INode}
- * of a {@link ITreeLayout}.
+ * The {@code RootNodeSelectionPage} provides a page for selecting the root
+ * {@link INode} of a {@link ITreeLayout}.
  * 
  * @param <O>
  *            the type of the {@link ITreeLayout}.
@@ -72,12 +72,12 @@ public class RootNodeSelectionPage<O extends ITreeLayout, C extends ITreeLayoutC
 
         super("Select Root Node", configurationView);
 
+        this.availableNodes = new ListViewWithSearchPanel<>("Available Nodes");
+        this.availableNodes.getLabel().setStyle("-fx-font-weight: bold");
+        this.availableNodes.setVgap(10);
 
 
-        availableNodes = new ListViewWithSearchPanel<>("Available Nodes");
-
-
-        this.getContentGridPane().add(availableNodes, 0, 0);
+        this.getContentGridPane().add(this.availableNodes, 0, 0);
     }
 
     @Override

@@ -142,10 +142,10 @@ public abstract class LayoutConfigurationWizardPage<O extends ILayout, C extends
 
 
         ColumnConstraints contentColumn = new ColumnConstraints();
-        contentColumn.setPercentWidth(60);
+        contentColumn.setPercentWidth(50);
 
         ColumnConstraints statusColumn = new ColumnConstraints();
-        statusColumn.setPercentWidth(40);
+        statusColumn.setPercentWidth(50);
 
         this.splitPane.getColumnConstraints().addAll(contentColumn,
                 statusColumn);

@@ -202,7 +202,7 @@ public enum VisualProperty
     @Override
     public String toString() {
 
-        return key;
+        return this.name;
     }
 
 

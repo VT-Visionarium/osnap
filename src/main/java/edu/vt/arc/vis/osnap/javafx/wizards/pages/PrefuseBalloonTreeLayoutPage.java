@@ -62,9 +62,11 @@ public class PrefuseBalloonTreeLayoutPage
         super("Set minimum radius of the Balloon Tree Layout",
                 configurationView);
 
-        minimumRadiusTF = new LabeledTextField("Minimum Radius");
+        this.minimumRadiusTF = new LabeledTextField("Minimum Radius");
+        this.minimumRadiusTF.setHgap(10);
+        this.minimumRadiusTF.getLabel().setStyle("-fx-font-weight: bold");
 
-        this.getContentGridPane().add(minimumRadiusTF, 0, 0);
+        this.getContentGridPane().add(this.minimumRadiusTF, 0, 0);
 
         this.setupValidation();
     }

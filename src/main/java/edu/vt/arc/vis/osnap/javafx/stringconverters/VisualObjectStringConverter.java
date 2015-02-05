@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 
-package edu.vt.arc.vis.osnap.javafx.stringConverters;
+package edu.vt.arc.vis.osnap.javafx.stringconverters;
 
 /*
  * _

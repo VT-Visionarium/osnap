@@ -40,7 +40,7 @@ import edu.vt.arc.vis.osnap.core.domain.visualization.VisualProperty;
 
 /**
  * The abstract {@code BasePrefuseTreeLayout} class provides common
- * functionality of all @{link IPrefuseTreeLayoutComponent
+ * functionality of all @{link IPrefuseTreeLayout
  * IPrefuseTreeLayoutComponents} based on the {@link prefuse Prefuse} toolkit.
  * <p>
  * Notably, it provides the mechanics for setting the root {@link INode Node} of
@@ -53,7 +53,7 @@ import edu.vt.arc.vis.osnap.core.domain.visualization.VisualProperty;
 @XmlType(name = "BasePrefuseTreeLayout")
 public abstract class BasePrefuseTreeLayout
         extends BasePrefuseLayout
-        implements IPrefuseTreeLayoutComponent {
+        implements IPrefuseTreeLayout {
 
     @XmlElement(name = "RootNode", type = NodeBase.class)
     private final INode rootNode;

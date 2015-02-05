@@ -35,6 +35,7 @@ import edu.vt.arc.vis.osnap.javafx.wizards.pages.GraphObjectSelectionPage;
 import edu.vt.arc.vis.osnap.javafx.wizards.pages.NamingPage;
 import edu.vt.arc.vis.osnap.javafx.wizards.pages.PrefuseForceDirectedLayoutPage;
 import edu.vt.arc.vis.osnap.javafx.wizards.pages.PrefuseLayoutPage;
+import edu.vt.arc.vis.osnap.javafx.wizards.pages.RoutingPage;
 
 
 
@@ -77,14 +78,17 @@ public class PrefuseForceDirectedLayoutWizard
         WizardPane page2 = new GraphObjectSelectionPage<>(
                 this.configurationView, universe);
 
-        WizardPane page3 = new PrefuseForceDirectedLayoutPage(
+        WizardPane page3 = new RoutingPage<>(this.configurationView,
+                PrefuseForceDirectedLayout.components());
+        
+        WizardPane page4 = new PrefuseForceDirectedLayoutPage(
                 this.configurationView);
 
-        WizardPane page4 = new PrefuseLayoutPage<>(this.configurationView);
+        WizardPane page5 = new PrefuseLayoutPage<>(this.configurationView);
 
-        WizardPane page5 = new NamingPage<>(this.configurationView);
+        WizardPane page6 = new NamingPage<>(this.configurationView);
 
-        this.setFlow(new LinearFlow(page1, page2, page3, page4, page5));
+        this.setFlow(new LinearFlow(page1, page2, page3, page4, page5, page6));
     }
 
     @Override

@@ -11,9 +11,9 @@ package edu.vt.arc.vis.osnap.javafx.wizards.configurations.statuspanes;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -42,8 +42,8 @@ public class PrefuseFruchtermanReingoldLayoutConfigurationView
         extends
         PrefuseLayoutConfigurationView<PrefuseFruchtermanReingoldLayout, PrefuseFruchtermanReingoldLayoutConfiguration> {
 
-    private Label maximumIterationsLabel;
-    private Text  maximumIterationsValue;
+    private final Label maximumIterationsLabel;
+    private final Text  maximumIterationsValue;
 
 
     /**
@@ -57,14 +57,14 @@ public class PrefuseFruchtermanReingoldLayoutConfigurationView
 
         super(title, new PrefuseFruchtermanReingoldLayoutConfiguration(), 1);
 
-        maximumIterationsLabel = new Label("Maximum Iterations: ");
-        maximumIterationsValue = new Text();
-        maximumIterationsValue.setStyle("-fx-font-weight: bold");
+        this.maximumIterationsLabel = new Label("Maximum Iterations:");
+        this.maximumIterationsValue = new Text();
+        this.maximumIterationsLabel.setStyle("-fx-font-weight: bold");
 
-        this.add(maximumIterationsLabel, 0,
-                super.rowsUsed() + super.getOffset() - 2);
-        this.add(maximumIterationsValue, 1,
-                super.rowsUsed() + super.getOffset() - 2);
+        this.add(this.maximumIterationsLabel, 0,
+                (super.rowsUsed() + super.getOffset()) - 2);
+        this.add(this.maximumIterationsValue, 1,
+                (super.rowsUsed() + super.getOffset()) - 2);
     }
 
 
@@ -73,13 +73,12 @@ public class PrefuseFruchtermanReingoldLayoutConfigurationView
 
         super.refreshView();
 
-        maximumIterationsValue.setText("");
+        this.maximumIterationsValue.setText("");
 
         if (this.getConfiguration() != null) {
 
-            maximumIterationsValue.setText(""
+            this.maximumIterationsValue.setText(""
                     + this.getConfiguration().getMaximumIterations());
-
         }
     }
 }

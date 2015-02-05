@@ -55,7 +55,7 @@ public abstract class BaseShapeLayout
      */
     public static String name() {
 
-        return "Scale LayoutVisualizer Component";
+        return "Shape Layout";
     }
 
 
@@ -81,7 +81,6 @@ public abstract class BaseShapeLayout
     public static Set<VisualProperty> capabilities() {
 
         return EnumSet.of(VisualProperty.EDGE_SHAPE,
-        // VisualProperty.HYPEREDGE_SHAPE,
                 VisualProperty.NODE_SHAPE);
     }
 
@@ -124,5 +123,4 @@ public abstract class BaseShapeLayout
 
         super(capabilities, name, description, randomizeName);
     }
-
 }

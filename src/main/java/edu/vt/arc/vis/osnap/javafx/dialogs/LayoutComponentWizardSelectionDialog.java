@@ -37,20 +37,23 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Window;
 import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
-import edu.vt.arc.vis.osnap.core.domain.layout.LayoutComponentRegistry;
+import edu.vt.arc.vis.osnap.core.domain.layout.LayoutRegistry;
 import edu.vt.arc.vis.osnap.core.domain.layout.common.I2DCoordinateLayout;
 import edu.vt.arc.vis.osnap.core.domain.layout.common.I3DCoordinateLayout;
 import edu.vt.arc.vis.osnap.core.domain.layout.common.ILayout;
 import edu.vt.arc.vis.osnap.core.domain.layout.common.IMappedLayout;
 import edu.vt.arc.vis.osnap.javafx.wizards.ILayoutConfigurationWizard;
+import edu.vt.arc.vis.osnap.javafx.wizards.Wizard;
 
 
 /**
- * Dialog page for selecting predefined mapping layout parameters or launching
- * the new display selection wizard.
+ * The {@code LayoutComponentWizardSelectionDialog} class provides a
+ * {@link Dialog} for selecting a layout to be created (by way of a
+ * {@link Wizard}).
  * 
  * @author Peter J. Radics, Shawn P. Neuman
- * 
+ * @version 1.2.0
+ * @since 0.5.0
  */
 public class LayoutComponentWizardSelectionDialog
         extends Dialog<ILayoutConfigurationWizard<?, ?>> {
@@ -127,17 +130,17 @@ public class LayoutComponentWizardSelectionDialog
         this.content.add(special, 3, 0);
 
 
-        for (Class<? extends ILayout> layoutComponentClass : LayoutComponentRegistry
+        for (Class<? extends ILayout> layoutComponentClass : LayoutRegistry
                 .Instance().getLayoutComponentClasses()) {
 
-            String name = LayoutComponentRegistry.Instance()
+            String name = LayoutRegistry.Instance()
                     .getNameOfLayoutComponentClass(layoutComponentClass);
 
             final RadioButton button = new RadioButton(name);
             button.setToggleGroup(this.group);
 
             Tooltip tip = new Tooltip();
-            tip.setText(LayoutComponentRegistry.Instance()
+            tip.setText(LayoutRegistry.Instance()
                     .getDescriptionOfLayoutComponent(name));
             button.setTooltip(tip);
 
@@ -184,11 +187,11 @@ public class LayoutComponentWizardSelectionDialog
 
                     String layoutComponentClassName = radioButton.getText();
 
-                    Class<? extends ILayout> layoutComponentClass = LayoutComponentRegistry
+                    Class<? extends ILayout> layoutComponentClass = LayoutRegistry
                             .Instance().getClassOfLayoutComponent(
                                     layoutComponentClassName);
 
-                    return LayoutComponentRegistry.Instance()
+                    return LayoutRegistry.Instance()
                             .createWizardForLayoutComponentClass(
                                     layoutComponentClass, owner, this.universe);
                 }

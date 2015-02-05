@@ -25,6 +25,8 @@ package edu.vt.arc.vis.osnap.javafx.wizards.pages;
 
 
 
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import edu.vt.arc.vis.osnap.core.domain.graph.common.IGraphObjectBasedValueTypeContainer;
 import edu.vt.arc.vis.osnap.core.domain.layout.common.IMappedLayout;
 import edu.vt.arc.vis.osnap.javafx.wizards.Wizard;
@@ -64,6 +66,8 @@ public class DomainKeyValueSelectionPage
 
 
         this.selectionGridPane = new DomainKeyValueSelectionGridPane();
+        GridPane.setVgrow(this.selectionGridPane, Priority.SOMETIMES);
+        GridPane.setHgrow(this.selectionGridPane, Priority.SOMETIMES);
 
         this.getContentGridPane().add(this.selectionGridPane, 0, 0);
     }

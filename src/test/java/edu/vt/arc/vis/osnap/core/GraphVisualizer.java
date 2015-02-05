@@ -10,7 +10,7 @@ import org.x3d.model.X3DDocument;
 
 import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
 import edu.vt.arc.vis.osnap.core.domain.graph.common.INode;
-import edu.vt.arc.vis.osnap.core.domain.layout.LayoutVisualizer;
+import edu.vt.arc.vis.osnap.core.domain.layout.LayoutSet;
 import edu.vt.arc.vis.osnap.core.domain.layout.common.ILayout;
 import edu.vt.arc.vis.osnap.core.domain.layout.complexComponents.TieredOrbitalLayout;
 import edu.vt.arc.vis.osnap.core.domain.visualization.VisualProperty;
@@ -221,7 +221,7 @@ public class GraphVisualizer {
 
         System.out.println("======================================\n\nLayout:");
 
-        LayoutVisualizer layoutVisualizer = LayoutVisualizer.defaultLayout(universe);
+        LayoutSet layoutSet = LayoutSet.defaultLayout(universe);
 
 
         INode rootNode = universe.getNode("owl:Thing");
@@ -317,7 +317,7 @@ public class GraphVisualizer {
         // VisualProperty.NODE_SHAPE);
 
         ILayout defaultCoordinates = null;
-        for (KeyValuePair<ILayout, VisualProperty> pair : layoutVisualizer
+        for (KeyValuePair<ILayout, VisualProperty> pair : layoutSet
                 .getLayoutComponents()) {
 
             switch (pair.getValue()) {
@@ -333,30 +333,30 @@ public class GraphVisualizer {
             }
         }
 
-        layoutVisualizer.removeLayoutProviderForVisualProperty(defaultCoordinates,
+        layoutSet.removeLayoutProviderForVisualProperty(defaultCoordinates,
                 VisualProperty.NODE_X_POSITION);
-        layoutVisualizer.removeLayoutProviderForVisualProperty(defaultCoordinates,
+        layoutSet.removeLayoutProviderForVisualProperty(defaultCoordinates,
                 VisualProperty.NODE_Y_POSITION);
-        layoutVisualizer.removeLayoutProviderForVisualProperty(defaultCoordinates,
+        layoutSet.removeLayoutProviderForVisualProperty(defaultCoordinates,
                 VisualProperty.NODE_Z_POSITION);
 
-        layoutVisualizer.addLayoutProviderForVisualProperty(provider,
+        layoutSet.addLayoutForVisualProperty(provider,
                 VisualProperty.NODE_X_POSITION);
-        layoutVisualizer.addLayoutProviderForVisualProperty(provider,
+        layoutSet.addLayoutForVisualProperty(provider,
                 VisualProperty.NODE_Y_POSITION);
-        layoutVisualizer.addLayoutProviderForVisualProperty(provider,
+        layoutSet.addLayoutForVisualProperty(provider,
                 VisualProperty.NODE_Z_POSITION);
 
         System.out.println("LayoutComponents: ");
-        for (KeyValuePair<ILayout, VisualProperty> component : layoutVisualizer
+        for (KeyValuePair<ILayout, VisualProperty> component : layoutSet
                 .getLayoutComponents()) {
             System.out.println("\t" + component.getValue() + ": "
                     + component.getKey().getName());
         }
 
-        System.out.print("\nApplying LayoutVisualizer to Visualization.");
+        System.out.print("\nApplying LayoutSet to Visualization.");
 
-        layoutVisualizer.layout();
+        layoutSet.layout();
 
         System.out.println(" Done.");
 
@@ -366,7 +366,7 @@ public class GraphVisualizer {
 
 
 
-        Visualization visualization = layoutVisualizer.getVisualization();
+        Visualization visualization = layoutSet.getVisualization();
 
         X3DDocument x3dDocument = null;
         try {

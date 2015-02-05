@@ -1,9 +1,9 @@
 /**
  * This package contains the layout functionality of the
  * edu.vt.arc.vis.osnap.core. This includes both the main
- * {@link edu.vt.arc.vis.osnap.core.domain.layout.LayoutVisualizer} class, as
+ * {@link edu.vt.arc.vis.osnap.core.domain.layout.LayoutSet} class, as
  * well as the
- * {@link edu.vt.arc.vis.osnap.core.domain.layout.LayoutComponentRegistry}
+ * {@link edu.vt.arc.vis.osnap.core.domain.layout.LayoutRegistry}
  * through which the supported
  * {@link edu.vt.arc.vis.osnap.core.domain.layout.common.ILayout
  * LayoutComponents} can be extended.
@@ -11,7 +11,6 @@
  * @author Peter J. Radics
  * @version 1.2.0
  * @since 0.1.0
- * 
  */
 package edu.vt.arc.vis.osnap.core.domain.layout;
 

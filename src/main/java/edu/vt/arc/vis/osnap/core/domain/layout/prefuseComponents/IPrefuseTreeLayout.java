@@ -28,17 +28,17 @@ import edu.vt.arc.vis.osnap.core.domain.layout.common.ITreeLayout;
 
 
 /**
- * The {@code IPrefuseTreeLayoutComponent} interface provides the contract for
- * all Prefuse {@link ITreeLayout Tree LayoutVisualizer Components}.
+ * The {@code IPrefuseTreeLayout} interface provides the contract for
+ * all Prefuse {@link ITreeLayout Tree Layouts}.
  * All prefuse TreeLayoutComponents provide 2D coordinates and require a root
  * node.
  * 
  * @author Peter J. Radics
- * @version 1.2.3
+ * @version 1.2.0
  * @version 0.5.0
  * 
  */
-public interface IPrefuseTreeLayoutComponent
+public interface IPrefuseTreeLayout
         extends IPrefuseLayout, ITreeLayout {
 
     // tagging interface

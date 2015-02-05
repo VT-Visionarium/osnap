@@ -2101,7 +2101,7 @@ public class ObjectFactory {
      */
 
     /**
-     * Create an instance of {@link LayoutVisualizer }
+     * Create an instance of {@link Layout }
      * 
      */
     /*

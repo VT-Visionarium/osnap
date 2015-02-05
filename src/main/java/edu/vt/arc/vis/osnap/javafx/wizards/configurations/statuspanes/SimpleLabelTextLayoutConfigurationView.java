@@ -52,6 +52,5 @@ public class SimpleLabelTextLayoutConfigurationView
     public SimpleLabelTextLayoutConfigurationView(final String title) {
 
         super(title, new SimpleLabelTextLayoutConfiguration());
-
     }
 }

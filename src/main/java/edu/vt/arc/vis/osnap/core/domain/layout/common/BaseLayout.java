@@ -122,8 +122,7 @@ public abstract class BaseLayout
 
 
     /**
-     * Returns the capabilities (the set of
-     * {@link edu.vt.arc.vis.osnap.core.domain.visualization.VisualProperty
+     * Returns the capabilities (the set of {@link VisualProperty
      * VisualProperties} that can be provided) of this {@link ILayout}.
      * 
      * @return the capabilities.
@@ -145,8 +144,6 @@ public abstract class BaseLayout
     public void setName(String name) {
 
         this.name = name;
-
-
     }
 
 
@@ -185,6 +182,7 @@ public abstract class BaseLayout
     public void setRestriction(Set<IGraphObject> restriction) {
 
         if (restriction != null) {
+
             this.clearRestriction();
             this.restriction.addAll(restriction);
         }
@@ -211,14 +209,12 @@ public abstract class BaseLayout
     /**
      * Creates a new instance of the {@link BaseLayout} class. Note that by
      * default all capabilities are disabled! They are enabled by a
-     * {@link edu.vt.arc.vis.osnap.core.domain.layout.LayoutVisualizer} when the
-     * provider is assigned to a specific
-     * {@link edu.vt.arc.vis.osnap.core.domain.visualization.VisualProperty}.
+     * {@link edu.vt.arc.vis.osnap.core.domain.layout.LayoutSet} when the
+     * provider is assigned to a specific {@link VisualProperty}.
      * 
      * @param capabilities
-     *            the set of
-     *            {@link edu.vt.arc.vis.osnap.core.domain.visualization.VisualProperty
-     *            VisualProperties} that can be provided by this class.
+     *            the set of {@link VisualProperty VisualProperties} that can be
+     *            provided by this class.
      */
     public BaseLayout(final Set<VisualProperty> capabilities) {
 
@@ -229,16 +225,14 @@ public abstract class BaseLayout
     /**
      * Creates a new instance of the {@link BaseLayout} class. Note that by
      * default all capabilities are disabled! They are enabled by a
-     * {@link edu.vt.arc.vis.osnap.core.domain.layout.LayoutVisualizer} when the
-     * provider is assigned to a specific
-     * {@link edu.vt.arc.vis.osnap.core.domain.visualization.VisualProperty}. It
-     * sets the description and name to the provided values and optionally
-     * appends it with a random number.
+     * {@link edu.vt.arc.vis.osnap.core.domain.layout.LayoutSet} when the
+     * provider is assigned to a specific {@link VisualProperty}. It sets the
+     * description and name to the provided values and optionally appends it
+     * with a random number.
      * 
      * @param capabilities
-     *            the set of
-     *            {@link edu.vt.arc.vis.osnap.core.domain.visualization.VisualProperty
-     *            VisualProperties} that can be provided by this class.
+     *            the set of {@link VisualProperty VisualProperties} that can be
+     *            provided by this class.
      * @param name
      *            the name of the layout component.
      * @param description
@@ -256,16 +250,14 @@ public abstract class BaseLayout
     /**
      * Creates a new instance of the {@link BaseLayout} class. Note that by
      * default all capabilities are disabled! They are enabled by a
-     * {@link edu.vt.arc.vis.osnap.core.domain.layout.LayoutVisualizer} when the
-     * provider is assigned to a specific
-     * {@link edu.vt.arc.vis.osnap.core.domain.visualization.VisualProperty}. It
-     * sets the description and name to the provided values and optionally
-     * appends it with a random number.
+     * {@link edu.vt.arc.vis.osnap.core.domain.layout.LayoutSet} when the
+     * provider is assigned to a specific {@link VisualProperty}. It sets the
+     * description and name to the provided values and optionally appends it
+     * with a random number.
      * 
      * @param capabilities
-     *            the set of
-     *            {@link edu.vt.arc.vis.osnap.core.domain.visualization.VisualProperty
-     *            VisualProperties} that can be provided by this class.
+     *            the set of {@link VisualProperty VisualProperties} that can be
+     *            provided by this class.
      * @param name
      *            the name of the layout component.
      * @param description
@@ -281,14 +273,16 @@ public abstract class BaseLayout
             final boolean randomizeName, final boolean serialization) {
 
         if ((capabilities == null || capabilities.isEmpty()) && !serialization) {
+
             throw new IllegalArgumentException(
-                    "Cannot create VisualPropertyProvider without capabilities!");
+                    "Cannot create Layout without capabilities!");
 
         }
 
         this.capabilities = new LinkedHashMap<>();
 
         if (capabilities != null) {
+
             for (VisualProperty visualProperty : capabilities) {
 
                 this.capabilities.put(visualProperty, false);
@@ -297,10 +291,12 @@ public abstract class BaseLayout
 
         this.restriction = new LinkedHashSet<>();
         if (name != null && randomizeName) {
+
             Random random = new Random();
             this.name = name + " - " + Math.abs(random.nextLong());
         }
         else {
+
             this.name = name;
         }
         this.description = description;
@@ -370,6 +366,7 @@ public abstract class BaseLayout
         for (VisualProperty visualProperty : this.capabilities.keySet()) {
 
             if (this.isEnabled(visualProperty)) {
+
                 return true;
             }
         }
@@ -385,6 +382,7 @@ public abstract class BaseLayout
 
             if (this.isEnabled(visualProperty)
                     && visualProperty.isNodeProperty()) {
+
                 return true;
             }
         }
@@ -399,6 +397,7 @@ public abstract class BaseLayout
 
             if (this.isEnabled(visualProperty)
                     && visualProperty.isEdgeProperty()) {
+
                 return true;
             }
         }
@@ -413,6 +412,7 @@ public abstract class BaseLayout
 
             if (this.isEnabled(visualProperty)
                     && visualProperty.isHyperedgeProperty()) {
+
                 return true;
             }
         }
@@ -503,11 +503,11 @@ public abstract class BaseLayout
 
     /**
      * Calculates the restricted set of {@link IVisualGraphObject Visual Graph
-     * Objects} for a {@link ILayout LayoutVisualizer Component} from an
+     * Objects} for a {@link ILayout LayoutSet Component} from an
      * unrestricted set.
      * 
      * @param layout
-     *            the {@link ILayout LayoutVisualizer Component}.
+     *            the {@link ILayout LayoutSet Component}.
      * @param unrestrictedSet
      *            the unrestricted set of {@link IVisualGraphObject Visual Graph
      *            Objects}

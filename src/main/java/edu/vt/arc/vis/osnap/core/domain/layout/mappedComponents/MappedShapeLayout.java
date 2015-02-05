@@ -68,7 +68,7 @@ public class MappedShapeLayout<DOMAIN_KEY_TYPE extends IGraphObjectBasedValueTyp
      */
     public static String name() {
 
-        return "Mapped Shape LayoutVisualizer Component";
+        return "Mapped Shape Layout";
     }
 
 

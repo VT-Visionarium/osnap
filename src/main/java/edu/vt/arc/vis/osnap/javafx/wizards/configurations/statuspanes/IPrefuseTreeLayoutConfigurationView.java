@@ -21,7 +21,7 @@ package edu.vt.arc.vis.osnap.javafx.wizards.configurations.statuspanes;
  */
 
 
-import edu.vt.arc.vis.osnap.core.domain.layout.prefuseComponents.IPrefuseTreeLayoutComponent;
+import edu.vt.arc.vis.osnap.core.domain.layout.prefuseComponents.IPrefuseTreeLayout;
 import edu.vt.arc.vis.osnap.javafx.wizards.configurations.IPrefuseTreeLayoutConfiguration;
 
 
@@ -30,14 +30,14 @@ import edu.vt.arc.vis.osnap.javafx.wizards.configurations.IPrefuseTreeLayoutConf
  * for all status panes for {@link IPrefuseTreeLayoutConfiguration}.
  * 
  * @param <O>
- *            the type of the {@link IPrefuseTreeLayoutComponent}.
+ *            the type of the {@link IPrefuseTreeLayout}.
  * @param <C>
  *            the concrete type of the {@link IPrefuseTreeLayoutConfiguration}.
  * @author Peter J. Radics
  * @version 1.2.0
  * @since 1.2.0
  */
-public interface IPrefuseTreeLayoutConfigurationView<O extends IPrefuseTreeLayoutComponent, C extends IPrefuseTreeLayoutConfiguration<O>>
+public interface IPrefuseTreeLayoutConfigurationView<O extends IPrefuseTreeLayout, C extends IPrefuseTreeLayoutConfiguration<O>>
         extends IPrefuseLayoutConfigurationView<O, C>,
         ITreeLayoutConfigurationView<O, C> {
 

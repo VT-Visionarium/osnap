@@ -243,10 +243,10 @@ public class PrefuseLayoutGenerator {
 
         }
 
-        if (layoutComponent instanceof IPrefuseTreeLayoutComponent
+        if (layoutComponent instanceof IPrefuseTreeLayout
                 && layoutComponent.getLayout() instanceof TreeLayout) {
 
-            IPrefuseTreeLayoutComponent treeLayoutComponent = (IPrefuseTreeLayoutComponent) layoutComponent;
+            IPrefuseTreeLayout treeLayoutComponent = (IPrefuseTreeLayout) layoutComponent;
 
             TreeLayout treeLayout = (TreeLayout) treeLayoutComponent
                     .getLayout();

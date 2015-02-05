@@ -19,23 +19,23 @@ package edu.vt.arc.vis.osnap.javafx.wizards.configurations;
 // @ formatter:on
 
 import edu.vt.arc.vis.osnap.core.domain.graph.common.INode;
-import edu.vt.arc.vis.osnap.core.domain.layout.prefuseComponents.IPrefuseTreeLayoutComponent;
+import edu.vt.arc.vis.osnap.core.domain.layout.prefuseComponents.IPrefuseTreeLayout;
 
 
 
 /**
  * The abstract {@code PrefuseTreeLayoutConfiguration} class provides
  * the base for {@link IConfiguration Configurations} of
- * {@link IPrefuseTreeLayoutComponent Prefuse TreeLayoutComponents}.
+ * {@link IPrefuseTreeLayout Prefuse TreeLayoutComponents}.
  *
  * @param <T>
- *            the type of the {@link IPrefuseTreeLayoutComponent}.
+ *            the type of the {@link IPrefuseTreeLayout}.
  *
  * @author Peter J. Radics
  * @version 1.2.3
  * @since 0.5.0
  */
-public abstract class PrefuseTreeLayoutConfiguration<T extends IPrefuseTreeLayoutComponent>
+public abstract class PrefuseTreeLayoutConfiguration<T extends IPrefuseTreeLayout>
         extends PrefuseLayoutConfiguration<T>
         implements IPrefuseTreeLayoutConfiguration<T> {
 

@@ -60,8 +60,7 @@ public class TieredOrbitalLayoutWizard
      *            the owner of this wizard.
      * @param universe
      *            the {@link Universe} for which the
-     *            {@link ILayoutConfiguration LayoutVisualizer Configuration} is
-     *            created.
+     *            {@link ILayoutConfiguration Layout Configuration} is created.
      */
     public TieredOrbitalLayoutWizard(Window owner, Universe universe) {
 

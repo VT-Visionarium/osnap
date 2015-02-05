@@ -20,9 +20,9 @@ import edu.vt.arc.vis.osnap.core.domain.visualization.VisualNode;
 import edu.vt.arc.vis.osnap.core.domain.visualization.Visualization;
 import edu.vt.arc.vis.osnap.javafx.events.ExportLayoutEvent;
 import edu.vt.arc.vis.osnap.javafx.events.SwitchTabEvent;
-import edu.vt.arc.vis.osnap.javafx.stringConverters.VisualGraphObjectStringConverter;
-import edu.vt.arc.vis.osnap.javafx.stringConverters.VisualGraphObjectStringConverterConfiguration;
-import edu.vt.arc.vis.osnap.javafx.stringConverters.VisualObjectStringConverter;
+import edu.vt.arc.vis.osnap.javafx.stringconverters.VisualGraphObjectStringConverter;
+import edu.vt.arc.vis.osnap.javafx.stringconverters.VisualGraphObjectStringConverterConfiguration;
+import edu.vt.arc.vis.osnap.javafx.stringconverters.VisualObjectStringConverter;
 import edu.vt.arc.vis.osnap.javafx.widgets.VisualObjectData;
 
 
@@ -152,25 +152,25 @@ public class VisualizationDetailsVBox
         edgeBox.getChildren().add(text2);
 
         this.graphListView = new ListViewWithSearchPanel<>(
-                "Graph LayoutVisualizer",
+                "Graph Layout",
                 new VisualGraphObjectStringConverter<VisualGraph>(
                         VisualGraphObjectStringConverterConfiguration.GRAPH_OBJECT_ID));
 
         this.nodeListView = new ListViewWithSearchPanel<>(
-                "Node LayoutVisualizer",
+                "Node Layout",
                 new VisualObjectStringConverter<VisualNode>(
                         VisualGraphObjectStringConverterConfiguration.GRAPH_OBJECT_ID));
 
 
 
         this.edgeListView = new ListViewWithSearchPanel<>(
-                "Edge LayoutVisualizer",
+                "Edge Layout",
                 new VisualObjectStringConverter<VisualEdge>(
                         VisualGraphObjectStringConverterConfiguration.GRAPH_OBJECT_ID));
 
 
-        this.nodeData = new VisualObjectData("Node LayoutVisualizer Data");
-        this.edgeData = new VisualObjectData("Edge LayoutVisualizer Data");
+        this.nodeData = new VisualObjectData("Node Layout Data");
+        this.edgeData = new VisualObjectData("Edge Layout Data");
 
         this.exportButton = new Button("Export Visualization to X3D");
         this.addLayoutComponentButton = new Button(

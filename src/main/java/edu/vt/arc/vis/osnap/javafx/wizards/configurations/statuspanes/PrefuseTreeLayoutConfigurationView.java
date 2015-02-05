@@ -25,24 +25,24 @@ package edu.vt.arc.vis.osnap.javafx.wizards.configurations.statuspanes;
 
 import javafx.scene.control.Label;
 import javafx.scene.text.Text;
-import edu.vt.arc.vis.osnap.core.domain.layout.prefuseComponents.IPrefuseTreeLayoutComponent;
+import edu.vt.arc.vis.osnap.core.domain.layout.prefuseComponents.IPrefuseTreeLayout;
 import edu.vt.arc.vis.osnap.javafx.wizards.configurations.IPrefuseTreeLayoutConfiguration;
 
 
 /**
- * The {@code PrefuseTreeLayoutComponentConfigurationView} class provides a
+ * The {@code PrefuseTreeLayoutConfigurationView} class provides a
  * status pane for {@link IPrefuseTreeLayoutConfiguration Prefuse
  * TreeLayoutComponentConfigurations}.
  *
  * @param <O>
- *            the type of the {@link IPrefuseTreeLayoutComponent}.
+ *            the type of the {@link IPrefuseTreeLayout}.
  * @param <C>
  *            the type of the {@link IPrefuseTreeLayoutConfiguration}.
  * @author Shawn P Neuman, Peter J. Radics
  * @version 1.2.0
  * @since 0.5.0
  */
-public abstract class PrefuseTreeLayoutComponentConfigurationView<O extends IPrefuseTreeLayoutComponent, C extends IPrefuseTreeLayoutConfiguration<O>>
+public abstract class PrefuseTreeLayoutConfigurationView<O extends IPrefuseTreeLayout, C extends IPrefuseTreeLayoutConfiguration<O>>
         extends PrefuseLayoutConfigurationView<O, C>
         implements IPrefuseTreeLayoutConfigurationView<O, C> {
 
@@ -52,26 +52,26 @@ public abstract class PrefuseTreeLayoutComponentConfigurationView<O extends IPre
 
     /**
      * Creates a new instance of the
-     * {@code PrefuseTreeLayoutComponentConfigurationView} class.
+     * {@code PrefuseTreeLayoutConfigurationView} class.
      * 
      * @param title
      *            the title for this {@link IConfigurationView}.
      */
-    public PrefuseTreeLayoutComponentConfigurationView(final String title) {
+    public PrefuseTreeLayoutConfigurationView(final String title) {
 
         this(title, null);
     }
 
     /**
      * Creates a new instance of the
-     * {@code PrefuseTreeLayoutComponentConfigurationView} class.
+     * {@code PrefuseTreeLayoutConfigurationView} class.
      * 
      * @param title
      *            the title for this {@link IConfigurationView}.
      * @param defaultConfiguration
      *            the default configuration.
      */
-    public PrefuseTreeLayoutComponentConfigurationView(final String title,
+    public PrefuseTreeLayoutConfigurationView(final String title,
             final C defaultConfiguration) {
 
         this(title, defaultConfiguration, 0);
@@ -79,7 +79,7 @@ public abstract class PrefuseTreeLayoutComponentConfigurationView<O extends IPre
 
     /**
      * Creates a new instance of the
-     * {@code PrefuseTreeLayoutComponentConfigurationView} class.
+     * {@code PrefuseTreeLayoutConfigurationView} class.
      * 
      * @param title
      *            the title for this {@link IConfigurationView}.
@@ -88,7 +88,7 @@ public abstract class PrefuseTreeLayoutComponentConfigurationView<O extends IPre
      * @param offset
      *            the row offset of the values displayed by this view.
      */
-    public PrefuseTreeLayoutComponentConfigurationView(final String title,
+    public PrefuseTreeLayoutConfigurationView(final String title,
             final C defaultConfiguration, final int offset) {
 
         super(title, defaultConfiguration, offset + 1);
@@ -96,7 +96,7 @@ public abstract class PrefuseTreeLayoutComponentConfigurationView<O extends IPre
 
         this.rootNodeLabel = new Label("Root Node:");
         this.rootNodeValue = new Text();
-        this.rootNodeValue.setStyle("-fx-font-weight: bold");
+        this.rootNodeLabel.setStyle("-fx-font-weight: bold");
 
 
         this.add(this.rootNodeLabel, 0, super.rowsUsed());

@@ -47,22 +47,40 @@ public enum CoordinateComponent {
      * component or that the first component is to be used in a routing.
      */
     @XmlEnumValue(value = "FirstComponent")
-    FIRST_COMPONENT,
+    FIRST_COMPONENT("First Component"),
     /**
      * Specifies that the {@link ICoordinateLayout} can provide two components
      * or that the second component is to be used in a routing.
      */
     @XmlEnumValue(value = "SecondComponent")
-    SECOND_COMPONENT,
+    SECOND_COMPONENT("Second Component"),
     /**
      * Specifies that the {@link ICoordinateLayout} can provide three components
      * or that the third component is to be used in a routing.
      */
     @XmlEnumValue(value = "ThirdComponent")
-    THIRD_COMPONENT,
+    THIRD_COMPONENT("Third Component"),
     /**
      * Specifies that no component is to be used in a routing.
      */
     @XmlEnumValue(value = "NoComponent")
-    NO_COMPONENT;
+    NO_COMPONENT("No Component");
+
+    private final String name;
+
+
+    /**
+     * Creates a new instance of the {@code CoordinateComponent} class.
+     */
+    private CoordinateComponent(final String name) {
+
+        this.name = name;
+    }
+
+
+    @Override
+    public String toString() {
+    
+        return this.name;
+    }
 }

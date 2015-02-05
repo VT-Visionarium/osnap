@@ -32,8 +32,8 @@ import com.hp.hpl.jena.ontology.OntModel;
 import edu.vt.arc.vis.osnap.core.domain.Project;
 import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
 import edu.vt.arc.vis.osnap.core.domain.graph.common.GraphObjectProperty;
-import edu.vt.arc.vis.osnap.core.domain.layout.LayoutVisualizer;
-import edu.vt.arc.vis.osnap.core.domain.layout.LayoutComponentRegistry;
+import edu.vt.arc.vis.osnap.core.domain.layout.LayoutSet;
+import edu.vt.arc.vis.osnap.core.domain.layout.LayoutRegistry;
 import edu.vt.arc.vis.osnap.core.domain.visualization.Visualization;
 import edu.vt.arc.vis.osnap.io.graphML.GraphMLConverter;
 import edu.vt.arc.vis.osnap.io.owl.OWLConverter;
@@ -90,10 +90,10 @@ public class IOManager
         this.deserializerForType = new LinkedHashMap<>();
         this.serializerForType = new LinkedHashMap<>();
 
-        LayoutComponentRegistry.Instance();
+        LayoutRegistry.Instance();
         XmlSerializer.Instance().registerClass(Project.class);
         XmlSerializer.Instance().registerClass(GraphObjectProperty.class);
-        XmlSerializer.Instance().registerClass(LayoutVisualizer.class);
+        XmlSerializer.Instance().registerClass(LayoutSet.class);
     }
 
     @Override
@@ -347,8 +347,8 @@ public class IOManager
         }
         try {
 
-            XmlSerializer.Instance().deserialize(url, LayoutVisualizer.class);
-            return LayoutVisualizer.class;
+            XmlSerializer.Instance().deserialize(url, LayoutSet.class);
+            return LayoutSet.class;
         }
         catch (Exception e) {
             // Nothing to be done

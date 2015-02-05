@@ -89,28 +89,28 @@ public abstract class CoordinateLayoutConfigurationView<O extends ICoordinateLay
 
         super(title, defaultConfiguration);
 
-        this.xOutputLabel = new Label("Output on X: ");
-        this.yOutputLabel = new Label("Output on Y: ");
-        this.zOutputLabel = new Label("Output on Z: ");
+        this.xOutputLabel = new Label("Output on X:");
+        this.xOutputLabel.setStyle("-fx-font-weight: bold");
+        this.yOutputLabel = new Label("Output on Y:");
+        this.yOutputLabel.setStyle("-fx-font-weight: bold");
+        this.zOutputLabel = new Label("Output on Z:");
+        this.zOutputLabel.setStyle("-fx-font-weight: bold");
 
         this.xOutputValue = new Text();
-        this.xOutputValue.setStyle("-fx-font-weight: bold");
         this.yOutputValue = new Text();
-        this.yOutputValue.setStyle("-fx-font-weight: bold");
         this.zOutputValue = new Text();
-        this.zOutputValue.setStyle("-fx-font-weight: bold");
 
 
-        this.xOutputScaleLabel = new Label("Scale on X: ");
-        this.yOutputScaleLabel = new Label("Scale on Y: ");
-        this.zOutputScaleLabel = new Label("Scale on Z: ");
+        this.xOutputScaleLabel = new Label("Scale on X:");
+        this.xOutputScaleLabel.setStyle("-fx-font-weight: bold");
+        this.yOutputScaleLabel = new Label("Scale on Y:");
+        this.yOutputScaleLabel.setStyle("-fx-font-weight: bold");
+        this.zOutputScaleLabel = new Label("Scale on Z:");
+        this.zOutputScaleLabel.setStyle("-fx-font-weight: bold");
 
         this.xOutputScaleValue = new Text();
-        this.xOutputScaleValue.setStyle("-fx-font-weight: bold");
         this.yOutputScaleValue = new Text();
-        this.yOutputScaleValue.setStyle("-fx-font-weight: bold");
         this.zOutputScaleValue = new Text();
-        this.zOutputScaleValue.setStyle("-fx-font-weight: bold");
 
         this.add(this.xOutputLabel, 0, super.rowsUsed());
         this.add(this.xOutputValue, 1, super.rowsUsed());

@@ -39,7 +39,7 @@ import edu.vt.arc.vis.osnap.javafx.wizards.configurations.PrefuseRadialTreeLayou
  */
 public class PrefuseRadialTreeLayoutConfigurationView
         extends
-        PrefuseTreeLayoutComponentConfigurationView<PrefuseRadialTreeLayout, PrefuseRadialTreeLayoutConfiguration> {
+        PrefuseTreeLayoutConfigurationView<PrefuseRadialTreeLayout, PrefuseRadialTreeLayoutConfiguration> {
 
     private final Label radiusIncrementLabel;
     private final Text  radiusIncrementValue;
@@ -58,7 +58,7 @@ public class PrefuseRadialTreeLayoutConfigurationView
 
         this.radiusIncrementLabel = new Label("Radius Increment:");
         this.radiusIncrementValue = new Text();
-        this.radiusIncrementValue.setStyle("-fx-font-weight: bold");
+        this.radiusIncrementLabel.setStyle("-fx-font-weight: bold");
 
         this.add(this.radiusIncrementLabel, 0,
                 (super.rowsUsed() + super.getOffset()) - 1);

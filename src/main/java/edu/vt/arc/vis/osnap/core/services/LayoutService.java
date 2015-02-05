@@ -23,7 +23,7 @@ package edu.vt.arc.vis.osnap.core.services;
 
 import java.util.List;
 
-import edu.vt.arc.vis.osnap.core.domain.layout.LayoutVisualizer;
+import edu.vt.arc.vis.osnap.core.domain.layout.LayoutSet;
 import edu.vt.arc.vis.osnap.events.NotFoundException;
 import edu.vt.arc.vis.osnap.events.RequestDeniedException;
 import edu.vt.arc.vis.osnap.events.RequestFailedException;
@@ -32,26 +32,26 @@ import edu.vt.arc.vis.osnap.events.domain.layout.LayoutDetails;
 
 /**
  * @author Peter J. Radics
- * @version 1.1.0
+ * @version 1.2.0
  * @since 1.1.0
  *
  */
 public interface LayoutService {
 
-    public abstract LayoutVisualizer createLayout(String projectId, String universeId,
+    public abstract LayoutSet createLayout(String projectId, String universeId,
             String layoutId)
             throws RequestDeniedException, RequestFailedException,
             NotFoundException;
 
-    public abstract List<LayoutVisualizer> retrieveAllLayouts(String projectId)
+    public abstract List<LayoutSet> retrieveAllLayouts(String projectId)
             throws RequestDeniedException, RequestFailedException,
             NotFoundException;
 
-    public abstract LayoutVisualizer retrieveLayout(String projectId, String layoutId)
+    public abstract LayoutSet retrieveLayout(String projectId, String layoutId)
             throws RequestDeniedException, RequestFailedException,
             NotFoundException;
 
-    public abstract LayoutVisualizer deleteLayout(String projectId, String layoutId)
+    public abstract LayoutSet deleteLayout(String projectId, String layoutId)
             throws RequestDeniedException, RequestFailedException,
             NotFoundException;
 }

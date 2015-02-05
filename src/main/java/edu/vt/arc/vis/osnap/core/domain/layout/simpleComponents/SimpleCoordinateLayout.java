@@ -148,13 +148,6 @@ public class SimpleCoordinateLayout
 
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * edu.vt.arc.vis.osnap.core.domain.layout.common.ILayout#layout(edu.vt.
-     * arc.vis.osnap.core .visualization.VisualNode)
-     */
     @Override
     public void layout(VisualNode visualNode) {
 
@@ -167,34 +160,20 @@ public class SimpleCoordinateLayout
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * edu.vt.arc.vis.osnap.core.domain.layout.common.ILayout#layout(edu.vt.
-     * arc.vis.osnap.core .visualization.VisualEdge)
-     */
     @Override
     public void layout(VisualEdge visualEdge) {
 
         // Does not provide layout options for edges.
         throw new UnsupportedOperationException(
-                "Coordinate LayoutVisualizer Components are not applicable to Edges!");
+                "Coordinate Layouts are not applicable to Edges!");
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * edu.vt.arc.vis.osnap.core.domain.layout.common.ILayout#layout(edu.vt.
-     * arc.vis.osnap.core .visualization.VisualHyperEdge)
-     */
     @Override
     public void layout(VisualHyperEdge visualHyperEdge) {
 
         // Does not provide layout options for hyperedges.
         throw new UnsupportedOperationException(
-                "Coordinate LayoutVisualizer Components are not applicable to Hyperedges!");
+                "Coordinate Layouts are not applicable to Hyperedges!");
     }
 }

@@ -52,7 +52,7 @@ public abstract class LayoutConfigurationWizard<O extends ILayout, C extends ILa
 
     /**
      * Returns the {@link Universe} for which the {@link ILayoutConfiguration
-     * LayoutVisualizer Configuration} is created.
+     * Layout Configuration} is created.
      * 
      * @return the {@link Universe}.
      */
@@ -71,8 +71,7 @@ public abstract class LayoutConfigurationWizard<O extends ILayout, C extends ILa
      *            the title of this {@code ConfigurationWizard}.
      * @param universe
      *            the {@link Universe} for which the
-     *            {@link ILayoutConfiguration LayoutVisualizer Configuration} is
-     *            created.
+     *            {@link ILayoutConfiguration Layout Configuration} is created.
      */
     public LayoutConfigurationWizard(final Window owner, final String title,
             final Universe universe) {

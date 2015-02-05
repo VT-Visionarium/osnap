@@ -31,9 +31,8 @@ import edu.vt.arc.vis.osnap.javafx.wizards.configurations.IPrefuseLayoutConfigur
 
 
 /**
- * The {@code PrefuseLayoutConfigurationView} class provides a status
- * panes for {@link IPrefuseLayoutConfiguration Prefuse
- * LayoutConfigurations}.
+ * The {@code PrefuseLayoutConfigurationView} class provides a status panes for
+ * {@link IPrefuseLayoutConfiguration Prefuse LayoutConfigurations}.
  *
  * @param <O>
  *            the type of the {@link IPrefuseLayout}.
@@ -44,7 +43,7 @@ import edu.vt.arc.vis.osnap.javafx.wizards.configurations.IPrefuseLayoutConfigur
  * @since 0.5.0
  */
 public abstract class PrefuseLayoutConfigurationView<O extends IPrefuseLayout, C extends IPrefuseLayoutConfiguration<O>>
-        extends LayoutConfigurationView<O, C>
+        extends CoordinateLayoutConfigurationView<O, C>
         implements IPrefuseLayoutConfigurationView<O, C> {
 
     private final Label durationLabel;
@@ -59,9 +58,10 @@ public abstract class PrefuseLayoutConfigurationView<O extends IPrefuseLayout, C
 
     private final int   offset;
 
-    
+
     /**
      * Returns the offset.
+     * 
      * @return the offset.
      */
     public int getOffset() {
@@ -70,8 +70,8 @@ public abstract class PrefuseLayoutConfigurationView<O extends IPrefuseLayout, C
     }
 
     /**
-     * Creates a new instance of the
-     * {@code PrefuseLayoutConfigurationView} class.
+     * Creates a new instance of the {@code PrefuseLayoutConfigurationView}
+     * class.
      * 
      * @param title
      *            the title for this {@link IConfigurationView}.
@@ -82,8 +82,8 @@ public abstract class PrefuseLayoutConfigurationView<O extends IPrefuseLayout, C
     }
 
     /**
-     * Creates a new instance of the
-     * {@code PrefuseLayoutConfigurationView} class.
+     * Creates a new instance of the {@code PrefuseLayoutConfigurationView}
+     * class.
      * 
      * @param title
      *            the title for this {@link IConfigurationView}.
@@ -97,8 +97,8 @@ public abstract class PrefuseLayoutConfigurationView<O extends IPrefuseLayout, C
     }
 
     /**
-     * Creates a new instance of the
-     * {@code PrefuseLayoutConfigurationView} class.
+     * Creates a new instance of the {@code PrefuseLayoutConfigurationView}
+     * class.
      * 
      * @param title
      *            the title for this {@link IConfigurationView}.
@@ -114,12 +114,14 @@ public abstract class PrefuseLayoutConfigurationView<O extends IPrefuseLayout, C
 
         this.offset = offset;
 
-        this.durationLabel = new Label("LayoutVisualizer Duration");
-        this.anchorLabel = new Label("LayoutVisualizer Anchor");
-        this.layoutBoundsLabel = new Label(
-                "LayoutVisualizer Boundaries (x, y, width, height)");
-        this.layoutMarginsLabel = new Label(
-                "LayoutVisualizer Margins (top, bottom, left, right");
+        this.durationLabel = new Label("Layout Duration");
+        this.durationLabel.setStyle("-fx-font-weight: bold");
+        this.anchorLabel = new Label("Layout Anchor");
+        this.anchorLabel.setStyle("-fx-font-weight: bold");
+        this.layoutBoundsLabel = new Label("Layout Bounds (x, y, w, h)");
+        this.layoutBoundsLabel.setStyle("-fx-font-weight: bold");
+        this.layoutMarginsLabel = new Label("Layout Margins (t, b, l, r)");
+        this.layoutMarginsLabel.setStyle("-fx-font-weight: bold");
 
         this.durationValue = new Text();
         this.layoutAnchorValue = new Text();

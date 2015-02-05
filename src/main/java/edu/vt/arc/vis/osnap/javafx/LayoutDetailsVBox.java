@@ -24,7 +24,6 @@ package edu.vt.arc.vis.osnap.javafx;
 //@formatter:on
 
 
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -49,7 +48,7 @@ import org.jutility.javafx.control.ListViewWithSearchPanel;
 
 import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
 import edu.vt.arc.vis.osnap.core.domain.graph.common.IGraphObject;
-import edu.vt.arc.vis.osnap.core.domain.layout.LayoutVisualizer;
+import edu.vt.arc.vis.osnap.core.domain.layout.LayoutSet;
 import edu.vt.arc.vis.osnap.core.domain.layout.common.ILayout;
 import edu.vt.arc.vis.osnap.core.domain.mappings.IValueMapping;
 import edu.vt.arc.vis.osnap.core.domain.mappings.Mapping;
@@ -59,11 +58,11 @@ import edu.vt.arc.vis.osnap.javafx.dialogs.LayoutComponentWizardSelectionDialog;
 import edu.vt.arc.vis.osnap.javafx.events.ExportLayoutEvent;
 import edu.vt.arc.vis.osnap.javafx.widgets.RoutingGridPane;
 import edu.vt.arc.vis.osnap.javafx.wizards.ILayoutConfigurationWizard;
-import edu.vt.arc.vis.osnap.javafx.wizards.content.CapabilitiesObject;
 
 
 /**
- * the layoutVisualizer details page
+ * The {@code LayoutDetailsVBox} class provides a detailed view of the contents
+ * of a {@link LayoutSet}.
  * 
  * @author Shawn P Neuman
  * @version 1.2.0
@@ -73,7 +72,7 @@ public class LayoutDetailsVBox
         extends VBox {
 
     private final ObjectProperty<Universe>                                 universe;
-    private final ObjectProperty<LayoutVisualizer>                         layoutVisualizer;
+    private final ObjectProperty<LayoutSet>                                layoutSet;
     private final ObjectProperty<Visualization>                            visualization;
 
     private TextField                                                      nameTF;
@@ -81,10 +80,10 @@ public class LayoutDetailsVBox
 
     private RoutingGridPane                                                routingGridPane;
 
-    private ListViewWithSearchPanel<KeyValuePair<ILayout, VisualProperty>> layoutComponentListView;
-    private ListViewWithSearchPanel<IGraphObject>                          graphObjectListView;
+    private ListViewWithSearchPanel<KeyValuePair<ILayout, VisualProperty>> layoutLV;
+    private ListViewWithSearchPanel<IGraphObject>                          graphObjectLV;
     private ListViewWithSearchPanel<IValueMapping<?, ?>>                   valueMappingListView;
-    private CapabilitiesTableView                                          capabilities;
+    private LayoutCapabilitiesTableView                                    capabilities;
     private Button                                                         applyLayout;
     private Button                                                         export;
 
@@ -125,35 +124,35 @@ public class LayoutDetailsVBox
 
 
     /**
-     * Returns the layoutVisualizer property.
+     * Returns the layoutSet property.
      * 
-     * @return the layoutVisualizer property.
+     * @return the layoutSet property.
      */
-    public ObjectProperty<LayoutVisualizer> layoutProperty() {
+    public ObjectProperty<LayoutSet> layoutProperty() {
 
-        return this.layoutVisualizer;
+        return this.layoutSet;
     }
 
     /**
-     * Returns the layoutVisualizer.
+     * Returns the layoutSet.
      * 
-     * @return the layoutVisualizer.
+     * @return the layoutSet.
      */
-    public LayoutVisualizer getLayout() {
+    public LayoutSet getLayout() {
 
-        return this.layoutVisualizer.get();
+        return this.layoutSet.get();
     }
 
 
     /**
-     * Sets the layoutVisualizer.
+     * Sets the layoutSet.
      * 
-     * @param layoutVisualizer
-     *            the layoutVisualizer.
+     * @param layoutSet
+     *            the layoutSet.
      */
-    public void setLayout(LayoutVisualizer layoutVisualizer) {
+    public void setLayout(LayoutSet layoutSet) {
 
-        this.layoutVisualizer.set(layoutVisualizer);
+        this.layoutSet.set(layoutSet);
     }
 
 
@@ -187,7 +186,6 @@ public class LayoutDetailsVBox
      */
     public void setVisualization(Visualization visualization) {
 
-        // System.out.println("Setting vis to " + visualization);
         this.visualization.set(visualization);
     }
 
@@ -199,7 +197,7 @@ public class LayoutDetailsVBox
     public LayoutDetailsVBox() {
 
         this.universe = new SimpleObjectProperty<>();
-        this.layoutVisualizer = new SimpleObjectProperty<>();
+        this.layoutSet = new SimpleObjectProperty<>();
         this.visualization = new SimpleObjectProperty<>();
 
         this.setStyle("-fx-background-color: cornsilk");
@@ -209,9 +207,8 @@ public class LayoutDetailsVBox
         grid1.setVgap(10);
         grid1.setPadding(new Insets(10, 25, 25, 25));
 
-        this.layoutComponentListView = new ListViewWithSearchPanel<>(
-                "Layout Components");
-        GridPane.setVgrow(layoutComponentListView, Priority.ALWAYS);
+        this.layoutLV = new ListViewWithSearchPanel<>("Layout Components");
+        GridPane.setVgrow(layoutLV, Priority.ALWAYS);
 
 
         Text name = new Text("Name");
@@ -231,15 +228,14 @@ public class LayoutDetailsVBox
         this.routingGridPane.setPadding(new Insets(0));
 
 
-        graphObjectListView = new ListViewWithSearchPanel<>("Restrictions");
-        GridPane.setVgrow(graphObjectListView, Priority.ALWAYS);
-        capabilities = new CapabilitiesTableView("Capabilities");
+        graphObjectLV = new ListViewWithSearchPanel<>("Restrictions");
+        GridPane.setVgrow(graphObjectLV, Priority.ALWAYS);
+        capabilities = new LayoutCapabilitiesTableView("Capabilities");
         GridPane.setVgrow(capabilities, Priority.ALWAYS);
         valueMappingListView = new ListViewWithSearchPanel<>("Mapping");
         GridPane.setVgrow(valueMappingListView, Priority.ALWAYS);
 
-        applyLayout = new Button(
-                "Create Visualization from this layoutVisualizer");
+        applyLayout = new Button("Create Visualization from this layout");
         applyLayout.setDisable(false);
 
 
@@ -247,7 +243,7 @@ public class LayoutDetailsVBox
         export.setDisable(true);
 
 
-        grid1.add(layoutComponentListView, 0, 0, 1, 5);
+        grid1.add(layoutLV, 0, 0, 1, 5);
         grid1.add(name, 1, 0);
         grid1.add(nameTF, 1, 1);
         grid1.add(description, 1, 2);
@@ -255,7 +251,7 @@ public class LayoutDetailsVBox
 
         grid1.add(routingGridPane, 1, 4);
 
-        grid1.add(graphObjectListView, 2, 0, 1, 5);
+        grid1.add(graphObjectLV, 2, 0, 1, 5);
         grid1.add(capabilities, 3, 0, 1, 5);
         grid1.add(valueMappingListView, 4, 0, 1, 5);
 
@@ -275,10 +271,8 @@ public class LayoutDetailsVBox
 
         if (this.getLayout() != null) {
 
-            this.layoutComponentListView.getItems().clear();
-            // System.out.println("LayoutVisualizer components: "
-            // + this.getLayout().getLayoutComponents());
-            this.layoutComponentListView.getItems().addAll(
+            this.layoutLV.getItems().clear();
+            this.layoutLV.getItems().addAll(
                     this.getLayout().getLayoutComponents());
         }
     }
@@ -290,7 +284,7 @@ public class LayoutDetailsVBox
      */
     public void clear() {
 
-        this.layoutComponentListView.clear();
+        this.layoutLV.clear();
         this.clearLayoutComponentDetails();
     }
 
@@ -298,9 +292,9 @@ public class LayoutDetailsVBox
 
         this.nameTF.clear();
         this.descriptionTA.clear();
-        this.graphObjectListView.clear();
+        this.graphObjectLV.clear();
         this.valueMappingListView.clear();
-        this.capabilities.clearList();
+        this.capabilities.setLayout(null);
     }
 
     /**
@@ -329,8 +323,8 @@ public class LayoutDetailsVBox
 
                                 for (VisualProperty prop : visualProperty) {
                                     this.getLayout()
-                                            .addLayoutProviderForVisualProperty(
-                                                    comp, prop);
+                                            .addLayoutForVisualProperty(comp,
+                                                    prop);
                                 }
 
                                 Set<IGraphObject> restriction = new LinkedHashSet<>(
@@ -349,7 +343,7 @@ public class LayoutDetailsVBox
     private void setUpEventHandlers() {
 
 
-        this.layoutVisualizer.addListener((observable, oldValue, newValue) -> {
+        this.layoutSet.addListener((observable, oldValue, newValue) -> {
 
             if (newValue != null) {
 
@@ -361,7 +355,7 @@ public class LayoutDetailsVBox
             }
         });
 
-        this.layoutComponentListView
+        this.layoutLV
                 .selectedItemProperty()
                 .addListener(
                         (observable, oldValue, newValue) -> {
@@ -371,34 +365,16 @@ public class LayoutDetailsVBox
                             if (newValue != null) {
 
                                 ILayout layout = newValue.getKey();
-                                VisualProperty visualProperty = newValue
-                                        .getValue();
-
 
                                 this.nameTF.setText(layout.getName());
                                 this.descriptionTA.setText(layout
                                         .getDescription());
 
-                                this.graphObjectListView.getItems().addAll(
+                                this.graphObjectLV.getItems().addAll(
                                         layout.getRestriction());
 
                                 this.routingGridPane.setLayout(layout);
-
-                                Set<VisualProperty> capabilities = layout
-                                        .providesCapabilities();
-
-                                Set<CapabilitiesObject> caps = new HashSet<>();
-                                for (VisualProperty property : capabilities) {
-
-                                    Boolean enabled = layout
-                                            .isEnabled(property);
-                                    CapabilitiesObject co = new CapabilitiesObject(
-                                            visualProperty, enabled);
-                                    caps.add(co);
-                                }
-
-                                this.capabilities.populateCapabilities(caps);
-
+                                this.capabilities.setLayout(layout);
 
                                 if (layout instanceof Mapping<?, ?, ?, ?>) {
 
@@ -418,7 +394,7 @@ public class LayoutDetailsVBox
 
         this.applyLayout.setOnAction(actionEvent -> {
 
-            if (this.layoutVisualizer != null) {
+            if (this.layoutSet != null) {
 
                 // Date startTime = new Date();
                 this.getLayout().layout();
@@ -468,7 +444,7 @@ public class LayoutDetailsVBox
                 "Remove",
                 actionEvent -> {
 
-                    KeyValuePair<ILayout, VisualProperty> selectedItem = this.layoutComponentListView
+                    KeyValuePair<ILayout, VisualProperty> selectedItem = this.layoutLV
                             .getSelectedItem();
 
                     Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -488,13 +464,13 @@ public class LayoutDetailsVBox
                                                 .removeLayoutProviderForVisualProperty(
                                                         selectedItem.getKey(),
                                                         selectedItem.getValue());
-                                        this.layoutComponentListView.getItems()
-                                                .remove(selectedItem);
+                                        this.layoutLV.getItems().remove(
+                                                selectedItem);
                                     });
 
                 });
 
-        this.layoutComponentListView.contextMenuActions().addAll(
-                addLayoutComponent, removeLayoutComponent);
+        this.layoutLV.contextMenuActions().addAll(addLayoutComponent,
+                removeLayoutComponent);
     }
 }

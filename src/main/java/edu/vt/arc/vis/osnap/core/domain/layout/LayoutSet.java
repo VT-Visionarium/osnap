@@ -39,9 +39,9 @@ import org.jutility.math.geometry.Scale;
  * @author Peter J. Radics
  * @version 0.1
  */
-@XmlType(name = "LayoutVisualizer", propOrder = { "universe", "layouts" })
+@XmlType(name = "LayoutSet", propOrder = { "universe", "layouts" })
 @XmlAccessorType(XmlAccessType.NONE)
-public class LayoutVisualizer
+public class LayoutSet
         extends DomainObject {
 
 
@@ -80,24 +80,24 @@ public class LayoutVisualizer
     }
 
     @SuppressWarnings("unused")
-    private LayoutVisualizer() {
+    private LayoutSet() {
 
         this(null, true);
     }
 
     /**
-     * Creates a new {@code LayoutVisualizer} for the universe provided.
+     * Creates a new {@code LayoutSet} for the universe provided.
      * 
      * @param universe
      *            the universe to be laid out.
      */
-    public LayoutVisualizer(Universe universe) {
+    public LayoutSet(Universe universe) {
 
         this(universe, false);
     }
 
     /**
-     * Creates a new LayoutVisualizer for the universe provided.
+     * Creates a new LayoutSet for the universe provided.
      * 
      * @param universe
      *            the universe to be laid out.
@@ -105,9 +105,9 @@ public class LayoutVisualizer
      *            {@code true}, if used for serialization;
      *            {@code false} otherwise.
      */
-    private LayoutVisualizer(Universe universe, boolean serialization) {
+    private LayoutSet(Universe universe, boolean serialization) {
 
-        LayoutComponentRegistry.Instance();
+        LayoutRegistry.Instance();
         this.universe = universe;
         if (universe == null && !serialization) {
             throw new IllegalArgumentException(
@@ -146,7 +146,7 @@ public class LayoutVisualizer
      * @param property
      *            the property for which to add the provider.
      */
-    public void addLayoutProviderForVisualProperty(ILayout provider,
+    public void addLayoutForVisualProperty(ILayout provider,
             VisualProperty property) {
 
         if (provider == null) {
@@ -242,9 +242,9 @@ public class LayoutVisualizer
      *            the universe to layout visually.
      * @return the default layout.
      */
-    public static LayoutVisualizer defaultLayout(Universe universe) {
+    public static LayoutSet defaultLayout(Universe universe) {
 
-        LayoutVisualizer layoutVisualizer = new LayoutVisualizer(universe);
+        LayoutSet layoutSet = new LayoutSet(universe);
 
 
         ILayout defaultNodeColor = new SimpleColorLayout(
@@ -274,10 +274,10 @@ public class LayoutVisualizer
 
 
         ILayout nodeScale = new SimpleScaleLayout(
-                new Scale<>(layoutVisualizer.getVisualization().getPrecision()));
+                new Scale<>(layoutSet.getVisualization().getPrecision()));
         nodeScale.setName("Default Node Scale (1, 1, 1)");
         ILayout edgeScale = new SimpleScaleLayout(
-                new Scale<>(layoutVisualizer.getVisualization().getPrecision()));
+                new Scale<>(layoutSet.getVisualization().getPrecision()));
         edgeScale.setName("Default Edge Scale (1, 1, 1)");
         // ILayout hyperEdgeScale = new SimpleScaleLayout(
         // new Scalef());
@@ -296,59 +296,59 @@ public class LayoutVisualizer
 
 
         ILayout nodeCoordinates = new SphericalLayout();
-        nodeCoordinates.setName("Default Node Coordinates (Spherical LayoutVisualizer)");
+        nodeCoordinates.setName("Default Node Coordinates (Spherical LayoutSet)");
 
 
-        layoutVisualizer.addLayoutProviderForVisualProperty(defaultNodeColor,
+        layoutSet.addLayoutForVisualProperty(defaultNodeColor,
                 VisualProperty.NODE_COLOR);
-        layoutVisualizer.addLayoutProviderForVisualProperty(defaultEdgeColor,
+        layoutSet.addLayoutForVisualProperty(defaultEdgeColor,
                 VisualProperty.EDGE_COLOR);
         // layout.addLayoutProviderForVisualProperty(defaultHyperEdgeColor,
         // VisualProperty.HYPEREDGE_COLOR);
 
-        layoutVisualizer.addLayoutProviderForVisualProperty(nodeLabelText,
+        layoutSet.addLayoutForVisualProperty(nodeLabelText,
                 VisualProperty.NODE_LABEL_TEXT);
         // layout.addLayoutProviderForVisualProperty(edgeLabelText,
         // VisualProperty.EDGE_LABEL_TEXT);
         // layout.addLayoutProviderForVisualProperty(hyperEdgeLabelText,
         // VisualProperty.HYPEREDGE_LABEL_TEXT);
 
-        layoutVisualizer.addLayoutProviderForVisualProperty(nodeScale,
+        layoutSet.addLayoutForVisualProperty(nodeScale,
                 VisualProperty.NODE_SCALE);
-        layoutVisualizer.addLayoutProviderForVisualProperty(edgeScale,
+        layoutSet.addLayoutForVisualProperty(edgeScale,
                 VisualProperty.EDGE_SCALE);
         // layout.addLayoutProviderForVisualProperty(hyperEdgeScale,
         // VisualProperty.HYPEREDGE_SCALE);
 
-        layoutVisualizer.addLayoutProviderForVisualProperty(nodeShape,
+        layoutSet.addLayoutForVisualProperty(nodeShape,
                 VisualProperty.NODE_SHAPE);
-        layoutVisualizer.addLayoutProviderForVisualProperty(edgeShape,
+        layoutSet.addLayoutForVisualProperty(edgeShape,
                 VisualProperty.EDGE_SHAPE);
         // layout.addLayoutProviderForVisualProperty(hyperEdgeShape,
         // VisualProperty.HYPEREDGE_SHAPE);
 
 
-        layoutVisualizer.addLayoutProviderForVisualProperty(nodeCoordinates,
+        layoutSet.addLayoutForVisualProperty(nodeCoordinates,
                 VisualProperty.NODE_X_POSITION);
-        layoutVisualizer.addLayoutProviderForVisualProperty(nodeCoordinates,
+        layoutSet.addLayoutForVisualProperty(nodeCoordinates,
                 VisualProperty.NODE_Y_POSITION);
-        layoutVisualizer.addLayoutProviderForVisualProperty(nodeCoordinates,
+        layoutSet.addLayoutForVisualProperty(nodeCoordinates,
                 VisualProperty.NODE_Z_POSITION);
 
-        return layoutVisualizer;
+        return layoutSet;
 
     }
 
     /**
-     * Determines whether or not this {@code LayoutVisualizer} is identical to the
+     * Determines whether or not this {@code LayoutSet} is identical to the
      * one provided.
      * 
      * @param other
-     *            the other {@code LayoutVisualizer}.
+     *            the other {@code LayoutSet}.
      * @return {@code true} if they are identical; {@code false}
      *         otherwise.
      */
-    public boolean isIdentical(LayoutVisualizer other) {
+    public boolean isIdentical(LayoutSet other) {
 
         if (this.equals(other)) {
 
@@ -367,8 +367,8 @@ public class LayoutVisualizer
     @Override
     public boolean equals(Object obj) {
 
-        if (obj != null && obj instanceof LayoutVisualizer) {
-            LayoutVisualizer other = (LayoutVisualizer) obj;
+        if (obj != null && obj instanceof LayoutSet) {
+            LayoutSet other = (LayoutSet) obj;
 
             boolean sameUniverse = this.getUniverse().equals(
                     other.getUniverse());
@@ -387,5 +387,4 @@ public class LayoutVisualizer
 
         return hash;
     }
-
 }

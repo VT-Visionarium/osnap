@@ -59,7 +59,7 @@ public class SimpleShapeLayoutConfigurationView
 
         this.shape = new Text("Shape:");
         this.shapeTF = new Text();
-        this.shapeTF.setStyle("-fx-font-weight: bold");
+        this.shape.setStyle("-fx-font-weight: bold");
 
         this.add(this.shape, 0, 3);
         this.add(this.shapeTF, 1, 3);

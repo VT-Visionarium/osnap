@@ -31,9 +31,10 @@ import java.util.TreeSet;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 
 import org.controlsfx.validation.Validator;
 import org.controlsfx.validation.decoration.GraphicValidationDecoration;
@@ -44,7 +45,7 @@ import org.jutility.javafx.control.validation.ValidationGroup;
 import edu.vt.arc.vis.osnap.core.domain.graph.common.IGraphObject;
 import edu.vt.arc.vis.osnap.core.domain.graph.common.IGraphObjectBasedValueTypeContainer;
 import edu.vt.arc.vis.osnap.core.domain.graph.metadata.IMetadataContainer;
-import edu.vt.arc.vis.osnap.javafx.stringConverters.GraphObjectBasedValueTypeContainerStringConverter;
+import edu.vt.arc.vis.osnap.javafx.stringconverters.GraphObjectBasedValueTypeContainerStringConverter;
 
 
 /**
@@ -129,34 +130,44 @@ public class DomainKeyValueSelectionGridPane
      */
     public DomainKeyValueSelectionGridPane() {
 
-        this.setStyle("-fx-padding:10; -fx-background-color: honeydew; -fx-border-color: derive(honeydew, -30%); -fx-border-width: 3;");
-
         this.setHgap(25);
         this.setVgap(10);
-        this.setPadding(new Insets(10, 25, 25, 25));
 
         this.validationGroup = new ValidationGroup();
 
         this.restriction = FXCollections.observableArrayList();
 
-        this.typeSelectionCB = new LabeledComboBox<>("Property Type");
+        this.typeSelectionCB = new LabeledComboBox<>("Property Type",
+                Pos.TOP_CENTER);
         this.typeSelectionCB.getItems().addAll("Metadata",
                 "Graph Object Property");
+        this.typeSelectionCB.setVgap(10);
+        this.typeSelectionCB.getLabel().setStyle("-fx-font-weight: bold");
+        this.typeSelectionCB.setAlignment(Pos.TOP_CENTER);
+        GridPane.setHgrow(this.typeSelectionCB, Priority.SOMETIMES);
+        GridPane.setVgrow(this.typeSelectionCB, Priority.NEVER);
 
         this.domainKeysLV = new ListViewWithSearchPanel<>("Available Keys",
                 new GraphObjectBasedValueTypeContainerStringConverter<>());
         this.domainKeysLV.setVisible(false);
-
+        this.domainKeysLV.setVgap(10);
+        this.domainKeysLV.getLabel().setStyle("-fx-font-weight: bold");
+        GridPane.setVgrow(this.domainKeysLV, Priority.SOMETIMES);
+        GridPane.setHgrow(this.domainKeysLV, Priority.SOMETIMES);
 
         this.domainValuesLV = new ListViewWithSearchPanel<>("Available Values");
         this.domainValuesLV.setVisible(false);
         this.domainValuesLV.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE);
+        this.domainValuesLV.setVgap(10);
+        this.domainValuesLV.getLabel().setStyle("-fx-font-weight: bold");
+        GridPane.setVgrow(this.domainValuesLV, Priority.SOMETIMES);
+        GridPane.setHgrow(this.domainValuesLV, Priority.SOMETIMES);
 
 
         this.add(this.typeSelectionCB, 0, 0);
-        this.add(this.domainKeysLV, 1, 0);
-        this.add(this.domainValuesLV, 2, 0);
+        this.add(this.domainKeysLV, 0, 1);
+        this.add(this.domainValuesLV, 1, 1);
 
 
         this.setupEventHandlers();

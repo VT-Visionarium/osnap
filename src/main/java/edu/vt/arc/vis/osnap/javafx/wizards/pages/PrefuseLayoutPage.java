@@ -25,13 +25,14 @@ package edu.vt.arc.vis.osnap.javafx.wizards.pages;
 
 
 
+import javafx.geometry.HPos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 
 import org.controlsfx.validation.Validator;
 import org.controlsfx.validation.decoration.GraphicValidationDecoration;
-import org.jutility.javafx.control.labeled.LabeledTextField;
 import org.jutility.javafx.control.validation.ValidationUtils;
+import org.jutility.javafx.control.wrapper.TextFieldWrapper;
 
 import edu.vt.arc.vis.osnap.core.domain.layout.prefuseComponents.IPrefuseLayout;
 import edu.vt.arc.vis.osnap.javafx.wizards.Wizard;
@@ -59,24 +60,24 @@ import edu.vt.arc.vis.osnap.javafx.wizards.configurations.statuspanes.IPrefuseLa
 public class PrefuseLayoutPage<O extends IPrefuseLayout, C extends IPrefuseLayoutConfiguration<O>, T extends GridPane & IPrefuseLayoutConfigurationView<O, C>>
         extends LayoutConfigurationWizardPage<O, C, T> {
 
-    private final LabeledTextField durationTF;
+    private final TextFieldWrapper durationTF;
 
     private final Label            anchorLabel;
-    private final LabeledTextField xAnchorTF;
-    private final LabeledTextField yAnchorTF;
+    private final TextFieldWrapper xAnchorTF;
+    private final TextFieldWrapper yAnchorTF;
 
     private final Label            boundsLabel;
-    private final LabeledTextField layoutBoundsXTF;
-    private final LabeledTextField layoutBoundsYTF;
-    private final LabeledTextField layoutBoundsWidthTF;
-    private final LabeledTextField layoutBoundsHeightTF;
+    private final TextFieldWrapper layoutBoundsXTF;
+    private final TextFieldWrapper layoutBoundsYTF;
+    private final TextFieldWrapper layoutBoundsWidthTF;
+    private final TextFieldWrapper layoutBoundsHeightTF;
 
 
     private final Label            marginLabel;
-    private final LabeledTextField topMarginTF;
-    private final LabeledTextField bottomMarginTF;
-    private final LabeledTextField leftMarginTF;
-    private final LabeledTextField rightMarginTF;
+    private final TextFieldWrapper topMarginTF;
+    private final TextFieldWrapper bottomMarginTF;
+    private final TextFieldWrapper leftMarginTF;
+    private final TextFieldWrapper rightMarginTF;
 
 
     /**
@@ -90,47 +91,109 @@ public class PrefuseLayoutPage<O extends IPrefuseLayout, C extends IPrefuseLayou
         super("Set Prefuse-specific configuration items", configurationView);
 
 
-        this.durationTF = new LabeledTextField("Layout Duration");
-        this.durationTF.getLabel().setStyle("-fx-font-weight: bold");
+        this.durationTF = new TextFieldWrapper();
+        Label durationLabel = new Label("Layout Duration");
+        durationLabel.setStyle("-fx-font-weight: bold");
+        durationLabel.setLabelFor(this.durationTF);
 
         this.anchorLabel = new Label("Layout Anchor");
-        anchorLabel.setStyle("-fx-font-weight: bold");
-        this.xAnchorTF = new LabeledTextField("X");
-        this.yAnchorTF = new LabeledTextField("Y");
+        this.anchorLabel.setStyle("-fx-font-weight: bold");
+
+        this.xAnchorTF = new TextFieldWrapper();
+        Label xAnchorLabel = new Label("X");
+        xAnchorLabel.setLabelFor(this.xAnchorTF);
+
+        this.yAnchorTF = new TextFieldWrapper();
+        Label yAnchorLabel = new Label("Y");
+        yAnchorLabel.setLabelFor(this.yAnchorTF);
 
 
         this.boundsLabel = new Label("Layout Bounds");
-        boundsLabel.setStyle("-fx-font-weight: bold");
-        this.layoutBoundsXTF = new LabeledTextField("X (top left corner)");
-        this.layoutBoundsYTF = new LabeledTextField("Y (top left corner)");
-        this.layoutBoundsWidthTF = new LabeledTextField("Width");
-        this.layoutBoundsHeightTF = new LabeledTextField("Height");
+        this.boundsLabel.setStyle("-fx-font-weight: bold");
+
+        this.layoutBoundsXTF = new TextFieldWrapper();
+        Label layoutBoundsXLabel = new Label("X (top left)");
+        layoutBoundsXLabel.setLabelFor(this.layoutBoundsXTF);
+
+        this.layoutBoundsYTF = new TextFieldWrapper();
+        Label layoutBoundsYLabel = new Label("Y (top left)");
+        layoutBoundsYLabel.setLabelFor(this.layoutBoundsYTF);
+
+        this.layoutBoundsWidthTF = new TextFieldWrapper();
+        Label layoutBoundsWidthLabel = new Label("Width");
+        layoutBoundsWidthLabel.setLabelFor(this.layoutBoundsWidthTF);
+
+        this.layoutBoundsHeightTF = new TextFieldWrapper();
+        Label layoutBoundsHeightLabel = new Label("Height");
+        layoutBoundsHeightLabel.setLabelFor(this.layoutBoundsHeightTF);
+
 
         this.marginLabel = new Label("Layout Margins");
-        marginLabel.setStyle("-fx-font-weight: bold");
-        this.topMarginTF = new LabeledTextField("Top");
-        this.bottomMarginTF = new LabeledTextField("Bottom");
-        this.leftMarginTF = new LabeledTextField("Left");
-        this.rightMarginTF = new LabeledTextField("Right");
+        this.marginLabel.setStyle("-fx-font-weight: bold");
+
+        this.topMarginTF = new TextFieldWrapper();
+        Label topMarginLabel = new Label("Top");
+        topMarginLabel.setLabelFor(this.topMarginTF);
+
+        this.bottomMarginTF = new TextFieldWrapper();
+        Label bottomMarginLabel = new Label("Bottom");
+        bottomMarginLabel.setLabelFor(this.bottomMarginTF);
+
+        this.leftMarginTF = new TextFieldWrapper();
+        Label leftMarginLabel = new Label("Left");
+        leftMarginLabel.setLabelFor(this.leftMarginTF);
+
+        this.rightMarginTF = new TextFieldWrapper();
+        Label rightMarginLabel = new Label("Right");
+        rightMarginLabel.setLabelFor(this.rightMarginTF);
 
 
-        this.getContentGridPane().add(this.durationTF, 0, 0);
+        this.getContentGridPane().add(durationLabel, 0, 1);
+        this.getContentGridPane().add(this.durationTF, 1, 1);
+
 
         this.getContentGridPane().add(this.anchorLabel, 0, 2);
-        this.getContentGridPane().add(this.xAnchorTF, 0, 3);
-        this.getContentGridPane().add(this.yAnchorTF, 1, 3);
+
+        this.getContentGridPane().add(xAnchorLabel, 0, 3);
+        GridPane.setHalignment(xAnchorLabel, HPos.RIGHT);
+        this.getContentGridPane().add(this.xAnchorTF, 1, 3);
+        this.getContentGridPane().add(yAnchorLabel, 2, 3);
+        GridPane.setHalignment(yAnchorLabel, HPos.RIGHT);
+        this.getContentGridPane().add(this.yAnchorTF, 3, 3);
+
 
         this.getContentGridPane().add(this.boundsLabel, 0, 5);
-        this.getContentGridPane().add(this.layoutBoundsXTF, 0, 6);
-        this.getContentGridPane().add(this.layoutBoundsYTF, 1, 6);
-        this.getContentGridPane().add(this.layoutBoundsWidthTF, 0, 7);
-        this.getContentGridPane().add(this.layoutBoundsHeightTF, 1, 7);
+
+        this.getContentGridPane().add(layoutBoundsXLabel, 0, 6);
+        GridPane.setHalignment(layoutBoundsXLabel, HPos.RIGHT);
+        this.getContentGridPane().add(this.layoutBoundsXTF, 1, 6);
+        this.getContentGridPane().add(layoutBoundsYLabel, 2, 6);
+        GridPane.setHalignment(layoutBoundsYLabel, HPos.RIGHT);
+        this.getContentGridPane().add(this.layoutBoundsYTF, 3, 6);
+
+        this.getContentGridPane().add(layoutBoundsWidthLabel, 0, 7);
+        GridPane.setHalignment(layoutBoundsWidthLabel, HPos.RIGHT);
+        this.getContentGridPane().add(this.layoutBoundsWidthTF, 1, 7);
+        this.getContentGridPane().add(layoutBoundsHeightLabel, 2, 7);
+        GridPane.setHalignment(layoutBoundsHeightLabel, HPos.RIGHT);
+        this.getContentGridPane().add(this.layoutBoundsHeightTF, 3, 7);
+
 
         this.getContentGridPane().add(this.marginLabel, 0, 9);
-        this.getContentGridPane().add(this.topMarginTF, 0, 10);
-        this.getContentGridPane().add(this.bottomMarginTF, 1, 10);
-        this.getContentGridPane().add(this.leftMarginTF, 0, 11);
-        this.getContentGridPane().add(this.rightMarginTF, 1, 11);
+
+        this.getContentGridPane().add(topMarginLabel, 0, 10);
+        GridPane.setHalignment(topMarginLabel, HPos.RIGHT);
+        this.getContentGridPane().add(this.topMarginTF, 1, 10);
+        this.getContentGridPane().add(bottomMarginLabel, 2, 10);
+        GridPane.setHalignment(bottomMarginLabel, HPos.RIGHT);
+        this.getContentGridPane().add(this.bottomMarginTF, 3, 10);
+
+        this.getContentGridPane().add(leftMarginLabel, 0, 11);
+        GridPane.setHalignment(leftMarginLabel, HPos.RIGHT);
+        this.getContentGridPane().add(this.leftMarginTF, 1, 11);
+        this.getContentGridPane().add(rightMarginLabel, 2, 11);
+        GridPane.setHalignment(rightMarginLabel, HPos.RIGHT);
+        this.getContentGridPane().add(this.rightMarginTF, 3, 11);
 
 
         this.setupValidation();

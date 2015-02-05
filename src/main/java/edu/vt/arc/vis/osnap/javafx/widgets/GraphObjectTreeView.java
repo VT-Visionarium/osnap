@@ -1,21 +1,28 @@
-/*******************************************************************************
- * Copyright 2014 Virginia Tech Visionarium
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
+package edu.vt.arc.vis.osnap.javafx.widgets;
 
 
-package edu.vt.arc.vis.osnap.javafx.wizards.content;
+//@formatter:off
+/*
+* _
+* The Open Semantic Network Analysis Platform (OSNAP)
+* _
+* Copyright (C) 2012 - 2015 Visionarium at Virginia Tech
+* _
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*      http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+* _
+*/
+//@formatter:on
+
 
 
 import java.util.Collection;
@@ -36,7 +43,8 @@ import javafx.scene.control.TreeView;
  * in the universe listed below the tree hierarchy
  * 
  * @author Shawn P Neuman
- * 
+ * @version 1.2.0
+ * @since 0.5.0
  */
 public class GraphObjectTreeView
         extends TreeView<Object> {
@@ -104,13 +112,13 @@ public class GraphObjectTreeView
         root.getChildren().add(tree_graphs);
         if (this.showNodes) {
 
-            tree_nodes = new TreeItem<>("Nodes ("
-                    + universe.getNodes().size() + ")");
+            tree_nodes = new TreeItem<>("Nodes (" + universe.getNodes().size()
+                    + ")");
             root.getChildren().add(tree_nodes);
         }
         if (this.showEdges) {
-            tree_edges = new TreeItem<>("Edges ("
-                    + universe.getEdges().size() + ")");
+            tree_edges = new TreeItem<>("Edges (" + universe.getEdges().size()
+                    + ")");
             root.getChildren().add(tree_edges);
         }
         if (this.showHyperEdges) {
@@ -165,9 +173,7 @@ public class GraphObjectTreeView
     public void parseGraph(IGraph graph, TreeItem<Object> root, String filter) {
 
 
-        TreeItem<Object> graphItem = new TreeItem<>(graph
-        // .getID()
-        );
+        TreeItem<Object> graphItem = new TreeItem<>(graph);
 
         root.getChildren().add(graphItem);
         if (this.showNodes) {
@@ -199,8 +205,8 @@ public class GraphObjectTreeView
             }
         }
         if (this.showHyperEdges) {
-            TreeItem<Object> hyperTI = new TreeItem<>(graph
-                    + "Hyperedges (" + graph.getHyperEdges().size() + ")");
+            TreeItem<Object> hyperTI = new TreeItem<>(graph + "Hyperedges ("
+                    + graph.getHyperEdges().size() + ")");
             graphItem.getChildren().add(hyperTI);
             for (IHyperEdge he : graph.getHyperEdges()) {
 
@@ -239,12 +245,12 @@ public class GraphObjectTreeView
             }
         }
         if (this.showHyperEdges) {
-            TreeItem<Object> hyperItem = new TreeItem<>(node
-                    + "HyperEdges (" + node.getHyperEdges().size() + ")");
+            TreeItem<Object> hyperItem = new TreeItem<>(node + "HyperEdges ("
+                    + node.getHyperEdges().size() + ")");
             nodeItem.getChildren().add(hyperItem);
-            
+
             for (IHyperEdge he : node.getHyperEdges()) {
-                
+
                 this.parseHyperEdge(he, hyperItem, filter);
             }
         }

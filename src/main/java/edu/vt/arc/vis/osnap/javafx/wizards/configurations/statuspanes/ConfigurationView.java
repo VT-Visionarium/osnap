@@ -31,6 +31,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
 import edu.vt.arc.vis.osnap.javafx.wizards.configurations.IConfiguration;
 import edu.vt.arc.vis.osnap.javafx.wizards.configurations.ILayoutConfiguration;
 
@@ -61,6 +62,7 @@ public abstract class ConfigurationView<O, C extends IConfiguration<O>>
      * 
      * @return the {@link ILayoutConfiguration} property.
      */
+    @Override
     public ObjectProperty<C> configurationProperty() {
 
         return this.configurationProperty;
@@ -71,6 +73,7 @@ public abstract class ConfigurationView<O, C extends IConfiguration<O>>
      * 
      * @return the value of the {@link ILayoutConfiguration} property.
      */
+    @Override
     public C getConfiguration() {
 
         return this.configurationProperty.get();
@@ -82,6 +85,7 @@ public abstract class ConfigurationView<O, C extends IConfiguration<O>>
      * @param value
      *            the value of the {@link ILayoutConfiguration} property.
      */
+    @Override
     public void setConfiguration(final C value) {
 
         this.configurationProperty.set(value);
@@ -127,6 +131,7 @@ public abstract class ConfigurationView<O, C extends IConfiguration<O>>
                 defaultConfiguration);
 
         this.title = new Label(title);
+        this.title.setFont(Font.font("Verdana", 16));
         this.title.styleProperty().setValue(
                 "-fx-font-weight: bold; -fx-padding: 0 0 5 0;");
 

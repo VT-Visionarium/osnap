@@ -58,7 +58,7 @@ import edu.vt.arc.vis.osnap.javafx.wizards.configurations.ILayoutConfiguration;
 
 
 /**
- * The {@code LayoutComponentRegistry} singleton class provides the registry of
+ * The {@code LayoutRegistry} singleton class provides the registry of
  * available {@link ILayout LayoutComponents} and their
  * {@link IConfigurationWizard Wizards}.
  * 
@@ -66,10 +66,10 @@ import edu.vt.arc.vis.osnap.javafx.wizards.configurations.ILayoutConfiguration;
  * @version 1.2.0
  * @since 0.5.0
  */
-public class LayoutComponentRegistry {
+public class LayoutRegistry {
 
     private static final Logger                                                                    LOG = LoggerFactory
-                                                                                                               .getLogger(LayoutComponentRegistry.class);
+                                                                                                               .getLogger(LayoutRegistry.class);
 
     private final Map<String, Class<? extends ILayout>>                                            classMap;
     private final Map<Class<? extends ILayout>, String>                                            nameMap;
@@ -78,25 +78,25 @@ public class LayoutComponentRegistry {
     private final Map<String, Set<VisualProperty>>                                                 capabilityMap;
 
 
-    private static LayoutComponentRegistry                                                         s_Instance;
+    private static LayoutRegistry                                                         s_Instance;
 
     /**
      * Returns the singleton instance of the class.
      * 
      * @return the singleton instance.
      */
-    public static LayoutComponentRegistry Instance() {
+    public static LayoutRegistry Instance() {
 
         if (s_Instance == null) {
 
-            s_Instance = new LayoutComponentRegistry();
+            s_Instance = new LayoutRegistry();
         }
 
         return s_Instance;
     }
 
 
-    private LayoutComponentRegistry() {
+    private LayoutRegistry() {
 
         this.classMap = new LinkedHashMap<>();
         this.nameMap = new LinkedHashMap<>();

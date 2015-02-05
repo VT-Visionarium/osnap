@@ -45,7 +45,7 @@ import edu.vt.arc.vis.osnap.core.domain.graph.metadata.Metadata;
 import edu.vt.arc.vis.osnap.core.domain.graph.metadata.MetadataType;
 import edu.vt.arc.vis.osnap.core.domain.graph.metadata.Schema;
 import edu.vt.arc.vis.osnap.core.domain.graph.metadata.SchemaEntry;
-import edu.vt.arc.vis.osnap.javafx.stringConverters.GraphObjectBasedValueTypeContainerStringConverter;
+import edu.vt.arc.vis.osnap.javafx.stringconverters.GraphObjectBasedValueTypeContainerStringConverter;
 
 
 /**

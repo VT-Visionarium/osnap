@@ -24,15 +24,15 @@ import edu.vt.arc.vis.osnap.core.domain.graph.base.GraphBase;
 import edu.vt.arc.vis.osnap.core.domain.graph.base.HyperEdgeBase;
 import edu.vt.arc.vis.osnap.core.domain.graph.base.NodeBase;
 import edu.vt.arc.vis.osnap.core.domain.graph.base.UniverseBase;
-import edu.vt.arc.vis.osnap.core.domain.layout.LayoutVisualizer;
+import edu.vt.arc.vis.osnap.core.domain.layout.LayoutSet;
 import edu.vt.arc.vis.osnap.core.domain.visualization.Visualization;
 import edu.vt.arc.vis.osnap.events.domain.ProjectDetails;
 
 
 /**
  * The {@link Project} class provides a container for a visualization project,
- * namely a {@link Universe}, a number of {@link LayoutVisualizer Layouts}, and the
- * associated {@link Visualization Visualizations}.
+ * namely a {@link Universe}, a number of {@link LayoutSet Layouts}, and
+ * the associated {@link Visualization Visualizations}.
  * 
  * @author Peter J. Radics
  * @version 1.0
@@ -43,21 +43,22 @@ import edu.vt.arc.vis.osnap.events.domain.ProjectDetails;
         NodeBase.class, Node.class, EdgeBase.class, Edge.class,
         HyperEdgeBase.class, HyperEdge.class, EndpointBase.class,
         Endpoint.class })
-@XmlType(name = "OSNAP_Project", propOrder = { "universe", "layoutVisualizers",
+@XmlType(name = "OSNAP_Project", propOrder = { "universe", "layoutSets",
         "visualizations" })
 public class Project
         extends DomainObject {
 
     @XmlElement(name = "Universe", type = Universe.class)
-    private Universe                  universe;
+    private Universe                     universe;
 
-    @XmlElements({ @XmlElement(name = "LayoutVisualizer", type = LayoutVisualizer.class) })
+    @XmlElements({ @XmlElement(name = "LayoutSet",
+            type = LayoutSet.class) })
     @XmlElementWrapper(name = "Layouts")
-    private final List<LayoutVisualizer>        layoutVisualizers;
+    private final List<LayoutSet> layoutSets;
     @XmlElements({ @XmlElement(name = "Visualization",
             type = Visualization.class) })
     @XmlElementWrapper(name = "Visualizations")
-    private final List<Visualization> visualizations;
+    private final List<Visualization>    visualizations;
 
     /**
      * Returns the universe.
@@ -84,55 +85,55 @@ public class Project
 
 
     /**
-     * Returns the list of {@link LayoutVisualizer Layouts}..
+     * Returns the list of {@link LayoutSet Layouts}..
      * 
-     * @return the list of {@link LayoutVisualizer Layouts}.
+     * @return the list of {@link LayoutSet Layouts}.
      */
-    public List<LayoutVisualizer> getLayouts() {
+    public List<LayoutSet> getLayouts() {
 
-        return this.layoutVisualizers;
+        return this.layoutSets;
     }
 
 
     @SuppressWarnings("unused")
-    private void setLayouts(List<LayoutVisualizer> layoutVisualizers) {
+    private void setLayouts(List<LayoutSet> layoutSets) {
 
-        for (LayoutVisualizer layoutVisualizer : layoutVisualizers) {
+        for (LayoutSet layoutSet : layoutSets) {
 
-            this.addLayout(layoutVisualizer);
+            this.addLayout(layoutSet);
         }
     }
 
     /**
-     * Adds the {@link LayoutVisualizer} to the list of layoutVisualizers.
+     * Adds the {@link LayoutSet} to the list of layoutSets.
      * 
-     * @param layoutVisualizer
-     *            the {@link LayoutVisualizer} to add.
+     * @param layoutSet
+     *            the {@link LayoutSet} to add.
      * @return {@code true}, if the collection is changed by the operation.
      */
-    public boolean addLayout(LayoutVisualizer layoutVisualizer) {
+    public boolean addLayout(LayoutSet layoutSet) {
 
-        return this.layoutVisualizers.add(layoutVisualizer);
+        return this.layoutSets.add(layoutSet);
     }
 
     /**
-     * Removes the {@link LayoutVisualizer} from the list of layoutVisualizers.
+     * Removes the {@link LayoutSet} from the list of layoutSets.
      * 
-     * @param layoutVisualizer
-     *            the {@link LayoutVisualizer} to remove.
+     * @param layoutSet
+     *            the {@link LayoutSet} to remove.
      * @return {@code true}, if the collection is changed by the operation.
      */
-    public boolean removeLayout(LayoutVisualizer layoutVisualizer) {
+    public boolean removeLayout(LayoutSet layoutSet) {
 
-        return this.layoutVisualizers.remove(layoutVisualizer);
+        return this.layoutSets.remove(layoutSet);
     }
 
     /**
-     * Clears the list of {@link LayoutVisualizer Layouts}.
+     * Clears the list of {@link LayoutSet Layouts}.
      */
     public void clearLayouts() {
 
-        this.layoutVisualizers.clear();
+        this.layoutSets.clear();
     }
 
 
@@ -232,20 +233,26 @@ public class Project
             this.setId(null);
         }
         this.setUniverse(universe);
-        this.layoutVisualizers = new LinkedList<>();
+        this.layoutSets = new LinkedList<>();
         this.visualizations = new LinkedList<>();
     }
 
 
+    /**
+     * Creates a new instance of the {@code Project} class (Copy Constructor).
+     * 
+     * @param projectToCopy
+     *            the {@code Project} to copy.
+     */
     public Project(Project projectToCopy) {
 
         this.setUniverse(new Universe());
-        
+
         this.getUniverse().setId(projectToCopy.getUniverse().getId());
-        
+
         this.setId(projectToCopy.getId());
 
-        this.layoutVisualizers = new LinkedList<>();
+        this.layoutSets = new LinkedList<>();
         this.visualizations = new LinkedList<>();
     }
 
@@ -260,7 +267,7 @@ public class Project
 
         super(details);
 
-        this.layoutVisualizers = new LinkedList<>();
+        this.layoutSets = new LinkedList<>();
         this.visualizations = new LinkedList<>();
     }
 

@@ -30,8 +30,9 @@ import edu.vt.arc.vis.osnap.javafx.wizards.configurations.PrefuseNodeLinkTreeLay
 
 
 /**
- * The {@code PrefuseNodeLinkTreeLayoutConfigurationView} class provides a status panes for
- * {@link PrefuseNodeLinkTreeLayoutConfiguration PrefuseNodeLinkTreeConfigurations}.
+ * The {@code PrefuseNodeLinkTreeLayoutConfigurationView} class provides a
+ * status panes for {@link PrefuseNodeLinkTreeLayoutConfiguration
+ * PrefuseNodeLinkTreeConfigurations}.
  *
  * @author Shawn P Neuman, Peter J. Radics
  * @version 1.2.0
@@ -39,7 +40,7 @@ import edu.vt.arc.vis.osnap.javafx.wizards.configurations.PrefuseNodeLinkTreeLay
  */
 public class PrefuseNodeLinkTreeLayoutConfigurationView
         extends
-        PrefuseTreeLayoutComponentConfigurationView<PrefuseNodeLinkTreeLayout, PrefuseNodeLinkTreeLayoutConfiguration> {
+        PrefuseTreeLayoutConfigurationView<PrefuseNodeLinkTreeLayout, PrefuseNodeLinkTreeLayoutConfiguration> {
 
     private final Label orientation;
     private final Text  orientationValue;
@@ -56,7 +57,8 @@ public class PrefuseNodeLinkTreeLayoutConfigurationView
 
 
     /**
-     * Creates a new instance of the {@code PrefuseNodeLinkTreeLayoutConfigurationView} class.
+     * Creates a new instance of the
+     * {@code PrefuseNodeLinkTreeLayoutConfigurationView} class.
      *
      * @param title
      *            the title for this {@link IConfigurationView}.
@@ -67,19 +69,19 @@ public class PrefuseNodeLinkTreeLayoutConfigurationView
 
         this.orientation = new Label("Orientation: ");
         this.orientationValue = new Text();
-        this.orientationValue.setStyle("-fx-font-weight: bold");
+        this.orientation.setStyle("-fx-font-weight: bold");
 
         this.depthSpacing = new Label("Depth Spacing: ");
         this.depthSpacingValue = new Text();
-        this.depthSpacingValue.setStyle("-fx-font-weight: bold");
+        this.depthSpacing.setStyle("-fx-font-weight: bold");
 
         this.siblingSpacing = new Label("Space Between Siblings: ");
         this.spaceBetweenSiblingsValue = new Text();
-        this.spaceBetweenSiblingsValue.setStyle("-fx-font-weight: bold");
+        this.siblingSpacing.setStyle("-fx-font-weight: bold");
 
         this.subTreeSpacing = new Label("Space Between Neighboring Sub-Trees: ");
         this.spaceBetweenSubTreesValue = new Text();
-        this.spaceBetweenSubTreesValue.setStyle("-fx-font-weight: bold");
+        this.subTreeSpacing.setStyle("-fx-font-weight: bold");
 
 
         this.add(this.orientation, 0, 3);

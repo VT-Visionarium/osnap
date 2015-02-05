@@ -39,7 +39,7 @@ import edu.vt.arc.vis.osnap.javafx.wizards.configurations.statuspanes.ILayoutCon
 
 /**
  * The {@code NamingPage} provides a {@link LayoutConfigurationWizardPage} for
- * naming and describing {@link ILayout LayoutVisualizer Components}.
+ * naming and describing {@link ILayout Layout Components}.
  *
  * @param <O>
  *            the type of the {@link ILayout}.
@@ -68,7 +68,7 @@ public class NamingPage<O extends ILayout, C extends ILayoutConfiguration<O>, T 
      */
     public NamingPage(final T configurationView) {
 
-        super("Name LayoutVisualizer Component", configurationView);
+        super("Name the Layout", configurationView);
 
 
         this.nameTF = new LabeledTextField("Provide a name for this layout");
@@ -92,13 +92,13 @@ public class NamingPage<O extends ILayout, C extends ILayoutConfiguration<O>, T 
     private void setupValidation() {
 
         this.nameTF.registerValidator(Validator
-                .createEmptyValidator("Name of LayoutVisualizer cannot be empty!"));
+                .createEmptyValidator("Name of Layout cannot be empty!"));
         this.nameTF.setValidationDecorator(new GraphicValidationDecoration());
         this.nameTF.setErrorDecorationEnabled(true);
 
         this.descriptionTF
                 .registerValidator(Validator
-                        .createEmptyValidator("Description of LayoutVisualizer cannot be empty!"));
+                        .createEmptyValidator("Description of Layout cannot be empty!"));
         this.descriptionTF
                 .setValidationDecorator(new GraphicValidationDecoration());
         this.descriptionTF.setErrorDecorationEnabled(true);

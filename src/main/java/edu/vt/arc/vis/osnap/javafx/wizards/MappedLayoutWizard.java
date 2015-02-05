@@ -88,8 +88,9 @@ public class MappedLayoutWizard
         this.setFlow(new LinearFlow(page1, page2, page3, page4, page5));
     }
 
+    @Override
     public IMappedLayoutConfiguration getConfiguration() {
         
         return this.configurationView.getConfiguration();
-    };
+    }
 }

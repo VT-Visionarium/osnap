@@ -46,12 +46,12 @@ import edu.vt.arc.vis.osnap.javafx.dialogs.UniverseDialog;
 
 
 /**
- * 
+ * The {@code FileMenu} class provides the main file menu.
  * 
  * @author Peter J. Radics
- * @version 0.1
+ * @version 1.2.0
+ * @since 0.1.0
  */
-
 public class FileMenu
         extends Menu {
 
@@ -234,7 +234,11 @@ public class FileMenu
 
         this.openProjectUriMI = new Action("Open Project URI", actionEvent -> {
 
-            new UriDialog(FileMenu.this.stage).showAndWait().ifPresent(uri -> {
+            UriDialog dialog = new UriDialog(FileMenu.this.stage);
+
+            dialog.getDialogPane().setPrefWidth(600);
+
+            dialog.showAndWait().ifPresent(uri -> {
 
                 Project project = this.open(Project.class, uri);
 
@@ -272,19 +276,20 @@ public class FileMenu
         this.openUniverseUriMI = new Action("Open Graph Universe URI",
                 actionEvent -> {
 
-                    new UriDialog(FileMenu.this.stage).showAndWait().ifPresent(
-                            uri -> {
+                    UriDialog dialog = new UriDialog(FileMenu.this.stage);
 
-                                Universe universe = this.open(Universe.class,
-                                        uri);
+                    dialog.getDialogPane().setPrefWidth(600);
+                    dialog.showAndWait().ifPresent(uri -> {
 
-                                if (universe != null) {
+                        Universe universe = this.open(Universe.class, uri);
 
-                                    Project project = new Project(universe);
-                                    this.project.set(project);
-                                }
-                                this.universe.set(universe);
-                            });
+                        if (universe != null) {
+
+                            Project project = new Project(universe);
+                            this.project.set(project);
+                        }
+                        this.universe.set(universe);
+                    });
                 });
 
 

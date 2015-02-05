@@ -71,10 +71,11 @@ public abstract class LayoutConfigurationView<O extends ILayout, C extends ILayo
         super(title, defaultConfiguration);
 
         this.propertyType = new Label("Visual Property:");
+        this.propertyType.setStyle("-fx-font-weight: bold");
         this.propertyTypeTF = new Text();
-        this.propertyTypeTF.setStyle("-fx-font-weight: bold");
 
         this.forTheseObjects = new Label("For:");
+        this.forTheseObjects.setStyle("-fx-font-weight: bold");
         this.restrictionList = new ListView<>();
 
         GridPane.setHgrow(this.propertyType, Priority.ALWAYS);

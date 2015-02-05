@@ -60,8 +60,7 @@ public class SimpleShapeLayoutConfigurationWizard
      *            the owner of this wizard.
      * @param universe
      *            the {@link Universe} for which the
-     *            {@link ILayoutConfiguration LayoutVisualizer Configuration} is
-     *            created.
+     *            {@link ILayoutConfiguration Layout Configuration} is created.
      */
     public SimpleShapeLayoutConfigurationWizard(Window owner, Universe universe) {
 
@@ -89,5 +88,4 @@ public class SimpleShapeLayoutConfigurationWizard
 
         return this.configurationView.getConfiguration();
     }
-
 }

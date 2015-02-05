@@ -15,7 +15,14 @@
  ******************************************************************************/
 
 
-package edu.vt.arc.vis.osnap.javafx.wizards.content;
+/**
+ * This package contains string converters for the various classes in the O/SNAP
+ * framework.
+ * 
+ * @author Peter J. Radics
+ * 
+ */
+package edu.vt.arc.vis.osnap.javafx.stringconverters;
 
 /*
  * _
@@ -36,66 +43,3 @@ package edu.vt.arc.vis.osnap.javafx.wizards.content;
  * limitations under the License.
  * _
  */
-
-
-import edu.vt.arc.vis.osnap.core.domain.visualization.VisualProperty;
-
-
-/**
- * capabilities object stores visual property and boolean value for each vpp
- * capability designed for easier use of capabilities table
- * 
- * @author Shawn P Neuman
- */
-public class CapabilitiesObject {
-
-
-    private VisualProperty vp;
-    private Boolean        enabled;
-
-    /**
-     * @param vp
-     * @param enabled
-     * 
-     */
-    public CapabilitiesObject(VisualProperty vp, Boolean enabled) {
-
-        setVisualProperty(vp);
-        setEnabled(enabled);
-    }
-
-    /**
-     * @return this visual property
-     */
-    public VisualProperty getVisualProperty() {
-
-        return this.vp;
-
-    }
-
-    /**
-     * @param vp
-     */
-    public void setVisualProperty(VisualProperty vp) {
-
-        this.vp = vp;
-    }
-
-    /**
-     * @return if enabled true, else false
-     */
-    public Boolean isEnabled() {
-
-        return this.enabled;
-    }
-
-    /**
-     * @param enabled
-     *            true or false
-     */
-    public void setEnabled(Boolean enabled) {
-
-        this.enabled = enabled;
-    }
-
-}

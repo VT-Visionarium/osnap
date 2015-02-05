@@ -23,22 +23,22 @@ package edu.vt.arc.vis.osnap.javafx.wizards.configurations;
  */
 //@formatter:on
 
-import edu.vt.arc.vis.osnap.core.domain.layout.prefuseComponents.IPrefuseTreeLayoutComponent;
+import edu.vt.arc.vis.osnap.core.domain.layout.prefuseComponents.IPrefuseTreeLayout;
 
 
 /**
  * The {@code IPrefuseTreeLayoutConfiguration} interface provides the
  * contract for {@link IConfiguration Configurations} of
- * {@link IPrefuseTreeLayoutComponent Prefuse TreeLayoutComponents}.
+ * {@link IPrefuseTreeLayout Prefuse TreeLayoutComponents}.
  * 
  * @param <T>
- *            the type of the {@link IPrefuseTreeLayoutComponent}.
+ *            the type of the {@link IPrefuseTreeLayout}.
  * 
  * @author Peter J. Radics
  * @version 1.2.0
  * @since 1.2.0
  */
-public interface IPrefuseTreeLayoutConfiguration<T extends IPrefuseTreeLayoutComponent>
+public interface IPrefuseTreeLayoutConfiguration<T extends IPrefuseTreeLayout>
         extends IPrefuseLayoutConfiguration<T>, ITreeLayoutConfiguration<T> {
 
     // tagging interface

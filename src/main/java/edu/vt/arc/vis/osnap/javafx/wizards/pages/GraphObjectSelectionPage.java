@@ -38,23 +38,24 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import edu.vt.arc.vis.osnap.core.domain.graph.Graph;
 import edu.vt.arc.vis.osnap.core.domain.graph.Node;
 import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
 import edu.vt.arc.vis.osnap.core.domain.graph.common.IGraphObject;
 import edu.vt.arc.vis.osnap.core.domain.layout.common.ILayout;
 import edu.vt.arc.vis.osnap.core.domain.visualization.VisualProperty;
+import edu.vt.arc.vis.osnap.javafx.widgets.GraphObjectTreeView;
 import edu.vt.arc.vis.osnap.javafx.widgets.SearchPanel;
 import edu.vt.arc.vis.osnap.javafx.wizards.Wizard;
 import edu.vt.arc.vis.osnap.javafx.wizards.configurations.ILayoutConfiguration;
 import edu.vt.arc.vis.osnap.javafx.wizards.configurations.statuspanes.ILayoutConfigurationView;
-import edu.vt.arc.vis.osnap.javafx.wizards.content.GraphObjectTreeView;
 
 
 /**
  * The {@code GraphObjectSelectionPage} provides a
  * {@link LayoutConfigurationWizardPage} for selecting the {@link IGraphObject
- * GraphObjects} to which the {@link ILayout LayoutVisualizer Component} is to be
+ * GraphObjects} to which the {@link ILayout LayoutSet Component} is to be
  * applied.
  *
  * @param <O>
@@ -71,7 +72,7 @@ import edu.vt.arc.vis.osnap.javafx.wizards.content.GraphObjectTreeView;
 public class GraphObjectSelectionPage<O extends ILayout, C extends ILayoutConfiguration<O>, T extends GridPane & ILayoutConfigurationView<O, C>>
         extends LayoutConfigurationWizardPage<O, C, T> {
 
-    private final GraphObjectTreeView tree;
+    private final GraphObjectTreeView treeView;
     private final Universe            universe;
     private final SearchPanel         searchPanel;
     private String                    filterString = "";
@@ -85,8 +86,7 @@ public class GraphObjectSelectionPage<O extends ILayout, C extends ILayoutConfig
      *            the {@link ILayoutConfigurationView}.
      * @param universe
      *            the {@link Universe} for which the
-     *            {@link ILayoutConfiguration LayoutVisualizer Configuration} is
-     *            created.
+     *            {@link ILayoutConfiguration Layout Configuration} is created.
      */
     public GraphObjectSelectionPage(final T configurationView,
             final Universe universe) {
@@ -97,13 +97,17 @@ public class GraphObjectSelectionPage<O extends ILayout, C extends ILayoutConfig
 
         this.universe = universe;
 
-        this.tree = new GraphObjectTreeView();
-        this.tree.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        this.treeView = new GraphObjectTreeView();
+        this.treeView.getSelectionModel().setSelectionMode(
+                SelectionMode.MULTIPLE);
+        GridPane.setHgrow(this.treeView, Priority.SOMETIMES);
+        GridPane.setVgrow(this.treeView, Priority.SOMETIMES);
         this.searchPanel = new SearchPanel();
         this.searchPanel.setVisible(false);
+        GridPane.setHgrow(this.searchPanel, Priority.SOMETIMES);
+        GridPane.setVgrow(this.searchPanel, Priority.NEVER);
 
-        this.getContentGridPane().add(this.tree, 0, 0);
-        this.getContentGridPane().add(this.searchPanel, 0, 1);
+        this.getContentGridPane().add(this.treeView, 0, 0);
 
         this.setupEventHandlers();
     }
@@ -111,14 +115,17 @@ public class GraphObjectSelectionPage<O extends ILayout, C extends ILayoutConfig
 
     private void setupEventHandlers() {
 
-        this.searchPanel.getClose().setOnAction(actionEvent -> {
+        this.searchPanel.getClose().setOnAction(
+                actionEvent -> {
 
-            if (this.searchPanel.isVisible()) {
+                    if (this.searchPanel.isVisible()) {
 
-                this.searchPanel.setTextField("");
-                this.searchPanel.setVisible(false);
-            }
-        });
+                        this.searchPanel.setTextField("");
+                        this.searchPanel.setVisible(false);
+                        this.getContentGridPane().getChildren()
+                                .remove(this.searchPanel);
+                    }
+                });
 
         this.searchPanel.getFilterString()
                 .addListener(
@@ -130,11 +137,13 @@ public class GraphObjectSelectionPage<O extends ILayout, C extends ILayoutConfig
 
                                 if (this.nodeTree) {
 
-                                    this.tree.filterNodes(this.filterString);
+                                    this.treeView
+                                            .filterNodes(this.filterString);
                                 }
                                 else if (this.edgeTree) {
 
-                                    this.tree.filterEdges(this.filterString);
+                                    this.treeView
+                                            .filterEdges(this.filterString);
                                 }
                             }
                         });
@@ -147,6 +156,7 @@ public class GraphObjectSelectionPage<O extends ILayout, C extends ILayoutConfig
 
             if (acceleratorKey.match(keyEvent)) {
 
+                this.getContentGridPane().add(this.searchPanel, 0, 1);
                 this.searchPanel.setVisible(true);
                 this.searchPanel.requestFocus();
             }
@@ -154,14 +164,13 @@ public class GraphObjectSelectionPage<O extends ILayout, C extends ILayoutConfig
     }
 
 
-
     /**
-     * populates the node tree view
+     * populates the node treeView view
      *
      */
     public void populateTree() {
 
-        this.tree.populate(this.universe, this.filterString, this.nodeTree,
+        this.treeView.populate(this.universe, this.filterString, this.nodeTree,
                 this.edgeTree, false);
     }
 
@@ -197,8 +206,8 @@ public class GraphObjectSelectionPage<O extends ILayout, C extends ILayoutConfig
 
         final List<IGraphObject> selectedGraphObjects = new ArrayList<>();
 
-        for (final TreeItem<Object> treeItem : this.tree.getSelectionModel()
-                .getSelectedItems()) {
+        for (final TreeItem<Object> treeItem : this.treeView
+                .getSelectionModel().getSelectedItems()) {
 
             final Object selected = treeItem.getValue();
 
@@ -288,8 +297,8 @@ public class GraphObjectSelectionPage<O extends ILayout, C extends ILayoutConfig
         super.onEnteringPage(wizard);
 
 
-        final ILayoutConfiguration<?> config = this
-                .getConfigurationView().getConfiguration();
+        final ILayoutConfiguration<?> config = this.getConfigurationView()
+                .getConfiguration();
 
         if (config != null) {
 

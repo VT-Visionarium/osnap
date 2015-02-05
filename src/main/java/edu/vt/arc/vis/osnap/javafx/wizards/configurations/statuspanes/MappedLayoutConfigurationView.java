@@ -23,8 +23,10 @@ package edu.vt.arc.vis.osnap.javafx.wizards.configurations.statuspanes;
  */
 // @formatter:on
 
+import javafx.geometry.VPos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import edu.vt.arc.vis.osnap.core.domain.graph.common.GraphObjectProperty;
 import edu.vt.arc.vis.osnap.core.domain.graph.common.IGraphObjectBasedValueTypeContainer;
@@ -49,8 +51,6 @@ public class MappedLayoutConfigurationView
     private final Label            typeLabel;
     private final Text             typeTF;
     private final Label            selectedValues;
-    private final Label            value;
-    private final Text             valueTF;
     private final ListView<Object> propertyValuesList;
 
 
@@ -70,19 +70,15 @@ public class MappedLayoutConfigurationView
         this.typeTF = new Text();
         this.typeTF.setStyle("-fx-font-weight: bold");
 
-        this.value = new Label("With Value:");
-        this.valueTF = new Text();
-        this.valueTF.setStyle("-fx-font-weight: bold");
-
         this.selectedValues = new Label("Selected Values:");
         this.propertyValuesList = new ListView<>();
 
         this.add(this.typeLabel, 0, super.rowsUsed());
         this.add(this.typeTF, 1, super.rowsUsed());
-        this.add(this.value, 0, super.rowsUsed() + 1);
-        this.add(this.valueTF, 1, super.rowsUsed() + 1);
-        this.add(this.selectedValues, 0, super.rowsUsed() + 2);
-        this.add(this.propertyValuesList, 1, super.rowsUsed() + 2);
+        this.add(this.selectedValues, 0, super.rowsUsed() + 1);
+
+        GridPane.setValignment(selectedValues, VPos.TOP);
+        this.add(this.propertyValuesList, 1, super.rowsUsed() + 1);
     }
 
     @Override
@@ -93,13 +89,20 @@ public class MappedLayoutConfigurationView
         this.typeLabel.setText("");
         this.propertyValuesList.getItems().clear();
 
-        if (this.getConfiguration().getDomainKey() instanceof Metadata) {
+        if (this.getConfiguration().getDomainKey() != null) {
+            if (this.getConfiguration().getDomainKey() instanceof Metadata) {
 
-            this.typeLabel.setText("Metadata");
-        }
-        else if (this.getConfiguration().getDomainKey() instanceof GraphObjectProperty) {
+                this.typeLabel.setText("Metadata");
+            }
+            else if (this.getConfiguration().getDomainKey() instanceof GraphObjectProperty) {
 
-            this.typeLabel.setText("Property");
+                this.typeLabel.setText("Property");
+            }
+
+
+            this.typeTF.setText(this.getConfiguration().getDomainKey()
+                    .toString());
+
         }
 
         if (this.getConfiguration().getValueMappings().isEmpty()) {
