@@ -134,6 +134,9 @@ public abstract class LayoutConfigurationWizardPage<O extends ILayout, C extends
         this.splitPane.setVgap(10);
         this.splitPane.setHgap(10);
 
+        this.splitPane.setMaxSize(1000, 550);
+        this.splitPane.setPrefSize(1000, 550);
+
         this.contentGridPane = new GridPane();
         this.contentGridPane.setVgap(10);
         this.contentGridPane.setHgap(10);

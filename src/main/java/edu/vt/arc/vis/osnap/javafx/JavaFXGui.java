@@ -258,7 +258,7 @@ public class JavaFXGui
         XmlSerializer.Instance().registerClass(GraphMLDocument.class);
         XmlSerializer.Instance().registerClass(X3DDocument.class);
 
-        this.scene = new Scene(new VBox(), 1650, 800, Color.LIGHTSLATEGREY);
+        this.scene = new Scene(new VBox(), 1000, 700, Color.LIGHTSLATEGREY);
 
 
         this.scene.getRoot().addEventHandler(SwitchTabEvent.SWITCH,

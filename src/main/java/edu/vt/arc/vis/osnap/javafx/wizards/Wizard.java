@@ -210,6 +210,7 @@ public class Wizard {
         } else if ( owner instanceof Node ) {
                 window = ((Node)owner).getScene().getWindow();
         }
+        dialog.setResizable(true);
         
         dialog.initOwner(window);
     }
