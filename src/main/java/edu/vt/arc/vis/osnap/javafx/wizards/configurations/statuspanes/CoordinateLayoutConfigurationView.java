@@ -1,6 +1,5 @@
 package edu.vt.arc.vis.osnap.javafx.wizards.configurations.statuspanes;
 
-
 // @formatter:off
 /*
  * _
@@ -28,7 +27,6 @@ import javafx.scene.text.Text;
 import edu.vt.arc.vis.osnap.core.domain.layout.common.ICoordinateLayout;
 import edu.vt.arc.vis.osnap.javafx.wizards.configurations.ICoordinateLayoutConfiguration;
 
-
 /**
  * The abstract {@code CoordinateLayoutConfigurationView} class provides the
  * base for all status panes for {@link ICoordinateLayoutConfiguration
@@ -44,124 +42,124 @@ import edu.vt.arc.vis.osnap.javafx.wizards.configurations.ICoordinateLayoutConfi
  * @since 0.5.0
  */
 public abstract class CoordinateLayoutConfigurationView<O extends ICoordinateLayout, C extends ICoordinateLayoutConfiguration<O>>
-        extends LayoutConfigurationView<O, C>
-        implements ICoordinateLayoutConfigurationView<O, C> {
+		extends LayoutConfigurationView<O, C> implements
+		ICoordinateLayoutConfigurationView<O, C> {
 
+	private final Label xOutputLabel;
+	private final Label yOutputLabel;
+	private final Label zOutputLabel;
+	private final Text xOutputValue;
+	private final Text yOutputValue;
+	private final Text zOutputValue;
 
-    private final Label xOutputLabel;
-    private final Label yOutputLabel;
-    private final Label zOutputLabel;
-    private final Text  xOutputValue;
-    private final Text  yOutputValue;
-    private final Text  zOutputValue;
+	private final Label xOutputScaleLabel;
+	private final Label yOutputScaleLabel;
+	private final Label zOutputScaleLabel;
+	private final Text xOutputScaleValue;
+	private final Text yOutputScaleValue;
+	private final Text zOutputScaleValue;
 
-    private final Label xOutputScaleLabel;
-    private final Label yOutputScaleLabel;
-    private final Label zOutputScaleLabel;
-    private final Text  xOutputScaleValue;
-    private final Text  yOutputScaleValue;
-    private final Text  zOutputScaleValue;
+	/**
+	 * Creates a new instance of the {@code SimpleShapeLayoutConfigurationView}
+	 * class.
+	 *
+	 * @param title
+	 *            the title for this {@link IConfigurationView}.
+	 */
+	public CoordinateLayoutConfigurationView(final String title) {
 
+		this(title, null);
+	}
 
-    /**
-     * Creates a new instance of the {@code SimpleShapeLayoutConfigurationView}
-     * class.
-     *
-     * @param title
-     *            the title for this {@link IConfigurationView}.
-     */
-    public CoordinateLayoutConfigurationView(final String title) {
+	/**
+	 * Creates a new instance of the {@code SimpleShapeLayoutConfigurationView}
+	 * class.
+	 *
+	 * @param title
+	 *            the title for this {@link IConfigurationView}.
+	 * @param defaultConfiguration
+	 *            the default configuration.
+	 */
+	public CoordinateLayoutConfigurationView(final String title,
+			final C defaultConfiguration) {
 
-        this(title, null);
-    }
+		super(title, defaultConfiguration);
 
-    /**
-     * Creates a new instance of the {@code SimpleShapeLayoutConfigurationView}
-     * class.
-     *
-     * @param title
-     *            the title for this {@link IConfigurationView}.
-     * @param defaultConfiguration
-     *            the default configuration.
-     */
-    public CoordinateLayoutConfigurationView(final String title,
-            final C defaultConfiguration) {
+		this.xOutputValue = new Text();
+		this.xOutputLabel = new Label("Output on X:");
+		this.xOutputLabel.setStyle("-fx-font-weight: bold");
+		this.xOutputLabel.setLabelFor(this.xOutputValue);
+		this.yOutputValue = new Text();
+		this.yOutputLabel = new Label("Output on Y:");
+		this.yOutputLabel.setStyle("-fx-font-weight: bold");
+		this.yOutputLabel.setLabelFor(this.yOutputValue);
+		this.zOutputValue = new Text();
+		this.zOutputLabel = new Label("Output on Z:");
+		this.zOutputLabel.setStyle("-fx-font-weight: bold");
+		this.zOutputLabel.setLabelFor(this.zOutputValue);
 
-        super(title, defaultConfiguration);
+		this.xOutputScaleValue = new Text();
+		this.xOutputScaleLabel = new Label("Scale on X:");
+		this.xOutputScaleLabel.setStyle("-fx-font-weight: bold");
+		this.xOutputScaleLabel.setLabelFor(this.xOutputScaleValue);
+		this.yOutputScaleValue = new Text();
+		this.yOutputScaleLabel = new Label("Scale on Y:");
+		this.yOutputScaleLabel.setStyle("-fx-font-weight: bold");
+		this.yOutputScaleLabel.setLabelFor(this.yOutputScaleValue);
+		this.zOutputScaleValue = new Text();
+		this.zOutputScaleLabel = new Label("Scale on Z:");
+		this.zOutputScaleLabel.setStyle("-fx-font-weight: bold");
+		this.zOutputScaleLabel.setLabelFor(this.zOutputScaleValue);
 
-        this.xOutputLabel = new Label("Output on X:");
-        this.xOutputLabel.setStyle("-fx-font-weight: bold");
-        this.yOutputLabel = new Label("Output on Y:");
-        this.yOutputLabel.setStyle("-fx-font-weight: bold");
-        this.zOutputLabel = new Label("Output on Z:");
-        this.zOutputLabel.setStyle("-fx-font-weight: bold");
+		this.add(this.xOutputLabel, 0, super.rowsUsed());
+		this.add(this.xOutputValue, 1, super.rowsUsed());
+		this.add(this.yOutputLabel, 0, super.rowsUsed() + 1);
+		this.add(this.yOutputValue, 1, super.rowsUsed() + 1);
+		this.add(this.zOutputLabel, 0, super.rowsUsed() + 2);
+		this.add(this.zOutputValue, 1, super.rowsUsed() + 2);
 
-        this.xOutputValue = new Text();
-        this.yOutputValue = new Text();
-        this.zOutputValue = new Text();
+		this.add(this.xOutputScaleLabel, 0, super.rowsUsed() + 3);
+		this.add(this.xOutputScaleValue, 1, super.rowsUsed() + 3);
+		this.add(this.yOutputScaleLabel, 0, super.rowsUsed() + 4);
+		this.add(this.yOutputScaleValue, 1, super.rowsUsed() + 4);
+		this.add(this.zOutputScaleLabel, 0, super.rowsUsed() + 5);
+		this.add(this.zOutputScaleValue, 1, super.rowsUsed() + 5);
+	}
 
+	@Override
+	protected int rowsUsed() {
 
-        this.xOutputScaleLabel = new Label("Scale on X:");
-        this.xOutputScaleLabel.setStyle("-fx-font-weight: bold");
-        this.yOutputScaleLabel = new Label("Scale on Y:");
-        this.yOutputScaleLabel.setStyle("-fx-font-weight: bold");
-        this.zOutputScaleLabel = new Label("Scale on Z:");
-        this.zOutputScaleLabel.setStyle("-fx-font-weight: bold");
+		return super.rowsUsed() + 6;
+	}
 
-        this.xOutputScaleValue = new Text();
-        this.yOutputScaleValue = new Text();
-        this.zOutputScaleValue = new Text();
+	@Override
+	public void refreshView() {
 
-        this.add(this.xOutputLabel, 0, super.rowsUsed());
-        this.add(this.xOutputValue, 1, super.rowsUsed());
-        this.add(this.yOutputLabel, 0, super.rowsUsed() + 1);
-        this.add(this.yOutputValue, 1, super.rowsUsed() + 1);
-        this.add(this.zOutputLabel, 0, super.rowsUsed() + 2);
-        this.add(this.zOutputValue, 1, super.rowsUsed() + 2);
+		super.refreshView();
 
+		this.xOutputValue.setText("");
+		this.yOutputValue.setText("");
+		this.zOutputValue.setText("");
 
-        this.add(this.xOutputScaleLabel, 0, super.rowsUsed() + 3);
-        this.add(this.xOutputScaleValue, 1, super.rowsUsed() + 3);
-        this.add(this.yOutputScaleLabel, 0, super.rowsUsed() + 4);
-        this.add(this.yOutputScaleValue, 1, super.rowsUsed() + 4);
-        this.add(this.zOutputScaleLabel, 0, super.rowsUsed() + 5);
-        this.add(this.zOutputScaleValue, 1, super.rowsUsed() + 5);
-    }
+		this.xOutputScaleValue.setText("");
+		this.yOutputScaleValue.setText("");
+		this.zOutputScaleValue.setText("");
 
-    @Override
-    protected int rowsUsed() {
+		if (this.getConfiguration() != null) {
 
-        return super.rowsUsed() + 6;
-    }
+			this.xOutputValue.setText(this.getConfiguration().getXOutput()
+					.toString());
+			this.yOutputValue.setText(this.getConfiguration().getYOutput()
+					.toString());
+			this.zOutputValue.setText(this.getConfiguration().getZOutput()
+					.toString());
 
-    @Override
-    public void refreshView() {
-
-        super.refreshView();
-
-        this.xOutputValue.setText("");
-        this.yOutputValue.setText("");
-        this.zOutputValue.setText("");
-
-        this.xOutputScaleValue.setText("");
-        this.yOutputScaleValue.setText("");
-        this.zOutputScaleValue.setText("");
-
-        if (this.getConfiguration() != null) {
-
-            this.xOutputValue.setText(this.getConfiguration().getXOutput()
-                    .toString());
-            this.yOutputValue.setText(this.getConfiguration().getYOutput()
-                    .toString());
-            this.zOutputValue.setText(this.getConfiguration().getZOutput()
-                    .toString());
-
-            this.xOutputScaleValue.setText(""
-                    + this.getConfiguration().getFirstComponentScale());
-            this.yOutputScaleValue.setText(""
-                    + this.getConfiguration().getSecondComponentScale());
-            this.zOutputScaleValue.setText(""
-                    + this.getConfiguration().getThirdComponentScale());
-        }
-    }
+			this.xOutputScaleValue.setText(""
+					+ this.getConfiguration().getFirstComponentScale());
+			this.yOutputScaleValue.setText(""
+					+ this.getConfiguration().getSecondComponentScale());
+			this.zOutputScaleValue.setText(""
+					+ this.getConfiguration().getThirdComponentScale());
+		}
+	}
 }

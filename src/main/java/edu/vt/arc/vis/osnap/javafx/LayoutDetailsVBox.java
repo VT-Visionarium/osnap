@@ -273,7 +273,7 @@ public class LayoutDetailsVBox
 
             this.layoutLV.getItems().clear();
             this.layoutLV.getItems().addAll(
-                    this.getLayout().getLayoutComponents());
+                    this.getLayout().getLayouts());
         }
     }
 

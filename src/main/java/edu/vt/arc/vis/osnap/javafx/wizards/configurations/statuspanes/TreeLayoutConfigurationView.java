@@ -77,8 +77,8 @@ public abstract class TreeLayoutConfigurationView<O extends ITreeLayout, C exten
         super(title, defaultConfiguration);
 
         this.rootNodeLabel = new Label("Root Node:");
+        this.rootNodeLabel.setStyle("-fx-font-weight: bold");
         this.rootNodeValue = new Text();
-        this.rootNodeValue.setStyle("-fx-font-weight: bold");
 
 
         this.add(this.rootNodeLabel, 0, super.rowsUsed());

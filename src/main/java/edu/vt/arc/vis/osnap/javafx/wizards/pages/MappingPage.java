@@ -1,32 +1,28 @@
 package edu.vt.arc.vis.osnap.javafx.wizards.pages;
 
 
-//@formatter:off
+// @formatter:off
 /*
-* _
-* The Open Semantic Network Analysis Platform (OSNAP)
-* _
-* Copyright (C) 2012 - 2014 Visionarium at Virginia Tech
-* _
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-* 
-*      http://www.apache.org/licenses/LICENSE-2.0
-* 
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-* _
-*/
-//@formatter:on
+ * _ The Open Semantic Network Analysis Platform (OSNAP) _ Copyright (C) 2012 -
+ * 2014 Visionarium at Virginia Tech _ Licensed under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License. _
+ */
+// @formatter:on
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javafx.beans.value.ChangeListener;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
@@ -43,9 +39,11 @@ import org.jutility.common.datatype.range.Interval;
 import org.jutility.common.datatype.util.NumberComparator;
 import org.jutility.common.datatype.util.NumberUtils;
 import org.jutility.javafx.control.ListViewWithSearchPanel;
-import org.jutility.javafx.control.labeled.LabeledComboBox;
 import org.jutility.javafx.control.labeled.LabeledTextField;
+import org.jutility.javafx.control.wrapper.ComboBoxWrapper;
 import org.jutility.math.geometry.Scalef;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import edu.vt.arc.vis.osnap.core.domain.graph.common.IGraphObjectBasedValueTypeContainer;
 import edu.vt.arc.vis.osnap.core.domain.layout.common.IMappedLayout;
@@ -70,6 +68,8 @@ public class MappingPage
         LayoutConfigurationWizardPage<IMappedLayout<? extends IGraphObjectBasedValueTypeContainer, ?, ?>, IMappedLayoutConfiguration, MappedLayoutConfigurationView> {
 
 
+    private static final Logger                                LOG = LoggerFactory
+                                                                           .getLogger(MappingPage.class);
 
     private final ToggleGroup                                  group;
     private final RadioButton                                  identity;
@@ -84,13 +84,14 @@ public class MappingPage
     private final ListViewWithSearchPanel<IValueMapping<?, ?>> valueMappingsLV;
 
 
-
+    private final GridPane                                     destinationGrid;
+    private final Label                                        destinationLabel;
     private final LabeledTextField                             fromTF;
     private final LabeledTextField                             toTF;
 
 
     private final ColorPicker                                  colorPicker;
-    private final LabeledComboBox<Shape>                       shapeComboBox;
+    private final ComboBoxWrapper<Shape>                       shapeComboBox;
 
     private Button                                             addMappingButton;
 
@@ -105,16 +106,6 @@ public class MappingPage
     public MappingPage(final MappedLayoutConfigurationView configurationView) {
 
         super("Create Value Mappings", configurationView);
-
-
-        this.addMappingButton = new Button("Add Mapping");
-        this.addMappingButton.setOnAction(click -> MappingPage.this
-                .addMappingValue());
-
-        this.domainValuesLV = new ListViewWithSearchPanel<>("Values to Map");
-        this.domainValuesLV.getSelectionModel().setSelectionMode(
-                SelectionMode.SINGLE);
-
 
         this.group = new ToggleGroup();
 
@@ -132,43 +123,63 @@ public class MappingPage
 
         GridPane mappingTypeGrid = new GridPane();
         mappingTypeGrid.setVgap(10);
-        mappingTypeGrid.add(new Label("Mapping Type"), 0, 0);
-        mappingTypeGrid.add(this.oneToOne, 0, 1);
-        mappingTypeGrid.add(this.setToOne, 0, 2);
-        mappingTypeGrid.add(this.intervalToOne, 0, 3);
-        mappingTypeGrid.add(this.intervalToInterval, 0, 4);
-        mappingTypeGrid.add(this.identity, 0, 5);
 
-        // Colors
+        Label mappingTypeLabel = new Label("Mapping");
+        mappingTypeLabel.setStyle("-fx-font-weight: bold");
+        mappingTypeGrid.add(mappingTypeLabel, 0, 0);
+        mappingTypeGrid.add(this.identity, 0, 1);
+        mappingTypeGrid.add(this.oneToOne, 0, 2);
+        mappingTypeGrid.add(this.setToOne, 0, 3);
+        mappingTypeGrid.add(this.intervalToOne, 0, 4);
+        mappingTypeGrid.add(this.intervalToInterval, 0, 5);
+
+
+
+        this.domainValuesLV = new ListViewWithSearchPanel<>("Selected Value");
+        this.domainValuesLV.getSelectionModel().setSelectionMode(
+                SelectionMode.SINGLE);
+        this.domainValuesLV.setVgap(10);
+        this.domainValuesLV.getLabel().setStyle("-fx-font-weight: bold");
+
+
+
+        this.destinationGrid = new GridPane();
+        this.destinationGrid.setVgap(10);
+        this.destinationLabel = new Label();
+        this.destinationLabel.setStyle("-fx-font-weight: bold");
+
+        this.fromTF = new LabeledTextField("From", Pos.TOP_CENTER);
+        this.toTF = new LabeledTextField("To", Pos.TOP_CENTER);
+
         this.colorPicker = new ColorPicker(Color.WHITE);
         this.colorPicker.getStyleClass().add("split_button");
 
         // Shapes
-        this.shapeComboBox = new LabeledComboBox<>("");
+        this.shapeComboBox = new ComboBoxWrapper<>();
         this.shapeComboBox.getItems().addAll(Shape.values());
 
-        this.valueMappingsLV = new ListViewWithSearchPanel<>("Mapped Choices");
+        this.destinationGrid.add(this.destinationLabel, 0, 0);
+        this.destinationGrid.add(this.fromTF, 0, 1);
+        this.destinationGrid.add(this.toTF, 0, 2);
 
 
-        final GridPane innerGrid = new GridPane();
 
-        this.fromTF = new LabeledTextField("From");
-        this.toTF = new LabeledTextField("To");
+        this.addMappingButton = new Button("Add Value Mapping");
+        this.addMappingButton.setOnAction(click -> MappingPage.this
+                .addMappingValue());
 
-        innerGrid.add(new Label("Set Mapping Value"), 0, 0);
-        innerGrid.add(this.fromTF, 0, 1);
-        innerGrid.add(this.toTF, 0, 2);
-        innerGrid.add(this.addMappingButton, 0, 3);
 
+        this.valueMappingsLV = new ListViewWithSearchPanel<>("Value Mappings");
+        this.valueMappingsLV.getLabel().setStyle("-fx-font-weight: bold");
 
 
         this.getContentGridPane().add(mappingTypeGrid, 0, 0);
         this.getContentGridPane().add(this.domainValuesLV, 1, 0);
-        this.getContentGridPane().add(this.shapeComboBox, 2, 0);
-        this.getContentGridPane().add(this.colorPicker, 2, 0);
 
-        this.getContentGridPane().add(this.valueMappingsLV, 0, 1, 2, 1);
-        this.getContentGridPane().add(innerGrid, 2, 1);
+        this.getContentGridPane().add(this.destinationGrid, 2, 0);
+
+        this.getContentGridPane().add(this.addMappingButton, 0, 1, 3, 1);
+        this.getContentGridPane().add(this.valueMappingsLV, 0, 2, 3, 1);
 
 
         this.disableToggles();
@@ -177,6 +188,7 @@ public class MappingPage
         this.setupEventHandlers();
         this.setupValidation();
 
+        this.group.selectToggle(this.oneToOne);
     }
 
     private void setupEventHandlers() {
@@ -184,17 +196,52 @@ public class MappingPage
         this.group.selectedToggleProperty().addListener(
                 (ChangeListener<Toggle>) (observable, oldValue, newValue) -> {
 
+                    String sourceString = "From Selected";
+                    String destinationString = "To ";
+                    if (this.getConfiguration() != null
+                            && this.getConfiguration()
+                                    .getEnabledVisualProperty() != null) {
+
+                        destinationString += this.getConfiguration()
+                                .getEnabledVisualProperty().toString();
+                    }
+                    SelectionMode selectionMode = SelectionMode.MULTIPLE;
+
                     if (newValue == this.oneToOne) {
 
-                        this.domainValuesLV.getSelectionModel()
-                                .setSelectionMode(SelectionMode.SINGLE);
+                        sourceString += " Value";
+                        destinationString += " Value";
+                        selectionMode = SelectionMode.SINGLE;
                     }
-                    else {
+                    else if (newValue == this.setToOne) {
 
-                        this.domainValuesLV.getSelectionModel()
-                                .setSelectionMode(SelectionMode.MULTIPLE);
+                        sourceString += " Set";
+                        destinationString += " Value";
+                    }
+                    else if (newValue == this.identity) {
+
+                        sourceString += " Values";
+                        destinationString = "To identical "
+                                + this.getConfiguration()
+                                        .getEnabledVisualProperty().toString()
+                                + " Values";
+                    }
+                    else if (newValue == this.intervalToOne) {
+
+                        sourceString += " Interval";
+                        destinationString += " Value";
+                    }
+                    else if (newValue == this.intervalToInterval) {
+
+                        sourceString += " Interval";
+                        destinationString += " Interval";
                     }
 
+
+                    this.domainValuesLV.getSelectionModel().setSelectionMode(
+                            selectionMode);
+                    this.domainValuesLV.getLabel().setText(sourceString);
+                    this.destinationLabel.setText(destinationString);
                     this.setFields();
                 });
 
@@ -204,7 +251,6 @@ public class MappingPage
             this.validate();
         });
     }
-
 
     private void setupValidation() {
 
@@ -284,52 +330,55 @@ public class MappingPage
 
         this.disableFields();
 
-        switch (this.getConfiguration().getEnabledVisualProperty()) {
+        if (this.getConfiguration() != null
+                && this.getConfiguration().getEnabledVisualProperty() != null) {
+            switch (this.getConfiguration().getEnabledVisualProperty()) {
 
-            case EDGE_COLOR:
-            case NODE_COLOR:
+                case EDGE_COLOR:
+                case NODE_COLOR:
 
-                this.colorPicker.setVisible(true);
-                break;
+                    this.colorPicker.setVisible(true);
+                    break;
 
-            case EDGE_LABEL_TEXT:
-            case NODE_LABEL_TEXT:
+                case EDGE_LABEL_TEXT:
+                case NODE_LABEL_TEXT:
 
-                if (this.group.selectedToggleProperty().getValue() != this.identity) {
+                    if (this.group.selectedToggleProperty().getValue() != this.identity) {
 
-                    this.toTF.setVisible(true);
-                    this.toTF.setPromptText("Enter a label.");
-                }
-                break;
+                        this.toTF.setVisible(true);
+                        this.toTF.setPromptText("Enter a label.");
+                    }
+                    break;
 
-            case EDGE_SCALE:
-            case NODE_SCALE:
-            case NODE_X_POSITION:
-            case NODE_Y_POSITION:
-            case NODE_Z_POSITION:
+                case EDGE_SCALE:
+                case NODE_SCALE:
+                case NODE_X_POSITION:
+                case NODE_Y_POSITION:
+                case NODE_Z_POSITION:
 
-                if (this.group.selectedToggleProperty().getValue() != this.identity) {
+                    if (this.group.selectedToggleProperty().getValue() != this.identity) {
 
-                    this.toTF.setVisible(true);
-                    this.toTF.setPromptText("Enter a float value.");
-                }
+                        this.toTF.setVisible(true);
+                        this.toTF.setPromptText("Enter a float value.");
+                    }
 
-                if (this.group.selectedToggleProperty().getValue() == this.intervalToInterval) {
+                    if (this.group.selectedToggleProperty().getValue() == this.intervalToInterval) {
 
-                    this.fromTF.setVisible(true);
-                    this.fromTF.setPromptText("Enter a float value.");
-                }
-                break;
+                        this.fromTF.setVisible(true);
+                        this.fromTF.setPromptText("Enter a float value.");
+                    }
+                    break;
 
-            case EDGE_SHAPE:
-            case NODE_SHAPE:
+                case EDGE_SHAPE:
+                case NODE_SHAPE:
 
-                this.shapeComboBox.setVisible(true);
-                break;
+                    this.shapeComboBox.setVisible(true);
+                    break;
 
-            default:
-                break;
+                default:
+                    break;
 
+            }
         }
     }
 
@@ -446,6 +495,7 @@ public class MappingPage
                         this.addMappingButton.setDisable(false);
                     }
                     else {
+
                         final boolean toNotEmpty = (this.toTF.getText() != null)
                                 && !"".equals(this.toTF.getText());
 
@@ -477,9 +527,14 @@ public class MappingPage
     private void addMappingValue() {
 
 
+        LOG.debug("Adding mapping value(s).");
         Class<?> domainValueType = this.getConfiguration().getDomainValueType();
         Class<?> coDomainValueType = this.getConfiguration()
                 .getEnabledVisualProperty().getValueType();
+
+
+        List<Object> selectedItems = new ArrayList<>(
+                this.domainValuesLV.getSelectedItems());
 
         List<IValueMapping<?, ?>> mappings = new ArrayList<>();
 
@@ -488,18 +543,19 @@ public class MappingPage
             case EDGE_COLOR:
             case NODE_COLOR:
 
-                for (final Object item : this.domainValuesLV.getSelectedItems()) {
+                for (final Object item : selectedItems) {
 
                     mappings.add(OneToOneValueMapping.create(
                             domainValueType.cast(item),
                             this.colorPicker.getValue()));
+                    this.domainValuesLV.getItems().remove(item);
                 }
                 break;
 
             case EDGE_LABEL_TEXT:
             case NODE_LABEL_TEXT:
 
-                for (final Object item : this.domainValuesLV.getSelectedItems()) {
+                for (final Object item : selectedItems) {
 
                     if (this.group.getSelectedToggle() == this.identity) {
 
@@ -551,8 +607,7 @@ public class MappingPage
                     }
                 }
                 else {
-                    for (final Object item : this.domainValuesLV
-                            .getSelectedItems()) {
+                    for (final Object item : selectedItems) {
                         final Float scale = Float.parseFloat(this.toTF
                                 .getText());
 
@@ -565,7 +620,7 @@ public class MappingPage
             case EDGE_SHAPE:
             case NODE_SHAPE:
 
-                for (final Object item : this.domainValuesLV.getSelectedItems()) {
+                for (final Object item : selectedItems) {
 
                     mappings.add(OneToOneValueMapping.create(domainValueType
                             .cast(item), this.shapeComboBox.getSelectionModel()
@@ -578,13 +633,25 @@ public class MappingPage
 
         }
 
-        for (final Object item : this.domainValuesLV.getSelectedItems()) {
+        LOG.debug("Selected Items: "
+                + this.domainValuesLV.getSelectionModel().getSelectedItems()
+                        .size());
+        LOG.debug("Selected Items copy: " + selectedItems.size());
+        this.domainValuesLV.getSelectionModel().clearSelection();
 
-            this.domainValuesLV.removeAll(item);
+        LOG.debug("Selected Items: "
+                + this.domainValuesLV.getSelectionModel().getSelectedItems()
+                        .size());
+        LOG.debug("Selected Items copy: " + selectedItems.size());
+
+        for (Object item : selectedItems) {
+
+
+            LOG.debug("Removing " + item + ": "
+                    + this.domainValuesLV.getItems().remove(item));
         }
 
         this.valueMappingsLV.getItems().addAll(mappings);
-
     }
 
 

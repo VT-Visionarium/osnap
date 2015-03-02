@@ -23,13 +23,13 @@ package edu.vt.arc.vis.osnap.javafx.wizards.pages;
  */
 //@formatter:on
 
-import javafx.geometry.VPos;
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 
 import org.controlsfx.validation.Validator;
 import org.controlsfx.validation.decoration.GraphicValidationDecoration;
-import org.jutility.javafx.control.labeled.LabeledTextArea;
-import org.jutility.javafx.control.labeled.LabeledTextField;
+import org.jutility.javafx.control.wrapper.TextAreaWrapper;
+import org.jutility.javafx.control.wrapper.TextFieldWrapper;
 
 import edu.vt.arc.vis.osnap.core.domain.layout.common.ILayout;
 import edu.vt.arc.vis.osnap.javafx.wizards.Wizard;
@@ -55,8 +55,8 @@ import edu.vt.arc.vis.osnap.javafx.wizards.configurations.statuspanes.ILayoutCon
 public class NamingPage<O extends ILayout, C extends ILayoutConfiguration<O>, T extends GridPane & ILayoutConfigurationView<O, C>>
         extends LayoutConfigurationWizardPage<O, C, T> {
 
-    private final LabeledTextField nameTF;
-    private final LabeledTextArea  descriptionTF;
+    private final TextFieldWrapper nameTF;
+    private final TextAreaWrapper  descriptionTF;
 
 
 
@@ -71,20 +71,26 @@ public class NamingPage<O extends ILayout, C extends ILayoutConfiguration<O>, T 
         super("Name the Layout", configurationView);
 
 
-        this.nameTF = new LabeledTextField("Provide a name for this layout");
-        this.nameTF.setHgap(10);
-        this.descriptionTF = new LabeledTextArea(
-                "Provide a Description for this layout");
-        this.descriptionTF.setHgap(10);
+        this.nameTF = new TextFieldWrapper();
+        Label nameLabel = new Label("Provide a name for this layout");
+        nameLabel.setLabelFor(this.nameTF);
+        nameLabel.setStyle("-fx-font-weight: bold");
+        
+        this.descriptionTF = new TextAreaWrapper();
         this.descriptionTF.setPrefRowCount(10);
         this.descriptionTF.setPrefColumnCount(20);
-
         this.descriptionTF.setWrapText(true);
-        GridPane.setValignment(this.descriptionTF.getLabel(), VPos.TOP);
+        Label descriptionLabel = new Label(
+                "Provide a Description for this layout");
+        descriptionLabel.setLabelFor(this.descriptionTF);
+        descriptionLabel.setStyle("-fx-font-weight: bold");
 
+//        GridPane.setValignment(this.descriptionTF.getLabel(), VPos.TOP);
 
-        this.getContentGridPane().add(this.nameTF, 0, 0);
-        this.getContentGridPane().add(this.descriptionTF, 0, 1);
+        this.getContentGridPane().add(nameLabel, 0, 0);
+        this.getContentGridPane().add(this.nameTF, 1, 0);
+        this.getContentGridPane().add(descriptionLabel, 0, 1);
+        this.getContentGridPane().add(this.descriptionTF, 1, 1);
 
         this.setupValidation();
     }

@@ -3,23 +3,18 @@ package edu.vt.arc.vis.osnap.javafx.wizards.configurations.statuspanes;
 
 // @formatter:off
 /*
- * _
- * The Open Semantic Network Analysis Platform (OSNAP)
- * _
- * Copyright (C) 2012 - 2014 Visionarium at Virginia Tech
- * _
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * _ The Open Semantic Network Analysis Platform (OSNAP) _ Copyright (C) 2012 -
+ * 2014 Visionarium at Virginia Tech _ Licensed under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * _
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License. _
  */
 // @formatter:on
 
@@ -42,17 +37,17 @@ public class PrefuseNodeLinkTreeLayoutConfigurationView
         extends
         PrefuseTreeLayoutConfigurationView<PrefuseNodeLinkTreeLayout, PrefuseNodeLinkTreeLayoutConfiguration> {
 
-    private final Label orientation;
+    private final Label orientationLabel;
     private final Text  orientationValue;
 
-    private final Label depthSpacing;
+    private final Label depthSpacingLabel;
     private final Text  depthSpacingValue;
 
-    private final Label siblingSpacing;
-    private final Text  spaceBetweenSiblingsValue;
+    private final Label siblingSpacingLabel;
+    private final Text  siblingSpacingValue;
 
-    private final Label subTreeSpacing;
-    private final Text  spaceBetweenSubTreesValue;
+    private final Label subTreeSpacingLabel;
+    private final Text  subTreeSpacingValue;
 
 
 
@@ -67,31 +62,36 @@ public class PrefuseNodeLinkTreeLayoutConfigurationView
 
         super(title, new PrefuseNodeLinkTreeLayoutConfiguration(), 4);
 
-        this.orientation = new Label("Orientation: ");
         this.orientationValue = new Text();
-        this.orientation.setStyle("-fx-font-weight: bold");
+        this.orientationLabel = new Label("Orientation:");
+        this.orientationLabel.setStyle("-fx-font-weight: bold");
+        this.orientationLabel.setLabelFor(this.orientationValue);
 
-        this.depthSpacing = new Label("Depth Spacing: ");
         this.depthSpacingValue = new Text();
-        this.depthSpacing.setStyle("-fx-font-weight: bold");
+        this.depthSpacingLabel = new Label("Depth Spacing:");
+        this.depthSpacingLabel.setStyle("-fx-font-weight: bold");
+        this.depthSpacingLabel.setLabelFor(this.depthSpacingValue);
 
-        this.siblingSpacing = new Label("Space Between Siblings: ");
-        this.spaceBetweenSiblingsValue = new Text();
-        this.siblingSpacing.setStyle("-fx-font-weight: bold");
+        this.siblingSpacingValue = new Text();
+        this.siblingSpacingLabel = new Label("Space Between Siblings:");
+        this.siblingSpacingLabel.setStyle("-fx-font-weight: bold");
+        this.siblingSpacingLabel.setLabelFor(this.siblingSpacingValue);
 
-        this.subTreeSpacing = new Label("Space Between Neighboring Sub-Trees: ");
-        this.spaceBetweenSubTreesValue = new Text();
-        this.subTreeSpacing.setStyle("-fx-font-weight: bold");
+        this.subTreeSpacingValue = new Text();
+        this.subTreeSpacingLabel = new Label(
+                "Space Between Neighboring Sub-Trees:");
+        this.subTreeSpacingLabel.setStyle("-fx-font-weight: bold");
+        this.subTreeSpacingLabel.setLabelFor(this.subTreeSpacingValue);
 
 
-        this.add(this.orientation, 0, 3);
+        this.add(this.orientationLabel, 0, 3);
         this.add(this.orientationValue, 1, 3);
-        this.add(this.depthSpacing, 0, 4);
+        this.add(this.depthSpacingLabel, 0, 4);
         this.add(this.depthSpacingValue, 1, 4);
-        this.add(this.siblingSpacing, 0, 5);
-        this.add(this.spaceBetweenSiblingsValue, 1, 5);
-        this.add(this.subTreeSpacing, 0, 6);
-        this.add(this.spaceBetweenSubTreesValue, 1, 6);
+        this.add(this.siblingSpacingLabel, 0, 5);
+        this.add(this.siblingSpacingValue, 1, 5);
+        this.add(this.subTreeSpacingLabel, 0, 6);
+        this.add(this.subTreeSpacingValue, 1, 6);
 
     }
 
@@ -102,8 +102,8 @@ public class PrefuseNodeLinkTreeLayoutConfigurationView
 
         this.orientationValue.setText("");
         this.depthSpacingValue.setText("");
-        this.spaceBetweenSiblingsValue.setText("");
-        this.spaceBetweenSubTreesValue.setText("");
+        this.siblingSpacingValue.setText("");
+        this.subTreeSpacingValue.setText("");
 
         if (this.getConfiguration() != null) {
 
@@ -113,10 +113,10 @@ public class PrefuseNodeLinkTreeLayoutConfigurationView
             this.depthSpacingValue.setText(""
                     + this.getConfiguration().getDepthSpacing());
 
-            this.spaceBetweenSiblingsValue.setText(""
+            this.siblingSpacingValue.setText(""
                     + this.getConfiguration().getSpaceBetweenSiblings());
 
-            this.spaceBetweenSubTreesValue.setText(""
+            this.subTreeSpacingValue.setText(""
                     + this.getConfiguration()
                             .getSpaceBetweenNeighboringSubtrees());
         }
