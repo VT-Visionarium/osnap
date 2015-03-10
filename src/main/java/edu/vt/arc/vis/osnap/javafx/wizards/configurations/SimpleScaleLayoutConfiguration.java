@@ -1,8 +1,8 @@
 package edu.vt.arc.vis.osnap.javafx.wizards.configurations;
 
 
-import org.jutility.math.geometry.IScale;
-import org.jutility.math.geometry.Scale;
+import org.jutility.math.geometry.IScaleFactor;
+import org.jutility.math.geometry.ScaleFactor;
 
 import edu.vt.arc.vis.osnap.core.domain.layout.simpleComponents.SimpleScaleLayout;
 
@@ -31,8 +31,7 @@ import edu.vt.arc.vis.osnap.core.domain.layout.simpleComponents.SimpleScaleLayou
 
 /**
  * The {@code SimpleScaleLayoutConfiguration} class provides the
- * {@link IConfiguration Configuration} for the
- * {@link SimpleScaleLayout}.
+ * {@link IConfiguration Configuration} for the {@link SimpleScaleLayout}.
  * 
  * @author Shawn P Neuman, Peter J. Radics
  * @version 1.2.0
@@ -41,22 +40,30 @@ import edu.vt.arc.vis.osnap.core.domain.layout.simpleComponents.SimpleScaleLayou
 public class SimpleScaleLayoutConfiguration
         extends LayoutConfiguration<SimpleScaleLayout> {
 
-    private IScale<Float> scale;
+    private IScaleFactor<?> scale;
 
 
     /**
-     * Sets the uniform {@link IScale Scale} assigned to the restrictions.
+     * Sets the uniform {@link IScaleFactor Scale} assigned to the restrictions.
      * 
      * @param scale
      *            the uniform scale assigned to the restrictions.
      */
-    public void setUniformScale(final float scale) {
+    public void setUniformScale(final Number scale) {
 
-        this.scale = new Scale<>(scale, scale, scale, Float.class);
+        if (scale != null) {
+
+            this.scale = new ScaleFactor<>(scale, scale, scale,
+                    scale.getClass());
+        }
+        else {
+
+            this.scale = new ScaleFactor<>(Float.class);
+        }
     }
 
     /**
-     * Sets the {@link IScale Scale} assigned to the restrictions.
+     * Sets the {@link IScaleFactor Scale} assigned to the restrictions.
      * 
      * @param scaleX
      *            the scale in x-direction.
@@ -68,15 +75,15 @@ public class SimpleScaleLayoutConfiguration
     public void setScale(final float scaleX, final float scaleY,
             final float scaleZ) {
 
-        this.scale = new Scale<>(scaleX, scaleY, scaleZ, Float.class);
+        this.scale = new ScaleFactor<>(scaleX, scaleY, scaleZ, Float.class);
     }
 
     /**
-     * Returns the {@link IScale Scale} assigned to the restrictions.
+     * Returns the {@link IScaleFactor Scale} assigned to the restrictions.
      * 
-     * @return the {@link IScale Scale} assigned to the restrictions.
+     * @return the {@link IScaleFactor Scale} assigned to the restrictions.
      */
-    public IScale<Float> getScale() {
+    public IScaleFactor<?> getScale() {
 
         return this.scale;
     }
@@ -86,10 +93,9 @@ public class SimpleScaleLayoutConfiguration
      */
     public SimpleScaleLayoutConfiguration() {
 
-        super(SimpleScaleLayout.name(), SimpleScaleLayout
-                .description());
+        super(SimpleScaleLayout.name(), SimpleScaleLayout.description());
 
-        this.scale = new Scale<>(Float.class);
+        this.scale = new ScaleFactor<>(Float.class);
     }
 
     @Override

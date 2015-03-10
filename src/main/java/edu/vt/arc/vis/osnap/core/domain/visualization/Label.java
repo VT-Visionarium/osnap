@@ -44,8 +44,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.jutility.math.vectorAlgebra.IVector4;
-import org.jutility.math.vectorAlgebra.Vector4;
+import org.jutility.math.vectoralgebra.IVector4;
+import org.jutility.math.vectoralgebra.Vector4;
 
 
 /**

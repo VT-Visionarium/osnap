@@ -29,9 +29,8 @@ import java.util.Set;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.jutility.math.vectorAlgebra.IPoint4;
-import org.jutility.math.vectorAlgebra.Point4;
-import org.jutility.math.vectorAlgebra.Point4f;
+import org.jutility.math.vectoralgebra.IPoint4;
+import org.jutility.math.vectoralgebra.Point4;
 
 import edu.vt.arc.vis.osnap.core.domain.layout.common.Base3DCoordinateLayout;
 import edu.vt.arc.vis.osnap.core.domain.layout.common.BaseCoordinateLayout;
@@ -45,7 +44,7 @@ import edu.vt.arc.vis.osnap.core.domain.visualization.VisualProperty;
 /**
  * The {@code SimpleCoordinateLayout} class provides a basic implementation of
  * the {@link edu.vt.arc.vis.osnap.core.domain.layout.common.ICoordinateLayout}
- * interface, setting every node'scale {@link Point4f Position} to the provided
+ * interface, setting every node'scale {@link IPoint4 Position} to the provided
  * position.
  * 
  * @author Peter J. Radics
@@ -115,7 +114,7 @@ public class SimpleCoordinateLayout
      * @param position
      *            the position.
      */
-    public void setPosition(Point4<?> position) {
+    public void setPosition(IPoint4<?> position) {
 
         this.position = position;
     }
@@ -126,7 +125,7 @@ public class SimpleCoordinateLayout
      */
     public SimpleCoordinateLayout() {
 
-        this(Point4f.ORIGIN);
+        this(Point4.ORIGIN(Float.class));
     }
 
 
@@ -136,7 +135,7 @@ public class SimpleCoordinateLayout
      * @param position
      *            the intended position of the nodes.
      */
-    public SimpleCoordinateLayout(Point4f position) {
+    public SimpleCoordinateLayout(IPoint4<?> position) {
 
         super(CoordinateComponent.FIRST_COMPONENT,
                 CoordinateComponent.SECOND_COMPONENT,

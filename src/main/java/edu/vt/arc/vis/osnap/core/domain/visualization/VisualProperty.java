@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.jutility.math.geometry.Scalef;
+import org.jutility.math.geometry.ScaleFactor;
 
 import edu.vt.arc.vis.osnap.core.domain.IValueTypeContainer;
 
@@ -68,7 +68,7 @@ public enum VisualProperty
      */
     @XmlEnumValue(value = "graphVis:node.scale")
     NODE_SCALE("graphVis:node.scale", "Node Scale", true, false, false,
-            Scalef.class),
+            ScaleFactor.class),
     /**
      * The label text of a node.
      */
@@ -112,7 +112,7 @@ public enum VisualProperty
      */
     @XmlEnumValue(value = "graphVis:edge.scale")
     EDGE_SCALE("graphVis:edge.scale", "Edge Scale", false, true, false,
-            Scalef.class),
+            ScaleFactor.class),
     /**
      * The label text of an edge.
      */
@@ -137,7 +137,7 @@ public enum VisualProperty
      */
     @XmlEnumValue(value = "graphVis:hyperEdge.scale")
     HYPEREDGE_SCALE("graphVis:hyperEdge.scale", "Hyperedge Scale", false,
-            false, true, Scalef.class),
+            false, true, ScaleFactor.class),
     /**
      * The label text of a hyperedge.
      */

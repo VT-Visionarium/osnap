@@ -45,7 +45,7 @@ import org.jutility.common.datatype.util.NumberUtils;
 import org.jutility.javafx.control.ListViewWithSearchPanel;
 import org.jutility.javafx.control.labeled.LabeledComboBox;
 import org.jutility.javafx.control.labeled.LabeledTextField;
-import org.jutility.math.geometry.Scalef;
+import org.jutility.math.geometry.IScaleFactor;
 
 import edu.vt.arc.vis.osnap.core.domain.graph.common.IGraphObjectBasedValueTypeContainer;
 import edu.vt.arc.vis.osnap.core.domain.layout.common.IMappedLayout;
@@ -344,7 +344,7 @@ public class MappingPage
 
         return (coDomainValueType.isAssignableFrom(domainValueType))
                 || (Number.class.isAssignableFrom(domainValueType) && (Number.class
-                        .isAssignableFrom(coDomainValueType) || Scalef.class
+                        .isAssignableFrom(coDomainValueType) || IScaleFactor.class
                         .isAssignableFrom(coDomainValueType)));
 
     }
@@ -357,7 +357,7 @@ public class MappingPage
                 .getDomainValueType();
 
         return (Number.class.isAssignableFrom(domainValueType) && (Number.class
-                .isAssignableFrom(coDomainValueType) || Scalef.class
+                .isAssignableFrom(coDomainValueType) || IScaleFactor.class
                 .isAssignableFrom(coDomainValueType)));
     }
 

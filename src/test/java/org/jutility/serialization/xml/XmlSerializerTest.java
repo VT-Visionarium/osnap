@@ -453,8 +453,8 @@ public class XmlSerializerTest {
         // System.out.println();
         // System.out.println();
         //
-        // org.jutility.math.vectorAlgebra.Tuple4<Double> numericTuple4 = new
-        // org.jutility.math.vectorAlgebra.Tuple4<>(
+        // org.jutility.math.vectoralgebra.Tuple4<Double> numericTuple4 = new
+        // org.jutility.math.vectoralgebra.Tuple4<>(
         // 5, 6, 7, 8, Double.class);
         //
         // String numericTuple4filename =
@@ -466,12 +466,12 @@ public class XmlSerializerTest {
         //
         //
         // System.out.print("XML Deserializing NumericTuple4.");
-        // org.jutility.math.vectorAlgebra.Tuple4<?> deserializedNumericTuple4 = null;
+        // org.jutility.math.vectoralgebra.Tuple4<?> deserializedNumericTuple4 = null;
         //
         // try {
         // deserializedNumericTuple4 = XmlSerializer.deserialize(
         // numericTuple4filename,
-        // org.jutility.math.vectorAlgebra.Tuple4.class);
+        // org.jutility.math.vectoralgebra.Tuple4.class);
         // }
         // catch (Exception ex) {
         // System.out.println("Exception caught: ");

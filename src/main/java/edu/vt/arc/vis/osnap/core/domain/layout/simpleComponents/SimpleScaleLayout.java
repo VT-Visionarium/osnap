@@ -35,15 +35,14 @@ import java.util.Set;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.jutility.math.geometry.IScale;
-import org.jutility.math.geometry.Scale;
-import org.jutility.math.geometry.Scalef;
+import org.jutility.math.geometry.IScaleFactor;
+import org.jutility.math.geometry.ScaleFactor;
 
 
 /**
  * The {@code SimpleScaleLayout} class provides a basic implementation of the
  * {@link edu.vt.arc.vis.osnap.core.domain.layout.common.IScaleLayout}
- * interface, setting the {@link Scalef Scale} of nodes, edges, and hyperedges
+ * interface, setting the {@link ScaleFactor Scale} of nodes, edges, and hyperedges
  * to (1, 1, 1).
  * 
  * @author Peter J. Radics
@@ -55,8 +54,8 @@ public class SimpleScaleLayout
         extends BaseScaleLayout {
 
 
-    @XmlElement(name = "Scale", type = Scale.class)
-    private IScale<?> scale;
+    @XmlElement(name = "Scale", type = ScaleFactor.class)
+    private IScaleFactor<?> scale;
 
 
     /**
@@ -100,7 +99,7 @@ public class SimpleScaleLayout
      * 
      * @return the scale.
      */
-    public IScale<?> getScale() {
+    public IScaleFactor<?> getScale() {
 
         return this.scale;
     }
@@ -112,7 +111,7 @@ public class SimpleScaleLayout
      * @param scale
      *            the sacle.
      */
-    public void setScale(IScale<?> scale) {
+    public void setScale(IScaleFactor<?> scale) {
 
         this.scale = scale;
     }
@@ -125,17 +124,17 @@ public class SimpleScaleLayout
      */
     public SimpleScaleLayout() {
 
-        this(new Scalef());
+        this(new ScaleFactor<>(Float.class));
     }
 
     /**
      * Creates a new instance of the {@code SimpleScaleLayout} class with the
-     * provided {@link Scalef Scale}.
+     * provided {@link ScaleFactor Scale}.
      * 
      * @param scale
      *            the intended scale for the graph objects.
      */
-    public SimpleScaleLayout(final IScale<?> scale) {
+    public SimpleScaleLayout(final IScaleFactor<?> scale) {
 
         super(SimpleScaleLayout.capabilities(), SimpleScaleLayout.name(),
                 SimpleScaleLayout.description(), false);

@@ -21,8 +21,8 @@ package edu.vt.arc.vis.osnap.javafx.wizards.configurations;
 
 import org.jutility.math.geometry.IRectangle2;
 import org.jutility.math.geometry.Rectangle2;
-import org.jutility.math.vectorAlgebra.IPoint2;
-import org.jutility.math.vectorAlgebra.Point2;
+import org.jutility.math.vectoralgebra.IPoint2;
+import org.jutility.math.vectoralgebra.Point2;
 
 import edu.vt.arc.vis.osnap.core.domain.layout.common.CoordinateComponent;
 import edu.vt.arc.vis.osnap.core.domain.layout.prefuseComponents.IPrefuseLayout;

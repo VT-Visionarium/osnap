@@ -7,7 +7,7 @@
  * @since 0.1
  */
 package edu.vt.arc.vis.osnap;
-
+// @formatter:off
 /*
  * _
  * The Open Semantic Network Analysis Platform (OSNAP)
@@ -27,5 +27,5 @@ package edu.vt.arc.vis.osnap;
  * limitations under the License.
  * _
  */
-
+// @formatter:on
 

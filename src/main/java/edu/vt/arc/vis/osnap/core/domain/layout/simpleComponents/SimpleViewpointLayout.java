@@ -41,13 +41,13 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.jutility.math.geometry.IRotation;
 import org.jutility.math.geometry.Rotation;
-import org.jutility.math.vectorAlgebra.IMatrix4;
-import org.jutility.math.vectorAlgebra.IPoint4;
-import org.jutility.math.vectorAlgebra.IVector4;
-import org.jutility.math.vectorAlgebra.Matrix4;
-import org.jutility.math.vectorAlgebra.Point4;
-import org.jutility.math.vectorAlgebra.Vector4;
-import org.jutility.math.vectorAlgebra.VectorAlgebraicOperations;
+import org.jutility.math.vectoralgebra.IMatrix4;
+import org.jutility.math.vectoralgebra.IPoint4;
+import org.jutility.math.vectoralgebra.IVector4;
+import org.jutility.math.vectoralgebra.Matrix4;
+import org.jutility.math.vectoralgebra.Point4;
+import org.jutility.math.vectoralgebra.Vector4;
+import org.jutility.math.vectoralgebra.VectorAlgebraicOperations;
 
 
 /**

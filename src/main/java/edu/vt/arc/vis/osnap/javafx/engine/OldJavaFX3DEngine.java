@@ -1,36 +1,11 @@
-/*******************************************************************************
- * Copyright 2014 Virginia Tech Visionarium
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- ******************************************************************************/
-
-
 package edu.vt.arc.vis.osnap.javafx.engine;
 
 
-import edu.vt.arc.vis.osnap.core.domain.visualization.VisualEdge;
-import edu.vt.arc.vis.osnap.core.domain.visualization.VisualGraph;
-import edu.vt.arc.vis.osnap.core.domain.visualization.VisualNode;
-import edu.vt.arc.vis.osnap.core.domain.visualization.VisualObject;
-import edu.vt.arc.vis.osnap.core.domain.visualization.Visualization;
-import edu.vt.arc.vis.osnap.io.x3d.X3DEngine;
-import javafx.event.EventHandler;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
@@ -42,49 +17,48 @@ import javafx.scene.shape.Sphere;
 import org.jutility.io.ConversionException;
 import org.jutility.io.IConverter;
 import org.jutility.math.geometry.Rectangle4;
-import org.jutility.math.vectorAlgebra.IPoint4;
-import org.jutility.math.vectorAlgebra.IVector4;
-import org.jutility.math.vectorAlgebra.Point4;
-import org.jutility.math.vectorAlgebra.VectorAlgebraicOperations;
+import org.jutility.math.vectoralgebra.IPoint4;
+import org.jutility.math.vectoralgebra.IVector4;
+import org.jutility.math.vectoralgebra.Point4;
+import org.jutility.math.vectoralgebra.VectorAlgebraicOperations;
+
+import edu.vt.arc.vis.osnap.core.domain.visualization.VisualEdge;
+import edu.vt.arc.vis.osnap.core.domain.visualization.VisualGraph;
+import edu.vt.arc.vis.osnap.core.domain.visualization.VisualNode;
+import edu.vt.arc.vis.osnap.core.domain.visualization.VisualObject;
+import edu.vt.arc.vis.osnap.core.domain.visualization.Visualization;
+import edu.vt.arc.vis.osnap.io.x3d.X3DEngine;
 
 
 /**
  * The {@link JavaFX3DEngine} class converts a {@link Visualization
  * visualizations} to a JavaFX 3D scene.
- * 
+ *
  * @author William H. Lund, Peter J. Radics
  * @version 1.1
  */
 public class OldJavaFX3DEngine
-        implements IConverter {
+implements IConverter {
 
-    final Xform                      cameraXform    = new Xform();
-    final Xform                      cameraXform2   = new Xform();
-    final Xform                      cameraXform3   = new Xform();
-    final double                     cameraDistance = 550;
-    PerspectiveCamera                camera;
+    private final Xform              cameraXform    = new Xform();
+    private final Xform              cameraXform2   = new Xform();
+    private final Xform              cameraXform3   = new Xform();
+    private final double             cameraDistance = 550;
+    private PerspectiveCamera        camera;
     private static OldJavaFX3DEngine s_Instance;
 
-    // final Xform visualizationGroup = new Xform();
 
-    // private boolean timelinePlaying = false;
-    // private double ONE_FRAME = 1.0 / 24.0;
-    // private double DELTA_MULTIPLIER = 200.0;
-    // private double CONTROL_MULTIPLIER = 0.1;
-    // private double SHIFT_MULTIPLIER = 0.1;
-    // private double ALT_MULTIPLIER = 0.5;
-
-    double                           mousePosX;
-    double                           mousePosY;
-    double                           mouseOldX;
-    double                           mouseOldY;
-    double                           mouseDeltaX;
-    double                           mouseDeltaY;
+    private double                   mousePosX;
+    private double                   mousePosY;
+    private double                   mouseOldX;
+    private double                   mouseOldY;
+    private double                   mouseDeltaX;
+    private double                   mouseDeltaY;
 
 
     /**
      * Returns the singleton instance of the {@link X3DEngine} class;
-     * 
+     *
      * @return the singleton instance.
      */
     public static OldJavaFX3DEngine Instance() {
@@ -98,7 +72,8 @@ public class OldJavaFX3DEngine
     }
 
     @Override
-    public boolean supportsConversion(Class<?> sourceType, Class<?> targetType) {
+    public boolean supportsConversion(final Class<?> sourceType,
+            final Class<?> targetType) {
 
         // lower bound required for source type.
         if (!Visualization.class.isAssignableFrom(sourceType)) {
@@ -117,18 +92,13 @@ public class OldJavaFX3DEngine
 
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see edu.vt.arc.vis.osnap.io.IConverter#convert(java.lang.Object,
-     * java.lang.Class)
-     */
     @Override
-    public <T, S> S convert(T documentToConvert, Class<? extends S> returnType)
+    public <T, S> S convert(final T documentToConvert,
+            final Class<? extends S> returnType)
             throws ConversionException {
 
 
-        Class<?> documentType = documentToConvert.getClass();
+        final Class<?> documentType = documentToConvert.getClass();
         if (!this.supportsConversion(documentType, returnType)) {
 
             throw new ConversionException("Conversion from " + documentType
@@ -142,110 +112,110 @@ public class OldJavaFX3DEngine
 
 
 
-    private Pane convert(Visualization visualization)
-            throws ConversionException {
+    private Pane convert(final Visualization visualization) {
 
-        Group root = new Group();
-        Rectangle4<Double> viewingPlane = this
-                .buildPreview(visualization, root);
+        final Group root = new Group();
+        final Rectangle4<Double> viewingPlane = this.buildPreview(
+                visualization, root);
 
-        SubScene scene = new SubScene(root, 1024.0, 768.0, true,
+        final SubScene scene = new SubScene(root, 1024.0, 768.0, true,
                 SceneAntialiasing.BALANCED);
         scene.setFill(Color.GREY);
 
-        camera = OldJavaFX3DEngine.buildCamera(10, 10000, viewingPlane);
-        buildCamera(camera);
-        scene.setCamera(camera);
+        this.camera = OldJavaFX3DEngine.buildCamera(10, 10000, viewingPlane);
+        this.buildCamera(this.camera);
+        scene.setCamera(this.camera);
 
-        Pane previewPane = new Pane(scene);
+        final Pane previewPane = new Pane(scene);
 
         scene.widthProperty().bind(previewPane.widthProperty());
         scene.heightProperty().bind(previewPane.heightProperty());
-        handleMouse(scene);
+        this.handleMouse(scene);
         return previewPane;
     }
 
     /**
      * Builds camera.
      */
-    private void buildCamera(PerspectiveCamera camera) {
+    private void buildCamera(final PerspectiveCamera camera) {
 
         // root.getChildren().add(cameraXform);
-        cameraXform.getChildren().add(cameraXform2);
-        cameraXform2.getChildren().add(cameraXform3);
-        cameraXform3.getChildren().add(camera);
-        cameraXform3.setRotateZ(180.0);
+        this.cameraXform.getChildren().add(this.cameraXform2);
+        this.cameraXform2.getChildren().add(this.cameraXform3);
+        this.cameraXform3.getChildren().add(camera);
+        this.cameraXform3.setRotateZ(180.0);
 
         camera.setNearClip(10.0);
         camera.setFarClip(10000.0);
-        camera.setTranslateZ(-cameraDistance);
-        cameraXform.getRotationY().setAngle(320.0);
-        cameraXform.getRotationX().setAngle(40.0);
+        camera.setTranslateZ(-this.cameraDistance);
+        this.cameraXform.getRotationY().setAngle(320.0);
+        this.cameraXform.getRotationX().setAngle(40.0);
     }
 
     /**
      * Mouse events handler for rotating, translating, and zooming the preview.
-     * 
+     *
      * @param scene
      */
-    private void handleMouse(SubScene scene) {
+    private void handleMouse(final SubScene scene) {
 
 
-        scene.setOnMousePressed(new EventHandler<MouseEvent>() {
+        scene.setOnMousePressed(me -> {
 
-            @Override
-            public void handle(MouseEvent me) {
-
-                mousePosX = me.getSceneX();
-                mousePosY = me.getSceneY();
-                mouseOldX = me.getSceneX();
-                mouseOldY = me.getSceneY();
-            }
+            OldJavaFX3DEngine.this.mousePosX = me.getSceneX();
+            OldJavaFX3DEngine.this.mousePosY = me.getSceneY();
+            OldJavaFX3DEngine.this.mouseOldX = me.getSceneX();
+            OldJavaFX3DEngine.this.mouseOldY = me.getSceneY();
         });
-        scene.setOnMouseDragged(new EventHandler<MouseEvent>() {
+        scene.setOnMouseDragged(me -> {
 
-            @Override
-            public void handle(MouseEvent me) {
+            OldJavaFX3DEngine.this.mouseOldX = OldJavaFX3DEngine.this.mousePosX;
+            OldJavaFX3DEngine.this.mouseOldY = OldJavaFX3DEngine.this.mousePosY;
+            OldJavaFX3DEngine.this.mousePosX = me.getSceneX();
+            OldJavaFX3DEngine.this.mousePosY = me.getSceneY();
+            OldJavaFX3DEngine.this.mouseDeltaX = (OldJavaFX3DEngine.this.mousePosX - OldJavaFX3DEngine.this.mouseOldX);
+            OldJavaFX3DEngine.this.mouseDeltaY = (OldJavaFX3DEngine.this.mousePosY - OldJavaFX3DEngine.this.mouseOldY);
 
-                mouseOldX = mousePosX;
-                mouseOldY = mousePosY;
-                mousePosX = me.getSceneX();
-                mousePosY = me.getSceneY();
-                mouseDeltaX = (mousePosX - mouseOldX);
-                mouseDeltaY = (mousePosY - mouseOldY);
+            double modifier = 1.0;
+            final double modifierFactor = 0.1;
 
-                double modifier = 1.0;
-                double modifierFactor = 0.1;
-
-                if (me.isControlDown()) {
-                    modifier = 0.1;
-                }
-                if (me.isShiftDown()) {
-                    modifier = 10.0;
-                }
-                if (me.isPrimaryButtonDown()) {
-                    cameraXform.getRotationY().setAngle(
-                            cameraXform.getRotationY().getAngle() - mouseDeltaX
-                                    * modifierFactor * modifier * 2.0); // or
-                                                                        // -
-                    cameraXform.getRotationX().setAngle(
-                            cameraXform.getRotationX().getAngle() - mouseDeltaY
-                                    * modifierFactor * modifier * 2.0); // or
-                                                                        // +
-                }
-                else if (me.isSecondaryButtonDown()) {
-                    double z = camera.getTranslateZ();
-                    double newZ = z + mouseDeltaY * modifierFactor * modifier;
-                    camera.setTranslateZ(newZ);
-                }
-                else if (me.isMiddleButtonDown()) {
-                    cameraXform2.getTranslation().setX(
-                            cameraXform2.getTranslation().getX() + mouseDeltaX
-                                    * modifierFactor * modifier * 0.3); // -
-                    cameraXform2.getTranslation().setY(
-                            cameraXform2.getTranslation().getY() + mouseDeltaY
-                                    * modifierFactor * modifier * 0.3); // -
-                }
+            if (me.isControlDown()) {
+                modifier = 0.1;
+            }
+            if (me.isShiftDown()) {
+                modifier = 10.0;
+            }
+            if (me.isPrimaryButtonDown()) {
+                OldJavaFX3DEngine.this.cameraXform.getRotationY().setAngle(
+                        OldJavaFX3DEngine.this.cameraXform.getRotationY()
+                                .getAngle()
+                                - (OldJavaFX3DEngine.this.mouseDeltaX
+                                        * modifierFactor * modifier * 2.0)); // or
+                                                                             // -
+                OldJavaFX3DEngine.this.cameraXform.getRotationX().setAngle(
+                        OldJavaFX3DEngine.this.cameraXform.getRotationX()
+                                .getAngle()
+                                - (OldJavaFX3DEngine.this.mouseDeltaY
+                                        * modifierFactor * modifier * 2.0)); // or
+                                                                             // +
+            }
+            else if (me.isSecondaryButtonDown()) {
+                final double z = OldJavaFX3DEngine.this.camera.getTranslateZ();
+                final double newZ = z
+                        + (OldJavaFX3DEngine.this.mouseDeltaY * modifierFactor * modifier);
+                OldJavaFX3DEngine.this.camera.setTranslateZ(newZ);
+            }
+            else if (me.isMiddleButtonDown()) {
+                OldJavaFX3DEngine.this.cameraXform2.getTranslation().setX(
+                        OldJavaFX3DEngine.this.cameraXform2.getTranslation()
+                                .getX()
+                                + (OldJavaFX3DEngine.this.mouseDeltaX
+                                        * modifierFactor * modifier * 0.3)); // -
+                OldJavaFX3DEngine.this.cameraXform2.getTranslation().setY(
+                        OldJavaFX3DEngine.this.cameraXform2.getTranslation()
+                                .getY()
+                                + (OldJavaFX3DEngine.this.mouseDeltaY
+                                        * modifierFactor * modifier * 0.3)); // -
             }
         });
 
@@ -254,7 +224,7 @@ public class OldJavaFX3DEngine
 
 
     /**
-     * 
+     *
      * @param nearClip
      * @param farClip
      * @param viewingPlane
@@ -263,10 +233,10 @@ public class OldJavaFX3DEngine
     private static PerspectiveCamera buildCamera(final double nearClip,
             final double farClip, final Rectangle4<Double> viewingPlane) {
 
-        PerspectiveCamera camera = new PerspectiveCamera(true);
+        final PerspectiveCamera camera = new PerspectiveCamera(true);
 
         OldJavaFX3DEngine
-                .calculateAndSetCameraCoordinates(camera, viewingPlane);
+        .calculateAndSetCameraCoordinates(camera, viewingPlane);
 
 
         camera.setNearClip(nearClip);
@@ -281,19 +251,19 @@ public class OldJavaFX3DEngine
     /**
      * Method to set color shading for nodes/edges and set up the calling path
      * of building the Xform for the given scene.
-     * 
+     *
      * @param visualization
      *            visualization of the current user specs
      */
-    private Rectangle4<Double> buildPreview(Visualization visualization,
-            Group root) {
+    private Rectangle4<Double> buildPreview(final Visualization visualization,
+            final Group root) {
 
         Rectangle4<Double> viewingPlane = new Rectangle4<>(new Point4<>(0, 0,
                 0, Double.class), new Point4<>(0, 0, 0, Double.class),
                 Double.class);
 
         // Will run through list of each graph in the visualization.
-        for (VisualGraph graph : visualization.getVisualGraphs()) {
+        for (final VisualGraph graph : visualization.getVisualGraphs()) {
 
             viewingPlane = this.processGraph(graph, root, viewingPlane);
         }
@@ -305,22 +275,22 @@ public class OldJavaFX3DEngine
      * Creates an initial Group to hold all of the node/edge shapes. Essentially
      * creates a universe which then adds nodes and edges to itself from the
      * processNode and processEdge methods.
-     * 
+     *
      * @param graph
      *            the graph to process.
      * @param root
      *            the root of the visualization.
      */
-    private Rectangle4<Double> processGraph(VisualGraph graph, Group root,
-            Rectangle4<Double> viewingPlane) {
+    private Rectangle4<Double> processGraph(final VisualGraph graph,
+            final Group root, final Rectangle4<Double> viewingPlane) {
 
         Rectangle4<Double> updatedViewingPlane = viewingPlane;
 
-        Group graphGroup = new Group();
-        for (VisualNode node : graph.getVisualNodes()) {
+        final Group graphGroup = new Group();
+        for (final VisualNode node : graph.getVisualNodes()) {
 
             if (node.isVisible()) {
-                Shape3D nodeShape = this.processNode(node);
+                final Shape3D nodeShape = this.processNode(node);
 
                 if (nodeShape != null) {
 
@@ -331,9 +301,9 @@ public class OldJavaFX3DEngine
             }
         }
 
-        for (VisualEdge edge : graph.getVisualEdges()) {
+        for (final VisualEdge edge : graph.getVisualEdges()) {
 
-            Shape3D edgeShape = this.processEdge(edge);
+            final Shape3D edgeShape = this.processEdge(edge);
 
             if (edgeShape != null) {
 
@@ -348,54 +318,57 @@ public class OldJavaFX3DEngine
     }
 
     private static void calculateAndSetCameraCoordinates(
-            PerspectiveCamera camera, Rectangle4<Double> viewingPlane) {
+            final PerspectiveCamera camera,
+            final Rectangle4<Double> viewingPlane) {
 
-        double minX = viewingPlane.getBottomLeftCorner().getX();
-        double minY = viewingPlane.getBottomLeftCorner().getY();
-        double maxX = viewingPlane.getTopRightCorner().getX();
-        double maxY = viewingPlane.getTopRightCorner().getY();
-        double minZ = viewingPlane.getBottomLeftCorner().getZ();
+        final double minX = viewingPlane.getBottomLeftCorner().getX();
+        final double minY = viewingPlane.getBottomLeftCorner().getY();
+        final double maxX = viewingPlane.getTopRightCorner().getX();
+        final double maxY = viewingPlane.getTopRightCorner().getY();
+        final double minZ = viewingPlane.getBottomLeftCorner().getZ();
 
-//        System.out.println("minX: " + minX + ", maxX: " + maxX);
-//        System.out.println("minY: " + minY + ", maxY: " + maxY);
-//        System.out.println("minZ: " + minZ);
+        // System.out.println("minX: " + minX + ", maxX: " + maxX);
+        // System.out.println("minY: " + minY + ", maxY: " + maxY);
+        // System.out.println("minZ: " + minZ);
 
-        double xExtent = maxX - minX;
-        double yExtent = maxY - minY;
+        final double xExtent = maxX - minX;
+        final double yExtent = maxY - minY;
 
-//        System.out.println("xExtent: " + xExtent);
-//        System.out.println("yExtent: " + yExtent);
+        // System.out.println("xExtent: " + xExtent);
+        // System.out.println("yExtent: " + yExtent);
 
         // c
-        double viewingPlaneExtent = Math.max(xExtent, yExtent);
+        final double viewingPlaneExtent = Math.max(xExtent, yExtent);
 
         // gamma
-        double fieldOfView = Math.toRadians(camera.getFieldOfView());
-//        System.out.println("FOV: " + fieldOfView);
+        final double fieldOfView = Math.toRadians(camera.getFieldOfView());
+        // System.out.println("FOV: " + fieldOfView);
 
-        double alpha = Math.toRadians((180d - camera.getFieldOfView()) / 2d);
-//        System.out.println("Alpha: " + alpha);
+        final double alpha = Math
+                .toRadians((180d - camera.getFieldOfView()) / 2d);
+        // System.out.println("Alpha: " + alpha);
 
         // a = c * (sin alpha / sin gamma)
-        double cathetus = viewingPlaneExtent
+        final double cathetus = viewingPlaneExtent
                 * (Math.sin(alpha) / Math.sin(fieldOfView));
 
-//        System.out.println("Cathetus: " + cathetus);
+        // System.out.println("Cathetus: " + cathetus);
 
         // c/2
-        double halfViewingPlaneExtent = viewingPlaneExtent / 2d;
-//        System.out.println("Half viewing plane extent: "
-//                + halfViewingPlaneExtent);
+        final double halfViewingPlaneExtent = viewingPlaneExtent / 2d;
+        // System.out.println("Half viewing plane extent: "
+        // + halfViewingPlaneExtent);
 
         // h = sqrt (a^2 - (1/2c)^2)
-        double viewingDistance = Math.sqrt((cathetus * cathetus)
+        final double viewingDistance = Math.sqrt((cathetus * cathetus)
                 - (halfViewingPlaneExtent * halfViewingPlaneExtent));
-//        System.out.println("ViewingDistance: " + viewingDistance);
+        // System.out.println("ViewingDistance: " + viewingDistance);
 
-        IPoint4<Double> cameraCoordinates = new Point4<>((maxX + minX) / 2d,
-                (maxY + minY) / 2d, minZ - viewingDistance, Double.class);
+        final IPoint4<Double> cameraCoordinates = new Point4<>(
+                (maxX + minX) / 2d, (maxY + minY) / 2d, minZ - viewingDistance,
+                Double.class);
 
-//        System.out.println("Camera coordinates: " + cameraCoordinates);
+        // System.out.println("Camera coordinates: " + cameraCoordinates);
 
         camera.setTranslateX(cameraCoordinates.getX());
         camera.setTranslateY(cameraCoordinates.getY());
@@ -403,7 +376,7 @@ public class OldJavaFX3DEngine
     }
 
     private Rectangle4<Double> updateViewingPlane(
-            Rectangle4<Double> viewingPlane, VisualNode visualNode) {
+            final Rectangle4<Double> viewingPlane, final VisualNode visualNode) {
 
         double minX = viewingPlane.getBottomLeftCorner().getX();
         double maxX = viewingPlane.getTopRightCorner().getX();
@@ -413,11 +386,11 @@ public class OldJavaFX3DEngine
 
 
 
-        IPoint4<?> position = visualNode.getPosition();
+        final IPoint4<?> position = visualNode.getPosition();
 
-        double x = position.getX().doubleValue();
-        double y = position.getY().doubleValue();
-        double z = position.getZ().doubleValue();
+        final double x = position.getX().doubleValue();
+        final double y = position.getY().doubleValue();
+        final double z = position.getZ().doubleValue();
 
         if (x < minX) {
 
@@ -447,12 +420,12 @@ public class OldJavaFX3DEngine
 
     /**
      * Processes the provided node and converts it into an {@link Shape3D}.
-     * 
+     *
      * @param node
      *            the node to process.
      * @return a {@link Shape3D}
      */
-    private Shape3D processNode(VisualNode node) {
+    private Shape3D processNode(final VisualNode node) {
 
         Shape3D shape = null;
 
@@ -489,21 +462,21 @@ public class OldJavaFX3DEngine
 
     /**
      * Processes the provided edge and converts it into a {@link Shape3D}.
-     * 
+     *
      * @param edge
      *            the edge to process.
      * @return a {@link Shape3D}.
      */
-    private Shape3D processEdge(VisualEdge edge) {
+    private Shape3D processEdge(final VisualEdge edge) {
 
         if (edge.isVisible()) {
 
             Shape3D shape = null;
-            IVector4<Float> distanceVector = VectorAlgebraicOperations
+            final IVector4<Float> distanceVector = VectorAlgebraicOperations
                     .subtract(edge.getVisualTargetNode().getPosition(), edge
                             .getVisualSourceNode().getPosition(), Float.class);
 
-            Float distance = distanceVector.length();
+            final Float distance = distanceVector.length();
 
             switch (edge.getShape()) {
                 case CONE:
@@ -536,27 +509,30 @@ public class OldJavaFX3DEngine
     }
 
 
-    private void setPosition(Shape3D shape, VisualObject visualObject) {
+    private void setPosition(final Shape3D shape,
+            final VisualObject visualObject) {
 
         shape.setTranslateX(visualObject.getPosition().getX().doubleValue());
         shape.setTranslateY(visualObject.getPosition().getY().doubleValue());
         shape.setTranslateZ(visualObject.getPosition().getZ().doubleValue());
     }
 
-    private void setRotation(Shape3D shape, VisualObject visualObject) {
+    private void setRotation(final Shape3D shape,
+            final VisualObject visualObject) {
 
         if (visualObject.getRotation() != null) {
 
             shape.setRotate(Math.toDegrees(visualObject.getRotation()
-                    .getAngle().doubleValue()));
+                    .getRotationAngle().doubleValue()));
             shape.setRotationAxis(new Point3D(visualObject.getRotation()
-                    .getAxis().getX().doubleValue(), visualObject.getRotation()
-                    .getAxis().getY().doubleValue(), visualObject.getRotation()
-                    .getAxis().getZ().doubleValue()));
+                    .getRotationAxis().getX().doubleValue(), visualObject
+                    .getRotation().getRotationAxis().getY().doubleValue(),
+                    visualObject.getRotation().getRotationAxis().getZ()
+                    .doubleValue()));
         }
     }
 
-    private void setScale(Shape3D shape, VisualObject visualObject) {
+    private void setScale(final Shape3D shape, final VisualObject visualObject) {
 
         if (visualObject.getScale() != null) {
 
@@ -569,7 +545,7 @@ public class OldJavaFX3DEngine
         }
     }
 
-    private void setColor(Shape3D shape, VisualObject visualObject) {
+    private void setColor(final Shape3D shape, final VisualObject visualObject) {
 
         final PhongMaterial material = new PhongMaterial();
         material.setDiffuseColor(visualObject.getColor());

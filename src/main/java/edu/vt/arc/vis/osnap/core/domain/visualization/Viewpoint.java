@@ -1,6 +1,3 @@
-/**
- * 
- */
 package edu.vt.arc.vis.osnap.core.domain.visualization;
 
 /*
@@ -38,8 +35,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.jutility.math.geometry.IRotation;
 import org.jutility.math.geometry.Rotation;
-import org.jutility.math.vectorAlgebra.IPoint4;
-import org.jutility.math.vectorAlgebra.Point4;
+import org.jutility.math.vectoralgebra.IPoint4;
+import org.jutility.math.vectoralgebra.Point4;
 
 
 /**

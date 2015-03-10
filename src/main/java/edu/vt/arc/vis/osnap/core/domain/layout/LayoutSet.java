@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 import org.jutility.common.datatype.map.KeyValuePair;
-import org.jutility.math.geometry.Scale;
+import org.jutility.math.geometry.ScaleFactor;;
 
 
 /**
@@ -274,10 +274,10 @@ public class LayoutSet
 
 
         ILayout nodeScale = new SimpleScaleLayout(
-                new Scale<>(layoutSet.getVisualization().getPrecision()));
+                new ScaleFactor<>(layoutSet.getVisualization().getPrecision()));
         nodeScale.setName("Default Node Scale (1, 1, 1)");
         ILayout edgeScale = new SimpleScaleLayout(
-                new Scale<>(layoutSet.getVisualization().getPrecision()));
+                new ScaleFactor<>(layoutSet.getVisualization().getPrecision()));
         edgeScale.setName("Default Edge Scale (1, 1, 1)");
         // ILayout hyperEdgeScale = new SimpleScaleLayout(
         // new Scalef());

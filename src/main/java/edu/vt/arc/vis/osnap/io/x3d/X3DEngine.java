@@ -1,20 +1,3 @@
-/*******************************************************************************
- * Copyright 2014 Virginia Tech Visionarium
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- ******************************************************************************/
-
-
 package edu.vt.arc.vis.osnap.io.x3d;
 
 
@@ -30,11 +13,11 @@ import org.jutility.io.ConversionException;
 import org.jutility.io.IConverter;
 import org.jutility.math.geometry.GeometricOperations;
 import org.jutility.math.geometry.IRotation;
-import org.jutility.math.geometry.IScale;
-import org.jutility.math.vectorAlgebra.IPoint4;
-import org.jutility.math.vectorAlgebra.IVector4;
-import org.jutility.math.vectorAlgebra.Vector4;
-import org.jutility.math.vectorAlgebra.VectorAlgebraicOperations;
+import org.jutility.math.geometry.IScaleFactor;
+import org.jutility.math.vectoralgebra.IPoint4;
+import org.jutility.math.vectoralgebra.IVector4;
+import org.jutility.math.vectoralgebra.Vector4;
+import org.jutility.math.vectoralgebra.VectorAlgebraicOperations;
 import org.x3d.fields.MFColor;
 import org.x3d.fields.MFFloat;
 import org.x3d.fields.MFString;
@@ -217,10 +200,11 @@ public class X3DEngine
                     viewpoint.getPosition().getZ().floatValue()));
 
             x3dViewpoint.setOrientation(new SFRotation(viewpoint.getRotation()
-                    .getAxis().getX().floatValue(), viewpoint.getRotation()
-                    .getAxis().getY().floatValue(), viewpoint.getRotation()
-                    .getAxis().getZ().floatValue(), viewpoint.getRotation()
-                    .getAngle().floatValue()));
+                    .getRotationAxis().getX().floatValue(), viewpoint
+                    .getRotation().getRotationAxis().getY().floatValue(),
+                    viewpoint.getRotation().getRotationAxis().getZ()
+                            .floatValue(), viewpoint.getRotation()
+                            .getRotationAngle().floatValue()));
             this.x3dDocument.getScene().getChildObjects().add(x3dViewpoint);
         }
 
@@ -345,16 +329,17 @@ public class X3DEngine
 
             if (node.getRotation() != null) {
                 IRotation<?> rotation = node.getRotation();
-                transformation.setRotation(NumberUtils.cast(rotation.getAxis()
-                        .getX(), Float.class), NumberUtils.cast(rotation
-                        .getAxis().getY(), Float.class), NumberUtils.cast(
-                        rotation.getAxis().getZ(), Float.class), NumberUtils
-                        .cast(rotation.getAngle(), Float.class));
+                transformation.setRotation(NumberUtils.cast(rotation
+                        .getRotationAxis().getX(), Float.class), NumberUtils
+                        .cast(rotation.getRotationAxis().getY(), Float.class),
+                        NumberUtils.cast(rotation.getRotationAxis().getZ(),
+                                Float.class), NumberUtils.cast(
+                                rotation.getRotationAngle(), Float.class));
             }
 
             if (node.getScale() != null) {
 
-                IScale<?> scale = node.getScale();
+                IScaleFactor<?> scale = node.getScale();
                 transformation.setScale(
                         NumberUtils.cast(scale.getScaleFactorX(), Float.class),
                         NumberUtils.cast(scale.getScaleFactorY(), Float.class),
@@ -382,19 +367,22 @@ public class X3DEngine
         return null;
     }
 
-    private Shape createShape(edu.vt.arc.vis.osnap.core.domain.visualization.Shape baseShape,
+    private Shape createShape(
+            edu.vt.arc.vis.osnap.core.domain.visualization.Shape baseShape,
             Color color) {
 
         return this.createShape(baseShape, color, 1f);
     }
 
-    private Shape createShape(edu.vt.arc.vis.osnap.core.domain.visualization.Shape baseShape,
+    private Shape createShape(
+            edu.vt.arc.vis.osnap.core.domain.visualization.Shape baseShape,
             Color color, float height) {
 
         return this.createShape(baseShape, color, height, 1.0f);
     }
 
-    private Shape createShape(edu.vt.arc.vis.osnap.core.domain.visualization.Shape baseShape,
+    private Shape createShape(
+            edu.vt.arc.vis.osnap.core.domain.visualization.Shape baseShape,
             Color color, float height, float width) {
 
         X3DGeometryNode geometry = null;
@@ -479,26 +467,28 @@ public class X3DEngine
 
             if (edge.getRotation() != null) {
                 IRotation<?> rotation = edge.getRotation();
-                transformation.setRotation(NumberUtils.cast(rotation.getAxis()
-                        .getX(), Float.class), NumberUtils.cast(rotation
-                        .getAxis().getY(), Float.class), NumberUtils.cast(
-                        rotation.getAxis().getZ(), Float.class), NumberUtils
-                        .cast(rotation.getAngle(), Float.class));
+                transformation.setRotation(NumberUtils.cast(rotation
+                        .getRotationAxis().getX(), Float.class), NumberUtils
+                        .cast(rotation.getRotationAxis().getY(), Float.class),
+                        NumberUtils.cast(rotation.getRotationAxis().getZ(),
+                                Float.class), NumberUtils.cast(
+                                rotation.getRotationAngle(), Float.class));
             }
             else {
                 IRotation<Float> rotation = GeometricOperations
-                        .getAngleAxisRotationBetweenVectors(
+                        .getRotationBetweenVectors(
                                 Vector4.J_UNIT_VECTOR(Float.class),
                                 distanceVector, Float.class);
 
-                transformation.setRotation(rotation.getAxis().getX(), rotation
-                        .getAxis().getY(), rotation.getAxis().getZ(), rotation
-                        .getAngle());
+                transformation.setRotation(rotation.getRotationAxis().getX(),
+                        rotation.getRotationAxis().getY(), rotation
+                                .getRotationAxis().getZ(), rotation
+                                .getRotationAngle());
             }
 
             if (edge.getScale() != null) {
 
-                IScale<?> scale = edge.getScale();
+                IScaleFactor<?> scale = edge.getScale();
                 transformation.setScale(
                         NumberUtils.cast(scale.getScaleFactorX(), Float.class),
                         1.0f,

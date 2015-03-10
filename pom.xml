@@ -65,8 +65,12 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
 
+    <!-- SonarQube -->
+    <sonar.login>sonar</sonar.login>
+    <sonar.password>$0n4rQub3</sonar.password>
+
 		<!-- jUtility -->
-		<org.jutility.version>0.1.2-SNAPSHOT</org.jutility.version>
+		<org.jutility.version>0.1.2</org.jutility.version>
 
 		<!-- ControlsFX -->
 		<org.controlsfx.version>8.20.8</org.controlsfx.version>
@@ -83,46 +87,43 @@
 
 
 		<!-- Spring Framework -->
-		<org.springframework.version>4.1.4.RELEASE
-		</org.springframework.version>
-		<org.springframework.data.version>1.7.1.RELEASE
-		</org.springframework.data.version>
+		<org.springframework.version>4.1.5.RELEASE</org.springframework.version>
+		<org.springframework.data.version>1.7.2.RELEASE</org.springframework.data.version>
 		<org.springframework.security.version>3.2.5.RELEASE
 		</org.springframework.security.version>
 
 		<!-- AspectJ -->
-		<org.aspectj.version>1.8.4</org.aspectj.version>
+		<org.aspectj.version>1.8.5</org.aspectj.version>
 		<javax.inject.version>1</javax.inject.version>
 
 		<!-- Cache -->
-		<net.sf.ehcache.version>2.6.9</net.sf.ehcache.version>
+		<net.sf.ehcache.version>2.6.10</net.sf.ehcache.version>
 
 		<!-- Tomcat -->
-		<org.apache.tomcat.version>8.0.17</org.apache.tomcat.version>
+		<org.apache.tomcat.version>8.0.20</org.apache.tomcat.version>
 
 		<!-- HTTPComponents -->
-		<org.apache.httpcomponents.version>4.3.5</org.apache.httpcomponents.version>
+		<org.apache.httpcomponents.version>4.4</org.apache.httpcomponents.version>
 
 		<!-- File Upload -->
 		<org.apache.commons.io.version>2.4</org.apache.commons.io.version>
 		<org.apache.commons.fileupload.version>1.3.1</org.apache.commons.fileupload.version>
 
 		<!-- Testing -->
-		<org.junit.version>4.11</org.junit.version>
-		<org.mockito.version>1.10.8</org.mockito.version>
+		<org.junit.version>4.12</org.junit.version>
+		<org.mockito.version>2.0.4-beta</org.mockito.version>
 		<org.hamcrest.version>1.3</org.hamcrest.version>
-		<xmlunit.version>1.5</xmlunit.version>
-		<com.jayway.jsonpath.version>1.1.0</com.jayway.jsonpath.version>
+		<xmlunit.version>1.6</xmlunit.version>
+		<com.jayway.jsonpath.version>1.2.0</com.jayway.jsonpath.version>
 
 		<!-- Validation -->
-		<org.hibernate.validator.version>5.1.2.Final</org.hibernate.validator.version>
+		<org.hibernate.validator.version>5.1.3.Final</org.hibernate.validator.version>
 		<javax.validation.version>1.1.0.Final</javax.validation.version>
-		<commons-validator.version>1.4.0</commons-validator.version>
+		<commons-validator.version>1.4.1</commons-validator.version>
 
 		<!-- Persistence -->
 		<eclipselink.version>2.5.2</eclipselink.version>
 		<mysql.version>5.1.34</mysql.version>
-		<eclipselink.version>2.5.2</eclipselink.version>
 		<org.apache.commons.dbcp2.version>2.0.1</org.apache.commons.dbcp2.version>
 
 		<!-- Thymeleaf -->
@@ -131,14 +132,19 @@
 		<org.thymeleaf.extras.java8time.version>2.1.0.RELEASE</org.thymeleaf.extras.java8time.version>
 
 		<!-- JSON -->
-		<com.fasterxml.jackson.version>2.5.0</com.fasterxml.jackson.version>
+		<com.fasterxml.jackson.version>2.5.1</com.fasterxml.jackson.version>
 
 
 		<!-- Logging -->
-		<org.slf4j.version>1.7.7</org.slf4j.version>
+		<org.slf4j.version>1.7.10</org.slf4j.version>
 		<log4j.version>1.2.17</log4j.version>
 		<logback.version>1.0.13</logback.version>
 	</properties>
+
+  <prerequisites>
+    <maven>2.2.1</maven>
+  </prerequisites>
+
 	<build>
 		<sourceDirectory>src/main/java</sourceDirectory>
 		<scriptSourceDirectory>src/main/scripts</scriptSourceDirectory>
@@ -167,19 +173,19 @@
 			<plugins>
 				<plugin>
 					<artifactId>maven-antrun-plugin</artifactId>
-					<version>1.3</version>
+					<version>1.8</version>
 				</plugin>
 				<plugin>
 					<artifactId>maven-assembly-plugin</artifactId>
-					<version>2.2-beta-5</version>
+					<version>2.5.3</version>
 				</plugin>
 				<plugin>
 					<artifactId>maven-dependency-plugin</artifactId>
-					<version>2.8</version>
+					<version>2.10</version>
 				</plugin>
 				<plugin>
 					<artifactId>maven-release-plugin</artifactId>
-					<version>2.3.2</version>
+					<version>2.5.1</version>
 				</plugin>
 				<!--This plugin's configuration is used to store Eclipse m2e settings 
 					only. It has no influence on the Maven build itself. -->
@@ -199,7 +205,7 @@
 											license-maven-plugin
 										</artifactId>
 										<versionRange>
-											[1.7,)
+											[1.8,)
 										</versionRange>
 										<goals>
 											<goal>
@@ -220,7 +226,7 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
+				<version>3.2</version>
 				<executions>
 					<execution>
 						<id>default-compile</id>
@@ -252,11 +258,11 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9.1</version>
+				<version>2.10.1</version>
 			</plugin>
 			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
-				<version>2.3</version>
+				<version>2.6</version>
 				<executions>
 					<execution>
 						<id>default-war</id>
@@ -303,7 +309,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-clean-plugin</artifactId>
-				<version>2.5</version>
+				<version>2.6.1</version>
 				<executions>
 					<execution>
 						<id>default-clean</id>
@@ -316,7 +322,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.6</version>
+				<version>2.7</version>
 				<executions>
 					<execution>
 						<id>default-testResources</id>
@@ -336,7 +342,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.12.4</version>
+				<version>2.18.1</version>
 				<executions>
 					<execution>
 						<id>default-test</id>
@@ -349,7 +355,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-install-plugin</artifactId>
-				<version>2.4</version>
+				<version>2.5.2</version>
 				<executions>
 					<execution>
 						<id>default-install</id>
@@ -362,7 +368,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-deploy-plugin</artifactId>
-				<version>2.7</version>
+				<version>2.8.2</version>
 				<executions>
 					<execution>
 						<id>default-deploy</id>
@@ -375,7 +381,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-site-plugin</artifactId>
-				<version>3.3</version>
+				<version>3.4</version>
 				<executions>
 					<execution>
 						<id>default-site</id>
@@ -389,7 +395,7 @@
 								<reportPlugin>
 									<groupId>org.apache.maven.plugins</groupId>
 									<artifactId>maven-javadoc-plugin</artifactId>
-									<version>2.9.1</version>
+									<version>2.10.1</version>
 									<configuration>
 										<outputDirectory>doc/</outputDirectory>
 										<show>protected</show>
@@ -399,6 +405,7 @@
 								<reportPlugin>
 									<groupId>org.apache.maven.plugins</groupId>
 									<artifactId>maven-project-info-reports-plugin</artifactId>
+                   <version>2.8</version>
 								</reportPlugin>
 							</reportPlugins>
 						</configuration>
@@ -415,7 +422,7 @@
 								<reportPlugin>
 									<groupId>org.apache.maven.plugins</groupId>
 									<artifactId>maven-javadoc-plugin</artifactId>
-									<version>2.9.1</version>
+									<version>2.10.1</version>
 									<configuration>
 										<outputDirectory>doc/</outputDirectory>
 										<show>protected</show>
@@ -425,6 +432,7 @@
 								<reportPlugin>
 									<groupId>org.apache.maven.plugins</groupId>
 									<artifactId>maven-project-info-reports-plugin</artifactId>
+                  <version>2.8</version>
 								</reportPlugin>
 							</reportPlugins>
 						</configuration>
@@ -436,7 +444,7 @@
 						<reportPlugin>
 							<groupId>org.apache.maven.plugins</groupId>
 							<artifactId>maven-javadoc-plugin</artifactId>
-							<version>2.9.1</version>
+							<version>2.10.1</version>
 							<configuration>
 								<outputDirectory>doc/</outputDirectory>
 								<show>protected</show>
@@ -446,6 +454,7 @@
 						<reportPlugin>
 							<groupId>org.apache.maven.plugins</groupId>
 							<artifactId>maven-project-info-reports-plugin</artifactId>
+              <version>2.8</version>
 						</reportPlugin>
 					</reportPlugins>
 				</configuration>
@@ -454,7 +463,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>license-maven-plugin</artifactId>
-				<version>1.7</version>
+				<version>1.8</version>
 				<executions>
 					<execution>
 						<id>first</id>
@@ -477,6 +486,11 @@
 					<sectionDelimiter>_</sectionDelimiter>
 				</configuration>
 			</plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>sonar-maven-plugin</artifactId>
+        <version>2.5</version>
+      </plugin>
 		</plugins>
 	</build>
 	<reporting>
@@ -484,7 +498,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9.1</version>
+				<version>2.10.1</version>
 				<configuration>
 					<outputDirectory>doc/</outputDirectory>
 					<show>protected</show>
@@ -874,6 +888,30 @@
 		</dependency>
 	</dependencies>
 
+  <repositories>
+    <repository>
+      <id>cgit-releases</id>
+      <name>CGIT Releases</name>
+      <url>https://vtcgit.com:8443/archiva/repository/public-releases/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>cgit-snapshots</id>
+      <name>CGIT Snapshots</name>
+      <url>https://vtcgit.com:8443/archiva/repository/public-snapshots/</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
 
 	<pluginRepositories>
 		<pluginRepository>

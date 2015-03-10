@@ -40,7 +40,7 @@ import org.jutility.common.datatype.tree.PreorderTreeIterator;
 import org.jutility.common.datatype.tree.Tree;
 import org.jutility.common.datatype.tree.TreeNode;
 import org.jutility.math.arithmetics.ArithmeticOperations;
-import org.jutility.math.vectorAlgebra.Point4;
+import org.jutility.math.vectoralgebra.Point4;
 
 import edu.vt.arc.vis.osnap.core.domain.graph.Edge;
 import edu.vt.arc.vis.osnap.core.domain.graph.algorithms.IWeight;

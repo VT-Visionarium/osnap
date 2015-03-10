@@ -1,20 +1,3 @@
-/*******************************************************************************
- * Copyright 2014 Virginia Tech Visionarium
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
-
-
 package edu.vt.arc.vis.osnap.core.domain.visualization;
 
 /*
@@ -53,11 +36,11 @@ import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.jutility.math.geometry.IRotation;
-import org.jutility.math.geometry.IScale;
+import org.jutility.math.geometry.IScaleFactor;
 import org.jutility.math.geometry.Rotation;
-import org.jutility.math.geometry.Scale;
-import org.jutility.math.vectorAlgebra.IPoint4;
-import org.jutility.math.vectorAlgebra.Point4;
+import org.jutility.math.geometry.ScaleFactor;
+import org.jutility.math.vectoralgebra.IPoint4;
+import org.jutility.math.vectoralgebra.Point4;
 
 import javafx.scene.paint.Color;
 
@@ -96,8 +79,8 @@ public abstract class VisualObject
 
     @XmlElement(name = "Shape")
     private Shape                         shape;
-    @XmlElement(name = "Scale", type = Scale.class)
-    private IScale<?>                     scale;
+    @XmlElement(name = "Scale", type = ScaleFactor.class)
+    private IScaleFactor<?>                     scale;
     @XmlElement(name = "Position", type = Point4.class)
     private IPoint4<?>                    position;
     @XmlElement(name = "Rotation", type = Rotation.class)
@@ -220,7 +203,7 @@ public abstract class VisualObject
      * 
      * @return the scale.
      */
-    public IScale<?> getScale() {
+    public IScaleFactor<?> getScale() {
 
         return this.scale;
     }
@@ -232,7 +215,7 @@ public abstract class VisualObject
      * @param scale
      *            the new scale.
      */
-    public void setScale(IScale<?> scale) {
+    public void setScale(IScaleFactor<?> scale) {
 
         this.scale = scale;
     }

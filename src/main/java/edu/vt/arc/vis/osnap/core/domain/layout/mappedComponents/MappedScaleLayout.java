@@ -29,7 +29,7 @@ import java.util.Set;
 
 import javax.xml.bind.annotation.XmlType;
 
-import org.jutility.math.geometry.Scalef;
+import org.jutility.math.geometry.ScaleFactor;
 
 import edu.vt.arc.vis.osnap.core.domain.graph.common.IGraphObjectBasedValueTypeContainer;
 import edu.vt.arc.vis.osnap.core.domain.layout.common.BaseMappedLayout;
@@ -58,7 +58,7 @@ import edu.vt.arc.vis.osnap.core.domain.visualization.VisualProperty;
  */
 @XmlType(name = "MappedScaleLayout")
 public class MappedScaleLayout<DOMAIN_KEY_TYPE extends IGraphObjectBasedValueTypeContainer, DOMAIN_VALUE_TYPE>
-        extends BaseMappedLayout<DOMAIN_KEY_TYPE, DOMAIN_VALUE_TYPE, Scalef>
+        extends BaseMappedLayout<DOMAIN_KEY_TYPE, DOMAIN_VALUE_TYPE, ScaleFactor<?>>
         implements IScaleLayout {
 
 
@@ -137,12 +137,13 @@ public class MappedScaleLayout<DOMAIN_KEY_TYPE extends IGraphObjectBasedValueTyp
      *            whether or not the constructor is invoked during
      *            serialization.
      */
+    @SuppressWarnings("unchecked")
     protected MappedScaleLayout(DOMAIN_KEY_TYPE domainKey,
             VisualProperty coDomainKey,
             Class<? extends DOMAIN_VALUE_TYPE> domainValueType,
             boolean serialization) {
 
-        super(domainKey, coDomainKey, domainValueType, Scalef.class,
+        super(domainKey, coDomainKey, domainValueType, (Class<? extends ScaleFactor<?>>) ScaleFactor.class,
                 MappedScaleLayout.name(), MappedScaleLayout.description(),
                 true, serialization);
 
@@ -169,20 +170,20 @@ public class MappedScaleLayout<DOMAIN_KEY_TYPE extends IGraphObjectBasedValueTyp
         if (this.getCoDomainKey() == VisualProperty.NODE_SCALE) {
 
 
-            Scalef scale = null;
+            ScaleFactor<?> scale = null;
             Object scaleFactor = this.getCoDomainValueForGraphObject(visualNode
                     .getNode());
             if (scaleFactor != null) {
-                if (scaleFactor instanceof Scalef) {
-                    scale = (Scalef) scaleFactor;
+                if (scaleFactor instanceof ScaleFactor<?>) {
+                    scale = (ScaleFactor<?>) scaleFactor;
                 }
-                else if (scaleFactor instanceof Float) {
-                    Float scaling = (Float) scaleFactor;
-                    scale = new Scalef(scaling, scaling, scaling);
+                else if (scaleFactor instanceof Number) {
+                    Number scaling = (Number) scaleFactor;
+                    scale = new ScaleFactor<>(scaling, scaling, scaling, scaling.getClass());
                 }
                 else {
                     throw new IllegalArgumentException(
-                            "Scale hast to be comprised of Floats, but provided "
+                            "Scale hast to be comprised of Numbers, but provided "
                                     + "value was " + scaleFactor.getClass()
                                     + "!");
                 }
@@ -200,20 +201,20 @@ public class MappedScaleLayout<DOMAIN_KEY_TYPE extends IGraphObjectBasedValueTyp
 
         if (this.getCoDomainKey() == VisualProperty.EDGE_SCALE) {
 
-            Scalef scale = null;
+            ScaleFactor<?> scale = null;
             Object scaleFactor = this.getCoDomainValueForGraphObject(visualEdge
                     .getEdge());
             if (scaleFactor != null) {
-                if (scaleFactor instanceof Scalef) {
-                    scale = (Scalef) scaleFactor;
+                if (scaleFactor instanceof ScaleFactor<?> ) {
+                    scale = (ScaleFactor<?>) scaleFactor;
                 }
-                else if (scaleFactor instanceof Float) {
-                    Float scaling = (Float) scaleFactor;
-                    scale = new Scalef(scaling, scaling, scaling);
+                else if (scaleFactor instanceof Number) {
+                    Number scaling = (Number) scaleFactor;
+                    scale = new ScaleFactor<>(scaling, scaling, scaling, scaling.getClass());
                 }
                 else {
                     throw new IllegalArgumentException(
-                            "Scale hast to be comprised of Floats, but provided "
+                            "Scale hast to be comprised of Numbers, but provided "
                                     + "value was " + scaleFactor.getClass()
                                     + "!");
                 }
@@ -228,20 +229,21 @@ public class MappedScaleLayout<DOMAIN_KEY_TYPE extends IGraphObjectBasedValueTyp
     public void layout(VisualHyperEdge visualHyperEdge) {
 
         // TODO: (v.2) fix Scale mappings to have x, y, z components?
-        Scalef scale = null;
+        ScaleFactor<?> scale = null;
         Object scaleFactor = this
                 .getCoDomainValueForGraphObject(visualHyperEdge.getHyperEdge());
         if (scaleFactor != null) {
-            if (scaleFactor instanceof Scalef) {
-                scale = (Scalef) scaleFactor;
+            if (scaleFactor instanceof ScaleFactor<?>) {
+                scale = (ScaleFactor<?>) scaleFactor;
             }
-            else if (scaleFactor instanceof Float) {
-                Float scaling = (Float) scaleFactor;
-                scale = new Scalef(scaling, scaling, scaling);
+            else if (scaleFactor instanceof Number) {
+                
+                Number scaling = (Number)scaleFactor;
+                scale = new ScaleFactor<>(scaling, scaling, scaling, scaling.getClass());
             }
             else {
                 throw new IllegalArgumentException(
-                        "Scale hast to be comprised of Floats, but provided "
+                        "Scale hast to be comprised of Numbers, but provided "
                                 + "value was " + scaleFactor.getClass() + "!");
             }
         }

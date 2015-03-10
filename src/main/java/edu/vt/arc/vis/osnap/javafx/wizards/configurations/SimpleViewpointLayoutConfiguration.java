@@ -23,7 +23,7 @@ package edu.vt.arc.vis.osnap.javafx.wizards.configurations;
  */
 // @formatter:on
 
-import org.jutility.math.vectorAlgebra.Vector4;
+import org.jutility.math.vectoralgebra.Vector4;
 
 import edu.vt.arc.vis.osnap.core.domain.layout.simpleComponents.SimpleViewpointLayout;
 

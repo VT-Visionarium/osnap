@@ -24,7 +24,7 @@ package edu.vt.arc.vis.osnap.core.domain.layout.prefuseComponents;
 // @formatter:on
 
 import org.jutility.math.geometry.IRectangle2;
-import org.jutility.math.vectorAlgebra.IPoint2;
+import org.jutility.math.vectoralgebra.IPoint2;
 
 import edu.vt.arc.vis.osnap.core.domain.layout.common.I2DCoordinateLayout;
 import prefuse.action.layout.Layout;
