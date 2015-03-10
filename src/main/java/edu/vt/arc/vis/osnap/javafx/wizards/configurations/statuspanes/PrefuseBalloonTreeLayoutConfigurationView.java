@@ -57,9 +57,10 @@ public class PrefuseBalloonTreeLayoutConfigurationView
 
         super(title, new PrefuseBalloonTreeLayoutConfiguration(), 1);
 
-        this.minimumRadiusLabel = new Label("Minimum Radius:");
         this.minimumRadiusValue = new Text();
+        this.minimumRadiusLabel = new Label("Minimum Radius:");
         this.minimumRadiusLabel.setStyle("-fx-font-weight: bold");
+        this.minimumRadiusLabel.setLabelFor(this.minimumRadiusValue);
 
 
         this.add(this.minimumRadiusLabel, 0,

@@ -318,7 +318,7 @@ public class GraphVisualizer {
 
         ILayout defaultCoordinates = null;
         for (KeyValuePair<ILayout, VisualProperty> pair : layoutSet
-                .getLayoutComponents()) {
+                .getLayouts()) {
 
             switch (pair.getValue()) {
 
@@ -349,7 +349,7 @@ public class GraphVisualizer {
 
         System.out.println("LayoutComponents: ");
         for (KeyValuePair<ILayout, VisualProperty> component : layoutSet
-                .getLayoutComponents()) {
+                .getLayouts()) {
             System.out.println("\t" + component.getValue() + ": "
                     + component.getKey().getName());
         }

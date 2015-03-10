@@ -62,18 +62,20 @@ public class PrefuseForceDirectedLayoutConfigurationView
 
         super(title, new PrefuseForceDirectedLayoutConfiguration(), 2);
 
-        this.iterationsLabel = new Label("Iterations: ");
         this.iterationsValue = new Text();
+        this.iterationsLabel = new Label("Iterations:");
         this.iterationsLabel.setStyle("-fx-font-weight: bold");
+        this.iterationsLabel.setLabelFor(this.iterationsValue);
 
         this.add(this.iterationsLabel, 0,
                 (super.rowsUsed() + super.getOffset()) - 2);
         this.add(this.iterationsValue, 1,
                 (super.rowsUsed() + super.getOffset()) - 2);
 
-        this.enforceBoundsLabel = new Label("Enforce Bounds? ");
         this.enforceBoundsValue = new Text();
+        this.enforceBoundsLabel = new Label("Enforce Bounds?");
         this.enforceBoundsLabel.setStyle("-fx-font-weight: bold");
+        this.enforceBoundsLabel.setLabelFor(this.enforceBoundsValue);
 
         this.add(this.enforceBoundsLabel, 0,
                 (super.rowsUsed() + super.getOffset()) - 1);

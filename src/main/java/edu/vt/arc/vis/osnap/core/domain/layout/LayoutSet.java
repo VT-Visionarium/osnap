@@ -34,10 +34,11 @@ import org.jutility.math.geometry.ScaleFactor;;
 
 
 /**
- * Provides a layout (a set of visual properties) for a graph universe.
+ * Provides a layout set (a set of visual properties) for a graph universe.
  * 
  * @author Peter J. Radics
- * @version 0.1
+ * @version 1.2.0
+ * @since 0.1.0
  */
 @XmlType(name = "LayoutSet", propOrder = { "universe", "layouts" })
 @XmlAccessorType(XmlAccessType.NONE)
@@ -50,9 +51,9 @@ public class LayoutSet
     @XmlIDREF
     @XmlAttribute
     @XmlSchemaType(name = "IDREF")
-    private final Universe                                             universe;
+    private final Universe                                    universe;
 
-    private Visualization                                              visualization;
+    private Visualization                                     visualization;
 
 
     /**
@@ -102,14 +103,15 @@ public class LayoutSet
      * @param universe
      *            the universe to be laid out.
      * @param serialization
-     *            {@code true}, if used for serialization;
-     *            {@code false} otherwise.
+     *            {@code true}, if used for serialization; {@code false}
+     *            otherwise.
      */
     private LayoutSet(Universe universe, boolean serialization) {
 
         LayoutRegistry.Instance();
         this.universe = universe;
         if (universe == null && !serialization) {
+            
             throw new IllegalArgumentException(
                     "Cannot create layout without an associated Universe!");
         }
@@ -124,43 +126,46 @@ public class LayoutSet
 
 
     /**
-     * Returns the List of Key-Value pairs of {@code ILayout} to
-     * {@code VisualProperty}.
+     * Returns the List of Key-Value pairs of {@link ILayout} to
+     * {@link VisualProperty}.
      * 
-     * @return a list of {@code IVisualPropertyProviders}.
+     * @return the List of Key-Value pairs of {@link ILayout} to
+     *         {@link VisualProperty}.
      */
-    @XmlElementWrapper(name = "LayoutComponents")
-    @XmlElement(name = "LayoutComponent", type = KeyValuePair.class)
-    public List<KeyValuePair<ILayout, VisualProperty>> getLayoutComponents() {
+    @XmlElementWrapper(name = "Layouts")
+    @XmlElement(name = "Layout", type = KeyValuePair.class)
+    public List<KeyValuePair<ILayout, VisualProperty>> getLayouts() {
 
-        // System.out.println("Sonofa...");
         return this.layouts;
     }
 
 
     /**
-     * Adds a layout provider for a visual property.
+     * Adds a {@link ILayout} for a {@link VisualProperty}.
      * 
      * @param provider
-     *            the provider to be added.
+     *            the {@link ILayout}.
      * @param property
-     *            the property for which to add the provider.
+     *            the {@link VisualProperty}.
      */
     public void addLayoutForVisualProperty(ILayout provider,
             VisualProperty property) {
 
         if (provider == null) {
-            throw new IllegalArgumentException("No layout component provided!");
+
+            throw new IllegalArgumentException("No layout provided!");
         }
 
         if (property == null) {
+
             throw new IllegalArgumentException(
-                    "Cannot register layout component without a visual property.");
+                    "Cannot register layout without a visual property.");
         }
 
         if (!provider.providesCapabilities().contains(property)) {
+
             throw new IllegalArgumentException(
-                    "Provided layout component cannot handle provided visual "
+                    "Provided layout cannot handle provided visual "
                             + "property!");
         }
 
@@ -183,8 +188,8 @@ public class LayoutSet
      * @param property
      *            the property for which to remove the provider.
      */
-    public void removeLayoutProviderForVisualProperty(
-            ILayout provider, VisualProperty property) {
+    public void removeLayoutProviderForVisualProperty(ILayout provider,
+            VisualProperty property) {
 
         if (provider != null && property != null) {
 
@@ -247,12 +252,10 @@ public class LayoutSet
         LayoutSet layoutSet = new LayoutSet(universe);
 
 
-        ILayout defaultNodeColor = new SimpleColorLayout(
-                Color.RED);
+        ILayout defaultNodeColor = new SimpleColorLayout(Color.RED);
         defaultNodeColor.setName("Default Node Color (red)");
 
-        ILayout defaultEdgeColor = new SimpleColorLayout(
-                Color.GREEN);
+        ILayout defaultEdgeColor = new SimpleColorLayout(Color.GREEN);
         defaultEdgeColor.setName("Default Edge Color (green)");
 
         // ILayout defaultHyperEdgeColor = new
@@ -275,6 +278,7 @@ public class LayoutSet
 
         ILayout nodeScale = new SimpleScaleLayout(
                 new ScaleFactor<>(layoutSet.getVisualization().getPrecision()));
+
         nodeScale.setName("Default Node Scale (1, 1, 1)");
         ILayout edgeScale = new SimpleScaleLayout(
                 new ScaleFactor<>(layoutSet.getVisualization().getPrecision()));
@@ -284,11 +288,9 @@ public class LayoutSet
         // hyperEdgeScale.setName("Default HyperEdge Scale (1, 1, 1)");
 
 
-        ILayout nodeShape = new SimpleShapeLayout(
-                Shape.SPHERE);
+        ILayout nodeShape = new SimpleShapeLayout(Shape.SPHERE);
         nodeShape.setName("Default Node Shape (Sphere)");
-        ILayout edgeShape = new SimpleShapeLayout(
-                Shape.CYLINDER);
+        ILayout edgeShape = new SimpleShapeLayout(Shape.CYLINDER);
         edgeShape.setName("Default Edge Shape (Cylinder)");
         // ILayout hyperEdgeShape = new SimpleShapeLayout(
         // Shape.CONE);
@@ -296,7 +298,8 @@ public class LayoutSet
 
 
         ILayout nodeCoordinates = new SphericalLayout();
-        nodeCoordinates.setName("Default Node Coordinates (Spherical LayoutSet)");
+        nodeCoordinates
+                .setName("Default Node Coordinates (Spherical LayoutSet)");
 
 
         layoutSet.addLayoutForVisualProperty(defaultNodeColor,
@@ -340,13 +343,12 @@ public class LayoutSet
     }
 
     /**
-     * Determines whether or not this {@code LayoutSet} is identical to the
-     * one provided.
+     * Determines whether or not this {@code LayoutSet} is identical to the one
+     * provided.
      * 
      * @param other
      *            the other {@code LayoutSet}.
-     * @return {@code true} if they are identical; {@code false}
-     *         otherwise.
+     * @return {@code true} if they are identical; {@code false} otherwise.
      */
     public boolean isIdentical(LayoutSet other) {
 
@@ -355,8 +357,8 @@ public class LayoutSet
             boolean sameUniverse = this.getUniverse().isIdentical(
                     other.getUniverse());
 
-            boolean sameNumberOfLayoutComponents = this.getLayoutComponents()
-                    .size() == other.getLayoutComponents().size();
+            boolean sameNumberOfLayoutComponents = this.getLayouts().size() == other
+                    .getLayouts().size();
 
             return sameUniverse && sameNumberOfLayoutComponents;
         }

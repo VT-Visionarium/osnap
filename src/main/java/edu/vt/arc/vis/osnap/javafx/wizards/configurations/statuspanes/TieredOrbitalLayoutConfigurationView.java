@@ -67,29 +67,35 @@ public class TieredOrbitalLayoutConfigurationView
 
         super(title, new TieredOrbitalLayoutConfiguration());
 
-        this.metadataLabel = new Label("Metadata:");
         this.metadataValue = new Text();
-        this.metadataValue.setStyle("-fx-font-weight: bold");
+        this.metadataLabel = new Label("Metadata:");
+        this.metadataLabel.setStyle("-fx-font-weight: bold");
+        this.metadataLabel.setLabelFor(this.metadataValue);
 
-        this.invertPathLabel = new Label("Invert Path to Root?");
         this.invertPathValue = new Text();
-        this.invertPathValue.setStyle("-fx-font-weight: bold");
+        this.invertPathLabel = new Label("Invert Path to Root?");
+        this.invertPathLabel.setStyle("-fx-font-weight: bold");
+        this.invertPathLabel.setLabelFor(this.invertPathValue);
 
-        this.ignoreDirectionLabel = new Label("Ignore Edge Direction?");
         this.ignoreDirectionValue = new Text();
-        this.ignoreDirectionValue.setStyle("-fx-font-weight: bold");
+        this.ignoreDirectionLabel = new Label("Ignore Edge Direction?");
+        this.ignoreDirectionLabel.setStyle("-fx-font-weight: bold");
+        this.ignoreDirectionLabel.setLabelFor(this.ignoreDirectionValue);
 
-        this.minimalDistanceLabel = new Label("Minimal Distance:");
         this.minimalDistanceValue = new Text();
-        this.minimalDistanceValue.setStyle("-fx-font-weight: bold");
+        this.minimalDistanceLabel = new Label("Minimal Distance:");
+        this.minimalDistanceLabel.setStyle("-fx-font-weight: bold");
+        this.minimalDistanceLabel.setLabelFor(this.minimalDistanceValue);
 
-        this.maximumNodeRadiusLabel = new Label("Maximum Node Radius:");
         this.maximumNodeRadiusValue = new Text();
-        this.maximumNodeRadiusValue.setStyle("-fx-font-weight: bold");
+        this.maximumNodeRadiusLabel = new Label("Maximum Node Radius:");
+        this.maximumNodeRadiusLabel.setStyle("-fx-font-weight: bold");
+        this.maximumNodeRadiusLabel.setLabelFor(this.maximumNodeRadiusValue);
 
-        this.depthModifierLabel = new Label("Depth Modifier:");
         this.depthModifierValue = new Text();
-        this.depthModifierValue.setStyle("-fx-font-weight: bold");
+        this.depthModifierLabel = new Label("Depth Modifier:");
+        this.depthModifierLabel.setStyle("-fx-font-weight: bold");
+        this.depthModifierLabel.setLabelFor(this.depthModifierValue);
 
         this.add(this.metadataLabel, 0, super.rowsUsed());
         this.add(this.metadataValue, 1, super.rowsUsed());

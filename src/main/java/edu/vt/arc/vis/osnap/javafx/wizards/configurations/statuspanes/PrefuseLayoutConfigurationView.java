@@ -3,23 +3,18 @@ package edu.vt.arc.vis.osnap.javafx.wizards.configurations.statuspanes;
 
 // @formatter:off
 /*
- * _
- * The Open Semantic Network Analysis Platform (OSNAP)
- * _
- * Copyright (C) 2012 - 2014 Visionarium at Virginia Tech
- * _
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * _ The Open Semantic Network Analysis Platform (OSNAP) _ Copyright (C) 2012 -
+ * 2014 Visionarium at Virginia Tech _ Licensed under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * _
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License. _
  */
 // @formatter:on
 
@@ -47,7 +42,7 @@ public abstract class PrefuseLayoutConfigurationView<O extends IPrefuseLayout, C
         implements IPrefuseLayoutConfigurationView<O, C> {
 
     private final Label durationLabel;
-    private final Label anchorLabel;
+    private final Label layoutAnchorLabel;
     private final Label layoutBoundsLabel;
     private final Label layoutMarginsLabel;
 
@@ -114,25 +109,32 @@ public abstract class PrefuseLayoutConfigurationView<O extends IPrefuseLayout, C
 
         this.offset = offset;
 
+        this.durationValue = new Text();
         this.durationLabel = new Label("Layout Duration");
         this.durationLabel.setStyle("-fx-font-weight: bold");
-        this.anchorLabel = new Label("Layout Anchor");
-        this.anchorLabel.setStyle("-fx-font-weight: bold");
+        this.durationLabel.setLabelFor(this.durationValue);
+
+        this.layoutAnchorValue = new Text();
+        this.layoutAnchorLabel = new Label("Layout Anchor");
+        this.layoutAnchorLabel.setStyle("-fx-font-weight: bold");
+        this.layoutAnchorLabel.setLabelFor(this.layoutAnchorValue);
+
+        this.layoutBoundsValue = new Text();
         this.layoutBoundsLabel = new Label("Layout Bounds (x, y, w, h)");
         this.layoutBoundsLabel.setStyle("-fx-font-weight: bold");
+        this.layoutBoundsLabel.setLabelFor(this.layoutBoundsValue);
+
+        this.layoutMarginsValue = new Text();
         this.layoutMarginsLabel = new Label("Layout Margins (t, b, l, r)");
         this.layoutMarginsLabel.setStyle("-fx-font-weight: bold");
+        this.layoutMarginsLabel.setLabelFor(this.layoutMarginsValue);
 
-        this.durationValue = new Text();
-        this.layoutAnchorValue = new Text();
-        this.layoutBoundsValue = new Text();
-        this.layoutMarginsValue = new Text();
 
         int row = super.rowsUsed() + offset;
         this.add(this.durationLabel, 0, row);
         this.add(this.durationValue, 1, row);
         row++;
-        this.add(this.anchorLabel, 0, row);
+        this.add(this.layoutAnchorLabel, 0, row);
         this.add(this.layoutAnchorValue, 1, row);
         row++;
         this.add(this.layoutBoundsLabel, 0, row);

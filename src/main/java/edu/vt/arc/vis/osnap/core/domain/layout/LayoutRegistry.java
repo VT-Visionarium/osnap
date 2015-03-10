@@ -58,9 +58,9 @@ import edu.vt.arc.vis.osnap.javafx.wizards.configurations.ILayoutConfiguration;
 
 
 /**
- * The {@code LayoutRegistry} singleton class provides the registry of
- * available {@link ILayout LayoutComponents} and their
- * {@link IConfigurationWizard Wizards}.
+ * The {@code LayoutRegistry} singleton class provides the registry of available
+ * {@link ILayout LayoutComponents} and their {@link IConfigurationWizard
+ * Wizards}.
  * 
  * @author Peter J. Radics
  * @version 1.2.0
@@ -78,7 +78,7 @@ public class LayoutRegistry {
     private final Map<String, Set<VisualProperty>>                                                 capabilityMap;
 
 
-    private static LayoutRegistry                                                         s_Instance;
+    private static LayoutRegistry                                                                  s_Instance;
 
     /**
      * Returns the singleton instance of the class.
@@ -324,7 +324,10 @@ public class LayoutRegistry {
         this.descriptionMap.put(name, description);
         this.capabilityMap.put(name, capabilities);
 
-        XmlSerializer.Instance().registerClass(layout);
+        if (!layout.isInterface()) {
+            
+            XmlSerializer.Instance().registerClass(layout);
+        }
     }
 
     /**
@@ -378,13 +381,14 @@ public class LayoutRegistry {
                 LOG.error("Could not create instance of wizard class for "
                         + layoutComponentClass + " using parameters "
                         + parameters + "!");
-                
+
                 ExceptionDialog edlg = new ExceptionDialog(e);
                 edlg.setTitle("Error trying to create Wizard!");
                 edlg.setContentText("Could not create instance of wizard class for "
-                        + layoutComponentClass + " using parameters "
+                        + layoutComponentClass
+                        + " using parameters "
                         + parameters + "!");
-                
+
                 edlg.showAndWait();
             }
         }

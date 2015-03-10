@@ -24,7 +24,6 @@ package edu.vt.arc.vis.osnap.javafx.wizards.pages;
 //@formatter:on
 
 
-import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.paint.Color;
 import edu.vt.arc.vis.osnap.core.domain.layout.simpleComponents.SimpleColorLayout;
@@ -62,7 +61,6 @@ public class SimpleColorSelectionPage
         this.colorPicker = new ColorPicker(Color.WHITE);
         this.colorPicker.getStyleClass().add("split_button");
         this.getContentGridPane().add(this.colorPicker, 0, 0);
-        this.getContentGridPane().add(new Button("Meh!!"), 0, 1);
     }
 
 

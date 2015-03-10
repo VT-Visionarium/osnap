@@ -1,40 +1,38 @@
 package edu.vt.arc.vis.osnap.javafx.wizards.pages;
 
-
 //@formatter:off
 /*
-* _
-* The Open Semantic Network Analysis Platform (OSNAP)
-* _
-* Copyright (C) 2012 - 2015 Visionarium at Virginia Tech
-* _
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*      http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-* _
-*/
+ * _
+ * The Open Semantic Network Analysis Platform (OSNAP)
+ * _
+ * Copyright (C) 2012 - 2015 Visionarium at Virginia Tech
+ * _
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * _
+ */
 //@formatter:on
 
-
+import javafx.scene.control.Label;
 
 import org.controlsfx.validation.Validator;
 import org.controlsfx.validation.decoration.GraphicValidationDecoration;
-import org.jutility.javafx.control.labeled.LabeledTextField;
 import org.jutility.javafx.control.validation.ValidationUtils;
+import org.jutility.javafx.control.wrapper.TextFieldWrapper;
 
 import edu.vt.arc.vis.osnap.core.domain.layout.complexComponents.TieredOrbitalLayout;
 import edu.vt.arc.vis.osnap.javafx.wizards.Wizard;
 import edu.vt.arc.vis.osnap.javafx.wizards.configurations.TieredOrbitalLayoutConfiguration;
 import edu.vt.arc.vis.osnap.javafx.wizards.configurations.statuspanes.TieredOrbitalLayoutConfigurationView;
-
 
 /**
  * The {@code TieredOrbitalLayoutPage} provides a
@@ -46,148 +44,165 @@ import edu.vt.arc.vis.osnap.javafx.wizards.configurations.statuspanes.TieredOrbi
  * @since 0.5.0
  */
 public class TieredOrbitalLayoutPage
-        extends
-        LayoutConfigurationWizardPage<TieredOrbitalLayout, TieredOrbitalLayoutConfiguration, TieredOrbitalLayoutConfigurationView> {
+		extends
+		LayoutConfigurationWizardPage<TieredOrbitalLayout, TieredOrbitalLayoutConfiguration, TieredOrbitalLayoutConfigurationView> {
 
-    private LabeledTextField ignoreEdgeDirectionTF;
-    private LabeledTextField invertPathToRootTF;
-    private LabeledTextField minimumDistanceTF;
-    private LabeledTextField maximumNodeRadiusTF;
-    private LabeledTextField depthModifierTF;
+	private TextFieldWrapper ignoreEdgeDirectionTF;
+	private TextFieldWrapper invertPathToRootTF;
+	private TextFieldWrapper minimumDistanceTF;
+	private TextFieldWrapper maximumNodeRadiusTF;
+	private TextFieldWrapper depthModifierTF;
 
+	/**
+	 * Creates a new instance of the {@code TieredOrbitalLayoutPage} class.
+	 *
+	 * @param configurationView
+	 *            the {@link TieredOrbitalLayoutConfigurationView} .
+	 */
+	public TieredOrbitalLayoutPage(
+			final TieredOrbitalLayoutConfigurationView configurationView) {
 
-    /**
-     * Creates a new instance of the {@code TieredOrbitalLayoutPage} class.
-     *
-     * @param configurationView
-     *            the {@link TieredOrbitalLayoutConfigurationView} .
-     */
-    public TieredOrbitalLayoutPage(
-            final TieredOrbitalLayoutConfigurationView configurationView) {
+		super("Set Tiered Orbital Layout Settings", configurationView);
 
-        super("Set Tiered Orbital Layout Settings", configurationView);
+		ignoreEdgeDirectionTF = new TextFieldWrapper();
+		Label ignoreEdgeDirectionLabel = new Label("Ignore Edge Direction");
+		ignoreEdgeDirectionLabel.setLabelFor(this.ignoreEdgeDirectionTF);
+		ignoreEdgeDirectionLabel.setStyle("-fx-font-weight: bold");
 
+		invertPathToRootTF = new TextFieldWrapper();
+		Label invertPathToRootLabel = new Label("Invert Path to Root Node");
+		invertPathToRootLabel.setLabelFor(this.invertPathToRootTF);
+		invertPathToRootLabel.setStyle("-fx-font-weight: bold");
 
-        ignoreEdgeDirectionTF = new LabeledTextField("Ignore Edge Direction");
+		minimumDistanceTF = new TextFieldWrapper();
+		Label minimumDistanceLabel = new Label("Minimum Distance between Nodes");
+		minimumDistanceLabel.setLabelFor(this.minimumDistanceTF);
+		minimumDistanceLabel.setStyle("-fx-font-weight: bold");
 
-        invertPathToRootTF = new LabeledTextField("Invert Path to Root Node");
+		maximumNodeRadiusTF = new TextFieldWrapper();
+		Label maximumNodeRadiusLabel = new Label("Maximum Node Radius");
+		maximumNodeRadiusLabel.setLabelFor(this.maximumNodeRadiusTF);
+		maximumNodeRadiusLabel.setStyle("-fx-font-weight: bold");
 
-        minimumDistanceTF = new LabeledTextField(
-                "Minimum Distance between Nodes");
+		depthModifierTF = new TextFieldWrapper();
+		Label depthModifierLabel = new Label(
+				"Depth Modifier (Distance between tiers)");
+		depthModifierLabel.setLabelFor(this.depthModifierTF);
+		depthModifierLabel.setStyle("-fx-font-weight: bold");
 
-        maximumNodeRadiusTF = new LabeledTextField("Maximum Node Radius");
+		this.getContentGridPane().add(ignoreEdgeDirectionLabel, 0, 0);
+		this.getContentGridPane().add(ignoreEdgeDirectionTF, 1, 0);
+		this.getContentGridPane().add(invertPathToRootLabel, 0, 1);
+		this.getContentGridPane().add(invertPathToRootTF, 1, 1);
+		this.getContentGridPane().add(minimumDistanceLabel, 0,2);
+		this.getContentGridPane().add(minimumDistanceTF, 1, 2);
+		this.getContentGridPane().add(maximumNodeRadiusLabel, 0, 3);
+		this.getContentGridPane().add(maximumNodeRadiusTF, 1, 3);
+		this.getContentGridPane().add(depthModifierLabel, 0, 4);
+		this.getContentGridPane().add(depthModifierTF, 1, 4);
 
-        depthModifierTF = new LabeledTextField(
-                "Depth Modifier (Distance between tiers)");
+		this.setupValidation();
+	}
 
-        this.getContentGridPane().add(ignoreEdgeDirectionTF, 0, 0);
-        this.getContentGridPane().add(invertPathToRootTF, 0, 1);
-        this.getContentGridPane().add(minimumDistanceTF, 0, 2);
-        this.getContentGridPane().add(maximumNodeRadiusTF, 0, 3);
-        this.getContentGridPane().add(depthModifierTF, 0, 4);
+	private void setupValidation() {
 
-        this.setupValidation();
-    }
+		this.ignoreEdgeDirectionTF
+				.registerValidator(Validator.combine(
+						Validator
+								.createEmptyValidator("Value cannot be empty!"),
+						ValidationUtils
+								.createBooleanFormatValidator("Boolean value required!")));
+		this.invertPathToRootTF
+				.registerValidator(Validator.combine(
+						Validator
+								.createEmptyValidator("Value cannot be empty!"),
+						ValidationUtils
+								.createBooleanFormatValidator("Boolean value required!")));
 
-    private void setupValidation() {
+		this.minimumDistanceTF.registerValidator(Validator.combine(Validator
+				.createEmptyValidator("Value cannot be empty!"),
+				ValidationUtils.createNumberFormatValidator(Float.class,
+						"Float value required!")));
+		this.maximumNodeRadiusTF.registerValidator(Validator.combine(Validator
+				.createEmptyValidator("Value cannot be empty!"),
+				ValidationUtils.createNumberFormatValidator(Float.class,
+						"Float value required!")));
+		this.depthModifierTF.registerValidator(Validator.combine(Validator
+				.createEmptyValidator("Value cannot be empty!"),
+				ValidationUtils.createNumberFormatValidator(Float.class,
+						"Float value required!")));
 
-        this.ignoreEdgeDirectionTF
-                .registerValidator(Validator.combine(
-                        Validator
-                                .createEmptyValidator("Value cannot be empty!"),
-                        ValidationUtils
-                                .createBooleanFormatValidator("Boolean value required!")));
-        this.invertPathToRootTF
-                .registerValidator(Validator.combine(
-                        Validator
-                                .createEmptyValidator("Value cannot be empty!"),
-                        ValidationUtils
-                                .createBooleanFormatValidator("Boolean value required!")));
+		this.ignoreEdgeDirectionTF
+				.setValidationDecorator(new GraphicValidationDecoration());
+		this.invertPathToRootTF
+				.setValidationDecorator(new GraphicValidationDecoration());
+		this.minimumDistanceTF
+				.setValidationDecorator(new GraphicValidationDecoration());
+		this.maximumNodeRadiusTF
+				.setValidationDecorator(new GraphicValidationDecoration());
+		this.depthModifierTF
+				.setValidationDecorator(new GraphicValidationDecoration());
 
-        this.minimumDistanceTF.registerValidator(Validator.combine(Validator
-                .createEmptyValidator("Value cannot be empty!"),
-                ValidationUtils.createNumberFormatValidator(Float.class,
-                        "Float value required!")));
-        this.maximumNodeRadiusTF.registerValidator(Validator.combine(Validator
-                .createEmptyValidator("Value cannot be empty!"),
-                ValidationUtils.createNumberFormatValidator(Float.class,
-                        "Float value required!")));
-        this.depthModifierTF.registerValidator(Validator.combine(Validator
-                .createEmptyValidator("Value cannot be empty!"),
-                ValidationUtils.createNumberFormatValidator(Float.class,
-                        "Float value required!")));
+		this.ignoreEdgeDirectionTF.setErrorDecorationEnabled(true);
+		this.invertPathToRootTF.setErrorDecorationEnabled(true);
+		this.minimumDistanceTF.setErrorDecorationEnabled(true);
+		this.maximumNodeRadiusTF.setErrorDecorationEnabled(true);
+		this.depthModifierTF.setErrorDecorationEnabled(true);
 
-        this.ignoreEdgeDirectionTF
-                .setValidationDecorator(new GraphicValidationDecoration());
-        this.invertPathToRootTF
-                .setValidationDecorator(new GraphicValidationDecoration());
-        this.minimumDistanceTF
-                .setValidationDecorator(new GraphicValidationDecoration());
-        this.maximumNodeRadiusTF
-                .setValidationDecorator(new GraphicValidationDecoration());
-        this.depthModifierTF
-                .setValidationDecorator(new GraphicValidationDecoration());
+		this.validationGroup().registerSubValidation(
+				this.ignoreEdgeDirectionTF,
+				this.ignoreEdgeDirectionTF.validationSupport());
+		this.validationGroup().registerSubValidation(this.invertPathToRootTF,
+				this.invertPathToRootTF.validationSupport());
+		this.validationGroup().registerSubValidation(this.minimumDistanceTF,
+				this.minimumDistanceTF.validationSupport());
+		this.validationGroup().registerSubValidation(this.maximumNodeRadiusTF,
+				this.maximumNodeRadiusTF.validationSupport());
+		this.validationGroup().registerSubValidation(this.depthModifierTF,
+				this.depthModifierTF.validationSupport());
+	}
 
-        this.ignoreEdgeDirectionTF.setErrorDecorationEnabled(true);
-        this.invertPathToRootTF.setErrorDecorationEnabled(true);
-        this.minimumDistanceTF.setErrorDecorationEnabled(true);
-        this.maximumNodeRadiusTF.setErrorDecorationEnabled(true);
-        this.depthModifierTF.setErrorDecorationEnabled(true);
+	@Override
+	public void onEnteringPage(Wizard wizard) {
 
-        this.validationGroup().registerSubValidation(
-                this.ignoreEdgeDirectionTF,
-                this.ignoreEdgeDirectionTF.validationSupport());
-        this.validationGroup().registerSubValidation(this.invertPathToRootTF,
-                this.invertPathToRootTF.validationSupport());
-        this.validationGroup().registerSubValidation(this.minimumDistanceTF,
-                this.minimumDistanceTF.validationSupport());
-        this.validationGroup().registerSubValidation(this.maximumNodeRadiusTF,
-                this.maximumNodeRadiusTF.validationSupport());
-        this.validationGroup().registerSubValidation(this.depthModifierTF,
-                this.depthModifierTF.validationSupport());
-    }
+		super.onEnteringPage(wizard);
 
-    @Override
-    public void onEnteringPage(Wizard wizard) {
+		if (this.getConfiguration() != null) {
 
-        super.onEnteringPage(wizard);
+			TieredOrbitalLayoutConfiguration config = this.getConfiguration();
 
-        if (this.getConfiguration() != null) {
+			this.invertPathToRootTF.setText(""
+					+ config.isInvertPathToRootNode());
 
-            TieredOrbitalLayoutConfiguration config = this.getConfiguration();
+			this.ignoreEdgeDirectionTF.setText(""
+					+ config.isIgnoreEdgeDirection());
 
-            this.invertPathToRootTF.setText(""
-                    + config.isInvertPathToRootNode());
+			this.minimumDistanceTF.setText("" + config.getMinimalDistance());
 
-            this.ignoreEdgeDirectionTF.setText(""
-                    + config.isIgnoreEdgeDirection());
+			this.maximumNodeRadiusTF
+					.setText("" + config.getMaximumNodeRadius());
 
-            this.minimumDistanceTF.setText("" + config.getMinimalDistance());
+			this.depthModifierTF.setText("" + config.getDepthModifier());
+		}
+	}
 
-            this.maximumNodeRadiusTF
-                    .setText("" + config.getMaximumNodeRadius());
+	@Override
+	public void onExitingPage(Wizard wizard) {
 
-            this.depthModifierTF.setText("" + config.getDepthModifier());
-        }
-    }
+		super.onExitingPage(wizard);
 
-    @Override
-    public void onExitingPage(Wizard wizard) {
+		if (this.getConfiguration() != null) {
 
-        super.onExitingPage(wizard);
-
-        if (this.getConfiguration() != null) {
-
-            this.getConfiguration().setIgnoreEdgeDirection(
-                    Boolean.valueOf(this.ignoreEdgeDirectionTF.getText()));
-            this.getConfiguration().setInvertPathToRootNode(
-                    Boolean.valueOf(this.invertPathToRootTF.getText()));
-            this.getConfiguration().setMinimalDistance(
-                    Float.valueOf(this.minimumDistanceTF.getText()));
-            this.getConfiguration().setMaximumNodeRadius(
-                    Float.valueOf(this.maximumNodeRadiusTF.getText()));
-            this.getConfiguration().setDepthModifier(
-                    Float.valueOf(this.depthModifierTF.getText()));
-        }
-    }
+			this.getConfiguration().setIgnoreEdgeDirection(
+					Boolean.valueOf(this.ignoreEdgeDirectionTF.getText()));
+			this.getConfiguration().setInvertPathToRootNode(
+					Boolean.valueOf(this.invertPathToRootTF.getText()));
+			this.getConfiguration().setMinimalDistance(
+					Float.valueOf(this.minimumDistanceTF.getText()));
+			this.getConfiguration().setMaximumNodeRadius(
+					Float.valueOf(this.maximumNodeRadiusTF.getText()));
+			this.getConfiguration().setDepthModifier(
+					Float.valueOf(this.depthModifierTF.getText()));
+		}
+	}
 }
