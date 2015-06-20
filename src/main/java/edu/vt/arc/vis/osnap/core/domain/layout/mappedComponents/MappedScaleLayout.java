@@ -56,9 +56,10 @@ import edu.vt.arc.vis.osnap.core.domain.visualization.VisualProperty;
  * @version 1.2.0
  * @since 0.1.0
  */
+@SuppressWarnings("rawtypes")
 @XmlType(name = "MappedScaleLayout")
 public class MappedScaleLayout<DOMAIN_KEY_TYPE extends IGraphObjectBasedValueTypeContainer, DOMAIN_VALUE_TYPE>
-        extends BaseMappedLayout<DOMAIN_KEY_TYPE, DOMAIN_VALUE_TYPE, ScaleFactor<?>>
+        extends BaseMappedLayout<DOMAIN_KEY_TYPE, DOMAIN_VALUE_TYPE, ScaleFactor>
         implements IScaleLayout {
 
 
@@ -137,13 +138,12 @@ public class MappedScaleLayout<DOMAIN_KEY_TYPE extends IGraphObjectBasedValueTyp
      *            whether or not the constructor is invoked during
      *            serialization.
      */
-    @SuppressWarnings("unchecked")
     protected MappedScaleLayout(DOMAIN_KEY_TYPE domainKey,
             VisualProperty coDomainKey,
             Class<? extends DOMAIN_VALUE_TYPE> domainValueType,
             boolean serialization) {
 
-        super(domainKey, coDomainKey, domainValueType, (Class<? extends ScaleFactor<?>>) ScaleFactor.class,
+        super(domainKey, coDomainKey, domainValueType,  ScaleFactor.class,
                 MappedScaleLayout.name(), MappedScaleLayout.description(),
                 true, serialization);
 

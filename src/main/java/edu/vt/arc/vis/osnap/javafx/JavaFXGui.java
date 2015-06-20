@@ -11,9 +11,9 @@ package edu.vt.arc.vis.osnap.javafx;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,6 +24,21 @@ package edu.vt.arc.vis.osnap.javafx;
 // @formatter:on
 
 import java.io.File;
+
+import javafx.application.Application;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.scene.Scene;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.Tooltip;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 import org.graphdrawing.graphml.GraphMLDocument;
 import org.jutility.io.ConversionException;
@@ -38,22 +53,6 @@ import edu.vt.arc.vis.osnap.io.IOManager;
 import edu.vt.arc.vis.osnap.javafx.engine.JavaFX3DEngine;
 import edu.vt.arc.vis.osnap.javafx.events.ExportLayoutEvent;
 import edu.vt.arc.vis.osnap.javafx.events.SwitchTabEvent;
-import javafx.application.Application;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.Tooltip;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
 
 // -------------------------------------------------------------------------
@@ -62,44 +61,44 @@ import javafx.stage.Stage;
  * customize the display properties through the use of dialog boxes and a
  * display wizard. Users can also create graphs and networks from scratch using
  * the add graph dialog through the context menu.
- * 
+ *
  * @author Shawn P Neuman, Peter J. Radics
  * @version May 21, 2013
  */
 public class JavaFXGui
         extends Application {
 
-    private String                                 title = "Open Semantic Network Analysis Platform";
+    private final String                        title = "Open Semantic Network Analysis Platform";
 
-    private Stage                                  stage;
-    private Scene                                  scene;
+    private Stage                               stage;
+    private Scene                               scene;
 
-    private UniverseEditorGridPane                    universeDetails;
-    private GraphEditorGridPane                       graphDetails;
-    private LayoutDetailsVBox                      layoutDetails;
-    private VisualizationDetailsVBox               visDetails;
-    private TabPane                                tabPane;
+    private UniverseEditorGridPane              universeDetails;
+    private GraphEditorGridPane                 graphDetails;
+    private LayoutDetailsVBox                   layoutDetails;
+    private VisualizationDetailsVBox            visDetails;
+    private TabPane                             tabPane;
 
 
-    private final ObjectProperty<Project>          project;
-    private final ObjectProperty<Universe>         universe;
-    private final ObjectProperty<LayoutSet> layoutSet;
-    private final ObjectProperty<Visualization>    visualization;
+    private final ObjectProperty<Project>       project;
+    private final ObjectProperty<Universe>      universe;
+    private final ObjectProperty<LayoutSet>     layoutSet;
+    private final ObjectProperty<Visualization> visualization;
 
-    private Tab                                    graphInformationTab;
-    private Tab                                    layoutInformationTab;
-    private Tab                                    visualizationInformationTab;
-    private Tab                                    universeInformationTab;
-    private Tab                                    previewTab;
+    private Tab                                 graphInformationTab;
+    private Tab                                 layoutInformationTab;
+    private Tab                                 visualizationInformationTab;
+    private Tab                                 universeInformationTab;
+    private Tab                                 previewTab;
 
-    private FileMenu                               fileMenu;
-    private LayoutMenu                             layoutMenu;
-    private VisualizationMenu                      visualizationMenu;
+    private FileMenu                            fileMenu;
+    private LayoutMenu                          layoutMenu;
+    private VisualizationMenu                   visualizationMenu;
 
 
     /**
      * Returns the universe property.
-     * 
+     *
      * @return the universe property.
      */
     public ObjectProperty<Project> project() {
@@ -109,7 +108,7 @@ public class JavaFXGui
 
     /**
      * Returns the project.
-     * 
+     *
      * @return the project.
      */
     public Project getProject() {
@@ -119,18 +118,18 @@ public class JavaFXGui
 
     /**
      * Sets the project.
-     * 
+     *
      * @param project
      *            the project.
      */
-    public void setProject(Project project) {
+    public void setProject(final Project project) {
 
         this.project.set(project);
     }
 
     /**
      * Returns the universe property.
-     * 
+     *
      * @return the universe property.
      */
     public ObjectProperty<Universe> universe() {
@@ -140,7 +139,7 @@ public class JavaFXGui
 
     /**
      * Returns the universe.
-     * 
+     *
      * @return the universe.
      */
     public Universe getUniverse() {
@@ -150,18 +149,18 @@ public class JavaFXGui
 
     /**
      * Sets the universe.
-     * 
+     *
      * @param universe
      *            the universe.
      */
-    public void setUniverse(Universe universe) {
+    public void setUniverse(final Universe universe) {
 
         this.universe.set(universe);
     }
 
     /**
      * Returns the layoutSet property.
-     * 
+     *
      * @return the layoutSet property.
      */
     public ObjectProperty<LayoutSet> layoutSet() {
@@ -171,28 +170,28 @@ public class JavaFXGui
 
     /**
      * Returns the layoutSet.
-     * 
+     *
      * @return the layoutSet.
      */
     public LayoutSet getLayout() {
 
-        return layoutSet.get();
+        return this.layoutSet.get();
     }
 
     /**
      * Sets the layoutSet.
-     * 
+     *
      * @param layoutSet
      *            the layoutSet.
      */
-    public void setLayout(LayoutSet layoutSet) {
+    public void setLayout(final LayoutSet layoutSet) {
 
         this.layoutSet.set(layoutSet);
     }
 
     /**
      * Returns the visualization property.
-     * 
+     *
      * @return the visualization property.
      */
     public ObjectProperty<Visualization> visualization() {
@@ -202,21 +201,21 @@ public class JavaFXGui
 
     /**
      * Returns the visualization.
-     * 
+     *
      * @return the visualization.
      */
     public Visualization getVisualization() {
 
-        return visualization.get();
+        return this.visualization.get();
     }
 
     /**
      * Sets the visualization.
-     * 
+     *
      * @param visualization
      *            the visualization.
      */
-    public void setVisualization(Visualization visualization) {
+    public void setVisualization(final Visualization visualization) {
 
         this.visualization.set(visualization);
     }
@@ -225,13 +224,13 @@ public class JavaFXGui
 
     /**
      * main method, will launch with command line arguments
-     * 
+     *
      * @param args
      *            command line arguments (unused)
      */
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
 
-        launch(args);
+        Application.launch(args);
     }
 
 
@@ -252,7 +251,7 @@ public class JavaFXGui
     public void start(final Stage primary) {
 
         this.stage = primary;
-        this.stage.setTitle(title);
+        this.stage.setTitle(this.title);
 
         XmlSerializer.Instance().registerClass(Project.class);
         XmlSerializer.Instance().registerClass(GraphMLDocument.class);
@@ -261,44 +260,39 @@ public class JavaFXGui
         this.scene = new Scene(new VBox(), 1000, 700, Color.LIGHTSLATEGREY);
 
 
-        this.scene.getRoot().addEventHandler(SwitchTabEvent.SWITCH,
-                new EventHandler<SwitchTabEvent>() {
+        this.scene.getRoot().addEventHandler(
+                SwitchTabEvent.SWITCH,
+                event -> JavaFXGui.this.tabPane.getSelectionModel().select(
+                        JavaFXGui.this.layoutInformationTab));
 
-                    @Override
-                    public void handle(SwitchTabEvent event) {
+        this.scene
+                .getRoot()
+                .addEventHandler(
+                        ExportLayoutEvent.EXPORT,
+                        event -> {
 
-                        tabPane.getSelectionModel()
-                                .select(layoutInformationTab);
-                    }
-                });
+                            final FileChooser fc = new FileChooser();
+                            fc.setTitle("Save File As");
+                            final FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(
+                                    "X3D Files", "*.x3d");
+                            fc.getExtensionFilters().add(filter);
+                            File x3dSaveFile = fc.showSaveDialog(primary);
 
-        this.scene.getRoot().addEventHandler(ExportLayoutEvent.EXPORT,
-                new EventHandler<ExportLayoutEvent>() {
+                            if (x3dSaveFile != null) {
 
-                    @Override
-                    public void handle(ExportLayoutEvent event) {
+                                if (!x3dSaveFile.getAbsolutePath().endsWith(
+                                        ".x3d")) {
 
-                        FileChooser fc = new FileChooser();
-                        fc.setTitle("Save File As");
-                        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(
-                                "X3D Files", "*.x3d");
-                        fc.getExtensionFilters().add(filter);
-                        File x3dSaveFile = fc.showSaveDialog(primary);
+                                    // System.out.println("File extension");
+                                    x3dSaveFile = new File(x3dSaveFile
+                                            .getAbsolutePath() + ".x3d");
+                                }
 
-                        if (x3dSaveFile != null) {
-
-                            if (!x3dSaveFile.getAbsolutePath().endsWith(".x3d")) {
-
-                                // System.out.println("File extension");
-                                x3dSaveFile = new File(x3dSaveFile
-                                        .getAbsolutePath() + ".x3d");
+                                IOManager.Instance().save(x3dSaveFile,
+                                        JavaFXGui.this.visualization.get(),
+                                        X3DDocument.class);
                             }
-
-                            IOManager.Instance().save(x3dSaveFile,
-                                    visualization.get(), X3DDocument.class);
-                        }
-                    }
-                });
+                        });
 
         this.universeDetails = new UniverseEditorGridPane();
         this.universeDetails.universe().bindBidirectional(this.universe);
@@ -308,149 +302,125 @@ public class JavaFXGui
 
         this.layoutDetails = new LayoutDetailsVBox();
         this.layoutDetails.universe().bindBidirectional(this.universe);
-        this.layoutDetails.layoutProperty().bindBidirectional(
-                this.layoutSet);
+        this.layoutDetails.layoutProperty().bindBidirectional(this.layoutSet);
         this.layoutDetails.visualization()
                 .bindBidirectional(this.visualization);
 
         this.visDetails = new VisualizationDetailsVBox();
         this.visDetails.visualization().bindBidirectional(this.visualization);
 
-        Tooltip layoutTabTip = new Tooltip();
+        final Tooltip layoutTabTip = new Tooltip();
         layoutTabTip
                 .setText("This tab will become enabled after graph(scale) have been selected from the Graph Information page");
 
 
-        tabPane = new TabPane();
-        tabPane.setMinHeight(30);
+        this.tabPane = new TabPane();
+        this.tabPane.setMinHeight(30);
 
-        graphInformationTab = new Tab("Graph Information");
-        graphInformationTab.setDisable(true);
-        layoutInformationTab = new Tab("Layout Information");
-        visualizationInformationTab = new Tab("Visualization Information");
-        universeInformationTab = new Tab("Universe Information");
-        universeInformationTab.setClosable(false);
-        graphInformationTab.setClosable(false);
-        layoutInformationTab.setClosable(false);
-        visualizationInformationTab.setClosable(false);
-        previewTab = new Tab("Preview");
-        previewTab.setDisable(true);
-        previewTab.setClosable(false);
-
-
-        tabPane.getTabs().addAll(universeInformationTab, graphInformationTab,
-                layoutInformationTab, visualizationInformationTab, previewTab);
-
-        universeInformationTab.setContent(universeDetails);
-        graphInformationTab.setContent(graphDetails);
-        layoutInformationTab.setContent(layoutDetails);
-        visualizationInformationTab.setContent(visDetails);
-        layoutInformationTab.setDisable(true);
-        visualizationInformationTab.setDisable(true);
-
-        ((VBox) scene.getRoot()).getChildren().addAll(this.createMenuBar(),
-                tabPane);
-
-        this.project.addListener(new ChangeListener<Project>() {
-
-            @Override
-            public void changed(
-                    ObservableValue<? extends Project> changedProperty,
-                    Project oldValue, Project newValue) {
+        this.graphInformationTab = new Tab("Graph Information");
+        this.graphInformationTab.setDisable(true);
+        this.layoutInformationTab = new Tab("Layout Information");
+        this.visualizationInformationTab = new Tab("Visualization Information");
+        this.universeInformationTab = new Tab("Universe Information");
+        this.universeInformationTab.setClosable(false);
+        this.graphInformationTab.setClosable(false);
+        this.layoutInformationTab.setClosable(false);
+        this.visualizationInformationTab.setClosable(false);
+        this.previewTab = new Tab("Preview");
+        this.previewTab.setDisable(true);
+        this.previewTab.setClosable(false);
 
 
-                if (newValue != null) {
+        this.tabPane.getTabs().addAll(this.universeInformationTab,
+                this.graphInformationTab, this.layoutInformationTab,
+                this.visualizationInformationTab, this.previewTab);
 
-                    if (!newValue.getLayouts().isEmpty()) {
+        this.universeInformationTab.setContent(this.universeDetails);
+        this.graphInformationTab.setContent(this.graphDetails);
+        this.layoutInformationTab.setContent(this.layoutDetails);
+        this.visualizationInformationTab.setContent(this.visDetails);
+        this.layoutInformationTab.setDisable(true);
+        this.visualizationInformationTab.setDisable(true);
 
-                        // System.out.println("Layouts: " +
-                        // newValue.getLayouts());
-                        JavaFXGui.this.layoutSet.set(newValue
-                                .getLayouts().get(0));
-                    }
-                    if (!newValue.getVisualizations().isEmpty()) {
+        ((VBox) this.scene.getRoot()).getChildren().addAll(
+                this.createMenuBar(), this.tabPane);
 
-                        // System.out.println("Visualizations: "
-                        // + newValue.getVisualizations());
-                        JavaFXGui.this.visualization.set(newValue
-                                .getVisualizations().get(0));
-                    }
-                }
+        this.project.addListener((changedProperty, oldValue, newValue) -> {
+
+
+            if (newValue != null) {
+
+                if (!newValue.getLayouts().isEmpty()) {
+
+                    // System.out.println("Layouts: " +
+                    // newValue.getLayouts());
+                JavaFXGui.this.layoutSet.set(newValue.getLayouts().get(0));
             }
+            if (!newValue.getVisualizations().isEmpty()) {
 
+                // System.out.println("Visualizations: "
+                // + newValue.getVisualizations());
+                JavaFXGui.this.visualization.set(newValue.getVisualizations()
+                        .get(0));
+            }
+        }
+    })  ;
+
+        this.universe.addListener((ChangeListener<Universe>) (changedProperty,
+                oldValue, newValue) -> {
+
+            final boolean requiresUniverse = (newValue == null);
+
+            JavaFXGui.this.layoutMenu.setDisable(requiresUniverse);
+            JavaFXGui.this.graphInformationTab.setDisable(requiresUniverse);
+
+            if (requiresUniverse) {
+
+                JavaFXGui.this.layoutSet.set(null);
+                JavaFXGui.this.visualization.set(null);
+            }
         });
 
-        this.universe.addListener(new ChangeListener<Universe>() {
+        this.layoutSet.addListener((ChangeListener<LayoutSet>) (observable,
+                oldValue, newValue) -> {
 
-            @Override
-            public void changed(
-                    ObservableValue<? extends Universe> changedProperty,
-                    Universe oldValue, Universe newValue) {
 
-                boolean requiresUniverse = (newValue == null);
+            final boolean requiresLayout = (newValue == null);
+            JavaFXGui.this.layoutInformationTab.setDisable(requiresLayout);
+            JavaFXGui.this.visualizationMenu.setDisable(requiresLayout);
 
-                layoutMenu.setDisable(requiresUniverse);
-                graphInformationTab.setDisable(requiresUniverse);
-
-                if (requiresUniverse) {
-
-                    layoutSet.set(null);
-                    visualization.set(null);
-                }
+            if (JavaFXGui.this.getProject() != null) {
+                JavaFXGui.this.getProject().clearLayouts();
             }
+            // LayoutSet not null
+                if (!requiresLayout) {
 
-        });
+                    if (JavaFXGui.this.getProject() != null) {
 
-        this.layoutSet
-                .addListener(new ChangeListener<LayoutSet>() {
-
-                    @Override
-                    public void changed(
-                            ObservableValue<? extends LayoutSet> observable,
-                            LayoutSet oldValue, LayoutSet newValue) {
-
-
-                        boolean requiresLayout = (newValue == null);
-                        layoutInformationTab.setDisable(requiresLayout);
-                        visualizationMenu.setDisable(requiresLayout);
-
-                        if (JavaFXGui.this.getProject() != null) {
-                            JavaFXGui.this.getProject().clearLayouts();
-                        }
-                        // LayoutSet not null
-                        if (!requiresLayout) {
-
-                            if (JavaFXGui.this.getProject() != null) {
-
-                                JavaFXGui.this.getProject().addLayout(newValue);
-                            }
-                            tabPane.getSelectionModel().select(
-                                    layoutInformationTab);
-                        }
-                        // LayoutSet null
-                        else {
-
-                            visualization.set(null);
-                        }
+                        JavaFXGui.this.getProject().addLayout(newValue);
                     }
-                });
-
-        this.visualization.addListener(new ChangeListener<Visualization>() {
-
-            @Override
-            public void changed(
-                    ObservableValue<? extends Visualization> observable,
-                    Visualization oldValue, Visualization newValue) {
-
-                boolean requiresVisualization = (newValue == null);
-                JavaFXGui.this.visualizationInformationTab
-                        .setDisable(requiresVisualization);
-                JavaFXGui.this.previewTab.setDisable(requiresVisualization);
-
-                if (JavaFXGui.this.getProject() != null) {
-                    JavaFXGui.this.getProject().clearVisualizations();
+                    JavaFXGui.this.tabPane.getSelectionModel().select(
+                            JavaFXGui.this.layoutInformationTab);
                 }
-                // Visualization not null
+                // LayoutSet null
+                else {
+
+                    JavaFXGui.this.visualization.set(null);
+                }
+            });
+
+        this.visualization.addListener((ChangeListener<Visualization>) (
+                observable, oldValue, newValue) -> {
+
+            final boolean requiresVisualization = (newValue == null);
+            JavaFXGui.this.visualizationInformationTab
+                    .setDisable(requiresVisualization);
+            JavaFXGui.this.previewTab.setDisable(requiresVisualization);
+
+            if (JavaFXGui.this.getProject() != null) {
+                JavaFXGui.this.getProject().clearVisualizations();
+            }
+            // Visualization not null
                 if (!requiresVisualization) {
                     Pane previewScene = null;
                     try {
@@ -459,7 +429,7 @@ public class JavaFXGui
                         JavaFXGui.this.previewTab.setContent(previewScene);
 
                     }
-                    catch (ConversionException e) {
+                    catch (final ConversionException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
@@ -467,11 +437,10 @@ public class JavaFXGui
                     if (JavaFXGui.this.getProject() != null) {
                         JavaFXGui.this.getProject().addVisualization(newValue);
                     }
-                    tabPane.getSelectionModel().select(
-                            visualizationInformationTab);
+                    JavaFXGui.this.tabPane.getSelectionModel().select(
+                            JavaFXGui.this.visualizationInformationTab);
                 }
-            }
-        });
+            });
 
         this.stage.setScene(this.scene);
 
@@ -518,23 +487,21 @@ public class JavaFXGui
     private MenuBar createMenuBar() {
 
 
-        MenuBar menuBar = new MenuBar();
+        final MenuBar menuBar = new MenuBar();
 
         this.fileMenu = new FileMenu(this.stage);
         this.universe.bind(this.fileMenu.universe());
         this.project.bind(this.fileMenu.project());
 
         this.layoutMenu = new LayoutMenu(this.stage);
-        this.layoutMenu.layoutSet().bindBidirectional(
-                this.layoutSet);
+        this.layoutMenu.layoutSet().bindBidirectional(this.layoutSet);
         this.layoutMenu.universe().bindBidirectional(this.universe);
         this.layoutMenu.setDisable(true);
 
         this.visualizationMenu = new VisualizationMenu(this.stage);
         this.visualizationMenu.visualization().bindBidirectional(
                 this.visualization);
-        this.visualizationMenu.layoutSet().bindBidirectional(
-                this.layoutSet);
+        this.visualizationMenu.layoutSet().bindBidirectional(this.layoutSet);
         this.visualizationMenu.universe().bindBidirectional(this.universe);
         this.visualizationMenu.setDisable(true);
 

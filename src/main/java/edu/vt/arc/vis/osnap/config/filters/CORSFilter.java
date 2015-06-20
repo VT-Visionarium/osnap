@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.authalic.saint.server.config.filters;
+package edu.vt.arc.vis.osnap.config.filters;
 
 /*
  * _

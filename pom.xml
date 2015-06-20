@@ -59,18 +59,18 @@
 	</issueManagement>
 
 
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
 
-    <!-- SonarQube -->
-    <sonar.login>sonar</sonar.login>
-    <sonar.password>$0n4rQub3</sonar.password>
+		<!-- SonarQube -->
+		<sonar.login>sonar</sonar.login>
+		<sonar.password>$0n4rQub3</sonar.password>
 
 		<!-- jUtility -->
-		<org.jutility.version>0.1.2</org.jutility.version>
+		<org.jutility.version>0.1.3</org.jutility.version>
 
 		<!-- ControlsFX -->
 		<org.controlsfx.version>8.20.8</org.controlsfx.version>
@@ -87,23 +87,22 @@
 
 
 		<!-- Spring Framework -->
-		<org.springframework.version>4.1.5.RELEASE</org.springframework.version>
-		<org.springframework.data.version>1.7.2.RELEASE</org.springframework.data.version>
-		<org.springframework.security.version>3.2.5.RELEASE
-		</org.springframework.security.version>
+		<org.springframework.version>4.1.6.RELEASE</org.springframework.version>
+		<org.springframework.data.version>1.8.0.RELEASE</org.springframework.data.version>
+		<org.springframework.security.version>4.0.1.RELEASE</org.springframework.security.version>
 
 		<!-- AspectJ -->
 		<org.aspectj.version>1.8.5</org.aspectj.version>
 		<javax.inject.version>1</javax.inject.version>
 
 		<!-- Cache -->
-		<net.sf.ehcache.version>2.6.10</net.sf.ehcache.version>
+		<net.sf.ehcache.version>2.6.11</net.sf.ehcache.version>
 
 		<!-- Tomcat -->
-		<org.apache.tomcat.version>8.0.20</org.apache.tomcat.version>
+		<org.apache.tomcat.version>8.0.23</org.apache.tomcat.version>
 
 		<!-- HTTPComponents -->
-		<org.apache.httpcomponents.version>4.4</org.apache.httpcomponents.version>
+		<org.apache.httpcomponents.version>4.4.1</org.apache.httpcomponents.version>
 
 		<!-- File Upload -->
 		<org.apache.commons.io.version>2.4</org.apache.commons.io.version>
@@ -111,39 +110,39 @@
 
 		<!-- Testing -->
 		<org.junit.version>4.12</org.junit.version>
-		<org.mockito.version>2.0.4-beta</org.mockito.version>
+		<org.mockito.version>2.0.8-beta</org.mockito.version>
 		<org.hamcrest.version>1.3</org.hamcrest.version>
 		<xmlunit.version>1.6</xmlunit.version>
-		<com.jayway.jsonpath.version>1.2.0</com.jayway.jsonpath.version>
+		<com.jayway.jsonpath.version>2.0.0</com.jayway.jsonpath.version>
 
 		<!-- Validation -->
-		<org.hibernate.validator.version>5.1.3.Final</org.hibernate.validator.version>
+		<org.hibernate.validator.version>5.2.0.CR1</org.hibernate.validator.version>
 		<javax.validation.version>1.1.0.Final</javax.validation.version>
 		<commons-validator.version>1.4.1</commons-validator.version>
 
 		<!-- Persistence -->
-		<eclipselink.version>2.5.2</eclipselink.version>
-		<mysql.version>5.1.34</mysql.version>
-		<org.apache.commons.dbcp2.version>2.0.1</org.apache.commons.dbcp2.version>
+		<eclipselink.version>2.6.0</eclipselink.version>
+		<mysql.version>5.1.35</mysql.version>
+		<org.apache.commons.dbcp2.version>2.1</org.apache.commons.dbcp2.version>
 
 		<!-- Thymeleaf -->
 		<org.thymeleaf.version>2.1.4.RELEASE</org.thymeleaf.version>
-		<org.thymeleaf.extras.springsecurity3.version>2.1.1.RELEASE</org.thymeleaf.extras.springsecurity3.version>
+		<org.thymeleaf.extras.springsecurity3.version>2.1.2.RELEASE</org.thymeleaf.extras.springsecurity3.version>
 		<org.thymeleaf.extras.java8time.version>2.1.0.RELEASE</org.thymeleaf.extras.java8time.version>
 
 		<!-- JSON -->
-		<com.fasterxml.jackson.version>2.5.1</com.fasterxml.jackson.version>
+		<com.fasterxml.jackson.version>2.6.0-rc1</com.fasterxml.jackson.version>
 
 
 		<!-- Logging -->
-		<org.slf4j.version>1.7.10</org.slf4j.version>
+		<org.slf4j.version>1.7.12</org.slf4j.version>
 		<log4j.version>1.2.17</log4j.version>
 		<logback.version>1.0.13</logback.version>
 	</properties>
 
-  <prerequisites>
-    <maven>2.2.1</maven>
-  </prerequisites>
+	<prerequisites>
+		<maven>3.0.2</maven>
+	</prerequisites>
 
 	<build>
 		<sourceDirectory>src/main/java</sourceDirectory>
@@ -177,7 +176,7 @@
 				</plugin>
 				<plugin>
 					<artifactId>maven-assembly-plugin</artifactId>
-					<version>2.5.3</version>
+					<version>2.5.5</version>
 				</plugin>
 				<plugin>
 					<artifactId>maven-dependency-plugin</artifactId>
@@ -259,6 +258,36 @@
 			<plugin>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>2.10.1</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<classpathPrefix>lib/</classpathPrefix>
+							<mainClass>edu.vt.arc.vis.osnap.javafx.JavaFXGui</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<classpathPrefix>lib/</classpathPrefix>
+							<mainClass>edu.vt.arc.vis.osnap.javafx.JavaFXGui</mainClass>
+						</manifest>
+					</archive>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
 			</plugin>
 			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
@@ -405,7 +434,7 @@
 								<reportPlugin>
 									<groupId>org.apache.maven.plugins</groupId>
 									<artifactId>maven-project-info-reports-plugin</artifactId>
-                   <version>2.8</version>
+									<version>2.8</version>
 								</reportPlugin>
 							</reportPlugins>
 						</configuration>
@@ -432,7 +461,7 @@
 								<reportPlugin>
 									<groupId>org.apache.maven.plugins</groupId>
 									<artifactId>maven-project-info-reports-plugin</artifactId>
-                  <version>2.8</version>
+									<version>2.8</version>
 								</reportPlugin>
 							</reportPlugins>
 						</configuration>
@@ -454,7 +483,7 @@
 						<reportPlugin>
 							<groupId>org.apache.maven.plugins</groupId>
 							<artifactId>maven-project-info-reports-plugin</artifactId>
-              <version>2.8</version>
+							<version>2.8</version>
 						</reportPlugin>
 					</reportPlugins>
 				</configuration>
@@ -486,11 +515,11 @@
 					<sectionDelimiter>_</sectionDelimiter>
 				</configuration>
 			</plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>sonar-maven-plugin</artifactId>
-        <version>2.5</version>
-      </plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>2.6</version>
+			</plugin>
 		</plugins>
 	</build>
 	<reporting>
@@ -514,6 +543,7 @@
 			<groupId>org.jutility</groupId>
 			<artifactId>jutility-all</artifactId>
 			<version>${org.jutility.version}</version>
+			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
@@ -888,30 +918,35 @@
 		</dependency>
 	</dependencies>
 
-  <repositories>
-    <repository>
-      <id>cgit-releases</id>
-      <name>CGIT Releases</name>
-      <url>https://vtcgit.com:8443/archiva/repository/public-releases/</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>cgit-snapshots</id>
-      <name>CGIT Snapshots</name>
-      <url>https://vtcgit.com:8443/archiva/repository/public-snapshots/</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
+	<repositories>
+		<repository>
+			<id>cgit-releases</id>
+			<name>CGIT Releases</name>
+			<url>https://vtcgit.com:8443/archiva/repository/public-releases/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>cgit-snapshots</id>
+			<name>CGIT Snapshots</name>
+			<url>https://vtcgit.com:8443/archiva/repository/public-snapshots/</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>central</id>
+			<name>Central Repository</name>
+			<url>http://repo.maven.apache.org/maven2</url>
+		</repository>
+	</repositories>
 
 	<pluginRepositories>
 		<pluginRepository>
