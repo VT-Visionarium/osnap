@@ -1,6 +1,5 @@
 package edu.vt.arc.vis.osnap.javafx.wizards;
 
-
 // @formatter:off
 /*
  * _
@@ -23,6 +22,7 @@ package edu.vt.arc.vis.osnap.javafx.wizards;
  */
 //@formatter:on
 
+import javafx.stage.Stage;
 import javafx.stage.Window;
 import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
 import edu.vt.arc.vis.osnap.core.domain.layout.prefuseComponents.PrefuseNodeLinkTreeLayout;
@@ -37,8 +37,6 @@ import edu.vt.arc.vis.osnap.javafx.wizards.pages.PrefuseNodeLinkTreeLayoutPage;
 import edu.vt.arc.vis.osnap.javafx.wizards.pages.RootNodeSelectionPage;
 import edu.vt.arc.vis.osnap.javafx.wizards.pages.RoutingPage;
 
-
-
 /**
  * The {@code PrefuseNodeLinkTreeLayoutWizard} provides a wizard for creating
  * the {@link PrefuseNodeLinkTreeLayoutConfiguration Configuration} of the
@@ -49,54 +47,67 @@ import edu.vt.arc.vis.osnap.javafx.wizards.pages.RoutingPage;
  * @since 0.5.0
  */
 public class PrefuseNodeLinkTreeLayoutWizard
-        extends
-        LayoutConfigurationWizard<PrefuseNodeLinkTreeLayout, PrefuseNodeLinkTreeLayoutConfiguration> {
+		extends
+		LayoutConfigurationWizard<PrefuseNodeLinkTreeLayout, PrefuseNodeLinkTreeLayoutConfiguration> {
 
-    private final PrefuseNodeLinkTreeLayoutConfigurationView configurationView;
+	private final PrefuseNodeLinkTreeLayoutConfigurationView configurationView;
 
+	/**
+	 * Creates a new instance of the {@code PrefuseNodeLinkTreeLayoutWizard}
+	 * class.
+	 * 
+	 * @param owner
+	 *            the owner of this wizard.
+	 * @param universe
+	 *            the {@link Universe} for which the
+	 *            {@link ILayoutConfiguration LayoutConfiguration} is created.
+	 */
+	public PrefuseNodeLinkTreeLayoutWizard(Stage owner, Universe universe) {
+		this((Window) owner, universe);
+	}
 
-    /**
-     * Creates a new instance of the {@code PrefuseNodeLinkTreeLayoutWizard}
-     * class.
-     * 
-     * @param owner
-     *            the owner of this wizard.
-     * @param universe
-     *            the {@link Universe} for which the
-     *            {@link ILayoutConfiguration LayoutConfiguration} is created.
-     */
-    public PrefuseNodeLinkTreeLayoutWizard(Window owner, Universe universe) {
+	/**
+	 * Creates a new instance of the {@code PrefuseNodeLinkTreeLayoutWizard}
+	 * class.
+	 * 
+	 * @param owner
+	 *            the owner of this wizard.
+	 * @param universe
+	 *            the {@link Universe} for which the
+	 *            {@link ILayoutConfiguration LayoutConfiguration} is created.
+	 */
+	public PrefuseNodeLinkTreeLayoutWizard(Window owner, Universe universe) {
 
-        super(owner, "Configure " + PrefuseNodeLinkTreeLayout.name(), universe);
+		super(owner, "Configure " + PrefuseNodeLinkTreeLayout.name(), universe);
 
-        this.configurationView = new PrefuseNodeLinkTreeLayoutConfigurationView(
-                "Configuration");
-        WizardPane page1 = new CapabilitySelectionPage<>(
-                this.configurationView,
-                PrefuseNodeLinkTreeLayout.capabilities());
+		this.configurationView = new PrefuseNodeLinkTreeLayoutConfigurationView(
+				"Configuration");
+		WizardPane page1 = new CapabilitySelectionPage<>(
+				this.configurationView,
+				PrefuseNodeLinkTreeLayout.capabilities());
 
-        WizardPane page2 = new GraphObjectSelectionPage<>(
-                this.configurationView, universe);
+		WizardPane page2 = new GraphObjectSelectionPage<>(
+				this.configurationView, universe);
 
-        WizardPane page3 = new RoutingPage<>(this.configurationView,
-                PrefuseNodeLinkTreeLayout.components());
+		WizardPane page3 = new RoutingPage<>(this.configurationView,
+				PrefuseNodeLinkTreeLayout.components());
 
-        WizardPane page4 = new RootNodeSelectionPage<>(this.configurationView);
+		WizardPane page4 = new RootNodeSelectionPage<>(this.configurationView);
 
-        WizardPane page5 = new PrefuseNodeLinkTreeLayoutPage(
-                this.configurationView);
+		WizardPane page5 = new PrefuseNodeLinkTreeLayoutPage(
+				this.configurationView);
 
-        WizardPane page6 = new PrefuseLayoutPage<>(this.configurationView);
+		WizardPane page6 = new PrefuseLayoutPage<>(this.configurationView);
 
-        WizardPane page7 = new NamingPage<>(this.configurationView);
+		WizardPane page7 = new NamingPage<>(this.configurationView);
 
-        this.setFlow(new LinearFlow(page1, page2, page3, page4, page5, page6,
-                page7));
-    }
+		this.setFlow(new LinearFlow(page1, page2, page3, page4, page5, page6,
+				page7));
+	}
 
-    @Override
-    public PrefuseNodeLinkTreeLayoutConfiguration getConfiguration() {
+	@Override
+	public PrefuseNodeLinkTreeLayoutConfiguration getConfiguration() {
 
-        return this.configurationView.getConfiguration();
-    }
+		return this.configurationView.getConfiguration();
+	}
 }

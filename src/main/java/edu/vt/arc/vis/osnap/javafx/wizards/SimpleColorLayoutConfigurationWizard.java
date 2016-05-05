@@ -1,6 +1,5 @@
 package edu.vt.arc.vis.osnap.javafx.wizards;
 
-
 // @formatter:off
 /*
  * _
@@ -23,7 +22,7 @@ package edu.vt.arc.vis.osnap.javafx.wizards;
  */
 //@formatter:on
 
-
+import javafx.stage.Stage;
 import javafx.stage.Window;
 import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
 import edu.vt.arc.vis.osnap.core.domain.layout.simpleComponents.SimpleColorLayout;
@@ -35,7 +34,6 @@ import edu.vt.arc.vis.osnap.javafx.wizards.pages.GraphObjectSelectionPage;
 import edu.vt.arc.vis.osnap.javafx.wizards.pages.NamingPage;
 import edu.vt.arc.vis.osnap.javafx.wizards.pages.SimpleColorSelectionPage;
 
-
 /**
  * The {@code SimpleColorLayoutConfigurationWizard} provides a wizard for
  * creating the {@link SimpleColorLayoutConfiguration Configuration} of the
@@ -46,44 +44,58 @@ import edu.vt.arc.vis.osnap.javafx.wizards.pages.SimpleColorSelectionPage;
  * @since 0.5.0
  */
 public class SimpleColorLayoutConfigurationWizard
-        extends
-        LayoutConfigurationWizard<SimpleColorLayout, SimpleColorLayoutConfiguration> {
+		extends
+		LayoutConfigurationWizard<SimpleColorLayout, SimpleColorLayoutConfiguration> {
 
-    private final SimpleColorLayoutConfigurationView configurationView;
+	private final SimpleColorLayoutConfigurationView configurationView;
 
-    /**
-     * Creates a new instance of the
-     * {@code SimpleColorLayoutConfigurationWizard} class.
-     * 
-     * @param owner
-     *            the owner of this wizard.
-     * @param universe
-     *            the {@link Universe} for which the
-     *            {@link ILayoutConfiguration LayoutConfiguration} is created.
-     */
-    public SimpleColorLayoutConfigurationWizard(Window owner, Universe universe) {
+	/**
+	 * Creates a new instance of the
+	 * {@code SimpleColorLayoutConfigurationWizard} class.
+	 * 
+	 * @param owner
+	 *            the owner of this wizard.
+	 * @param universe
+	 *            the {@link Universe} for which the
+	 *            {@link ILayoutConfiguration LayoutConfiguration} is created.
+	 */
+	public SimpleColorLayoutConfigurationWizard(Stage owner, Universe universe) {
+		this((Window) owner, universe);
+	}
 
-        super(owner, "Configure " + SimpleColorLayout.name(), universe);
+	/**
+	 * Creates a new instance of the
+	 * {@code SimpleColorLayoutConfigurationWizard} class.
+	 * 
+	 * @param owner
+	 *            the owner of this wizard.
+	 * @param universe
+	 *            the {@link Universe} for which the
+	 *            {@link ILayoutConfiguration LayoutConfiguration} is created.
+	 */
+	public SimpleColorLayoutConfigurationWizard(Window owner, Universe universe) {
 
-        this.configurationView = new SimpleColorLayoutConfigurationView(
-                "Configuration");
-        WizardPane page1 = new CapabilitySelectionPage<>(configurationView,
-                SimpleColorLayout.capabilities(), 1);
+		super(owner, "Configure " + SimpleColorLayout.name(), universe);
 
-        WizardPane page2 = new GraphObjectSelectionPage<>(configurationView,
-                universe);
+		this.configurationView = new SimpleColorLayoutConfigurationView(
+				"Configuration");
+		WizardPane page1 = new CapabilitySelectionPage<>(configurationView,
+				SimpleColorLayout.capabilities(), 1);
 
-        SimpleColorSelectionPage page3 = new SimpleColorSelectionPage(
-                configurationView);
+		WizardPane page2 = new GraphObjectSelectionPage<>(configurationView,
+				universe);
 
-        WizardPane page4 = new NamingPage<>(configurationView);
+		SimpleColorSelectionPage page3 = new SimpleColorSelectionPage(
+				configurationView);
 
-        this.setFlow(new LinearFlow(page1, page2, page3, page4));
-    }
+		WizardPane page4 = new NamingPage<>(configurationView);
 
-    @Override
-    public SimpleColorLayoutConfiguration getConfiguration() {
+		this.setFlow(new LinearFlow(page1, page2, page3, page4));
+	}
 
-        return this.configurationView.getConfiguration();
-    }
+	@Override
+	public SimpleColorLayoutConfiguration getConfiguration() {
+
+		return this.configurationView.getConfiguration();
+	}
 }

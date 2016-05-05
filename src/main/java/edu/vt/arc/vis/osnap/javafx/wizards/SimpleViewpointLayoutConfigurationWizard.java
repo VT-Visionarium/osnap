@@ -24,6 +24,7 @@ package edu.vt.arc.vis.osnap.javafx.wizards;
 //@formatter:on
 
 
+import javafx.stage.Stage;
 import javafx.stage.Window;
 import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
 import edu.vt.arc.vis.osnap.core.domain.layout.simpleComponents.SimpleViewpointLayout;
@@ -51,6 +52,24 @@ public class SimpleViewpointLayoutConfigurationWizard
 
     private final SimpleViewpointLayoutConfigurationView configurationView;
 
+
+
+    /**
+     * Creates a new instance of the
+     * {@code SimpleViewpointLayoutConfigurationWizard} class.
+     *
+     * @param owner
+     *            the owner of this wizard.
+     * @param universe
+     *            the {@link Universe} for which the
+     *            {@link ILayoutConfiguration LayoutConfiguration} is created.
+     */
+    public SimpleViewpointLayoutConfigurationWizard(final Stage owner,
+            final Universe universe) {
+    	this((Window)owner, universe);
+    }
+    
+    
     /**
      * Creates a new instance of the
      * {@code SimpleViewpointLayoutConfigurationWizard} class.

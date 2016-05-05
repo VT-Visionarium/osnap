@@ -23,6 +23,7 @@ package edu.vt.arc.vis.osnap.javafx.wizards;
  */
 //@formatter:on
 
+import javafx.stage.Stage;
 import javafx.stage.Window;
 import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
 import edu.vt.arc.vis.osnap.core.domain.layout.prefuseComponents.PrefuseBalloonTreeLayout;
@@ -54,6 +55,20 @@ public class PrefuseBalloonTreeLayoutWizard
 
     private final PrefuseBalloonTreeLayoutConfigurationView configurationView;
 
+
+    /**
+     * Creates a new instance of the {@code PrefuseBalloonTreeLayoutWizard}
+     * class.
+     * 
+     * @param owner
+     *            the owner of this wizard.
+     * @param universe
+     *            the {@link Universe} for which the
+     *            {@link ILayoutConfiguration LayoutConfiguration} is created.
+     */
+    public PrefuseBalloonTreeLayoutWizard(Stage owner, Universe universe) {
+    	this((Window)owner, universe);
+    }
 
     /**
      * Creates a new instance of the {@code PrefuseBalloonTreeLayoutWizard}

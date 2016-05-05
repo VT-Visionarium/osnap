@@ -24,6 +24,7 @@ package edu.vt.arc.vis.osnap.javafx.wizards;
 //@formatter:on
 
 
+import javafx.stage.Stage;
 import javafx.stage.Window;
 import edu.vt.arc.vis.osnap.core.domain.graph.Universe;
 import edu.vt.arc.vis.osnap.core.domain.layout.prefuseComponents.PrefuseRadialTreeLayout;
@@ -55,6 +56,21 @@ public class PrefuseRadialTreeLayoutWizard
 
     private final PrefuseRadialTreeLayoutConfigurationView configurationView;
 
+
+
+    /**
+     * Creates a new instance of the {@code PrefuseRadialTreeLayoutWizard}
+     * class.
+     * 
+     * @param owner
+     *            the owner of this wizard.
+     * @param universe
+     *            the {@link Universe} for which the
+     *            {@link ILayoutConfiguration LayoutConfiguration} is created.
+     */
+    public PrefuseRadialTreeLayoutWizard(Stage owner, Universe universe) {
+    	this((Window)owner, universe);
+    }
 
     /**
      * Creates a new instance of the {@code PrefuseRadialTreeLayoutWizard}
