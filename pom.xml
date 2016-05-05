@@ -70,10 +70,10 @@
 		<sonar.password>$0n4rQub3</sonar.password>
 
 		<!-- jUtility -->
-		<org.jutility.version>0.1.3</org.jutility.version>
+		<org.jutility.version>0.2.0-SNAPSHOT</org.jutility.version>
 
 		<!-- ControlsFX -->
-		<org.controlsfx.version>8.20.8</org.controlsfx.version>
+		<org.controlsfx.version>8.40.10</org.controlsfx.version>
 
 		<!-- GraphML -->
 		<org.jutility.graphml.version>1.0.0
